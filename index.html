@@ -622,7 +622,8 @@ function recordTimingsAndItems(completed) {
   sessionData.addonCount = addedItems.length;
   sessionData.addonsSelected = addedItems.length > 0 ? 1 : 0;
   sessionData.addonNames = addedItems.map(i=>i.name).join("|");
-  sessionData.addonPrices = addedItems.map(i=>i.price.toFixed(2)).join("|");
+  //sessionData.addonPrices = addedItems.map(i=>i.price.toFixed(2)).join("|");
+  sessionData.addonPrices = addedItems.reduce((s,i)=>s+i.price,0).toFixed(2);
   sessionData.finalTotal = getCurrentTotal().toFixed(2);
   sessionData.gapCleared = isGapCleared() ? 1 : 0;
   sessionData.hoverEvents = JSON.stringify(hoverLog);
@@ -630,7 +631,7 @@ function recordTimingsAndItems(completed) {
 
 function completeCheckout() {
   stopInactivityWatch();
-  sessionData.abandonType = "none";
+  sessionData.abandonType = "completed";
   recordTimingsAndItems(true);
   setScreen("posttask");
 }
