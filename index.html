@@ -7,29 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F5F0;
-    --surface: #FFFFFF;
-    --text: #1A1A18;
-    --muted: #6B6B65;
-    --accent: #2B5E3F;
-    --accent-light: #EAF2ED;
-    --border: #E0DDD6;
-    --warning: #C84B0F;
-    --warning-light: #FDF0EA;
-    --success: #1A6B3C;
-    --success-light: #D6F0E2;
-    --shadow: 0 2px 16px rgba(0,0,0,0.07);
-    --radius: 12px;
+    --bg: #F7F5F0; --surface: #FFFFFF; --text: #1A1A18; --muted: #6B6B65;
+    --accent: #2B5E3F; --accent-light: #EAF2ED; --border: #E0DDD6;
+    --warning: #C84B0F; --warning-light: #FDF0EA;
+    --success: #1A6B3C; --success-light: #D6F0E2;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07); --radius: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex; align-items: flex-start; justify-content: center;
-    padding: 40px 20px 80px;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px 80px; }
   .container { width: 100%; max-width: 740px; }
   .screen { display: none; animation: fadeIn 0.3s ease; }
   .screen.active { display: block; }
@@ -48,11 +33,7 @@
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 14px; box-shadow: var(--shadow); }
   .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
 
-  .shipping-banner {
-    border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px;
-    display: flex; align-items: center; gap: 12px;
-    transition: background 0.4s, border-color 0.4s;
-  }
+  .shipping-banner { border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; transition: background 0.4s, border-color 0.4s; }
   .shipping-banner.danger { background: var(--warning-light); border: 1.5px solid var(--warning); }
   .shipping-banner.success { background: var(--success-light); border: 1.5px solid var(--success); }
   .shipping-banner .icon { font-size: 1.3rem; flex-shrink: 0; }
@@ -73,11 +54,7 @@
   .shipping-line { color: var(--warning); font-size: 0.85rem; }
 
   .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-  .rec-card {
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 14px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-    position: relative; user-select: none;
-  }
+  .rec-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; position: relative; user-select: none; }
   .rec-card:hover { border-color: var(--accent); box-shadow: 0 4px 18px rgba(43,94,63,0.1); transform: translateY(-2px); }
   .rec-card.selected { border-color: var(--accent); background: var(--accent-light); }
   .rec-card .rec-emoji { font-size: 1.5rem; margin-bottom: 7px; }
@@ -86,28 +63,15 @@
   .rec-card .rec-price { font-weight: 700; color: var(--accent); font-size: 0.92rem; }
   .rec-card .rec-cat { font-size: 0.72rem; color: var(--muted); background: var(--bg); padding: 2px 6px; border-radius: 99px; }
   .rec-card .rec-explanation { margin-top: 8px; font-size: 0.76rem; color: var(--muted); line-height: 1.45; border-top: 1px solid var(--border); padding-top: 8px; }
-  .rec-card .check-badge {
-    position: absolute; top: 9px; right: 9px;
-    width: 20px; height: 20px; background: var(--accent); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 0.65rem; font-weight: 700;
-  }
-  .rec-card .gap-badge {
-    position: absolute; top: 9px; right: 9px;
-    background: var(--accent); color: white;
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em;
-    padding: 2px 7px; border-radius: 99px; text-transform: uppercase;
-  }
+  .rec-card .check-badge { position: absolute; top: 9px; right: 9px; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.65rem; font-weight: 700; }
+  .rec-card .gap-badge { position: absolute; top: 9px; right: 9px; background: var(--accent); color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 99px; text-transform: uppercase; }
 
-  #live-cart-panel {
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow);
-  }
+  #live-cart-panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
   #live-cart-panel .panel-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
   #live-cart-panel .added-items { margin-bottom: 10px; }
   #live-cart-panel .added-item { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; padding: 4px 0; }
   #live-cart-panel .added-item .ai-name { color: var(--text); font-weight:500; }
-  #live-cart-panel .added-item .ai-remove { background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:2px 4px;border-radius:4px; }
+  #live-cart-panel .added-item .ai-remove { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.8rem; padding:2px 4px; border-radius:4px; }
   #live-cart-panel .added-item .ai-remove:hover { color:var(--warning); }
   .panel-totals { border-top: 1px solid var(--border); padding-top: 10px; }
   .panel-row { display:flex; justify-content:space-between; font-size:0.84rem; margin-bottom:4px; color:var(--muted); }
@@ -116,12 +80,7 @@
   .gap-indicator.short { background: var(--warning-light); color: var(--warning); }
   .gap-indicator.met { background: var(--success-light); color: var(--success); }
 
-  .btn {
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-    padding: 13px 24px; border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
-    cursor: pointer; border: none; transition: all 0.2s; width: 100%;
-  }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; width: 100%; }
   .btn-primary { background: var(--accent); color: white; }
   .btn-primary:hover { background: #214a30; }
   .btn-secondary { background: transparent; color: var(--muted); border: 1.5px solid var(--border); margin-top: 8px; }
@@ -129,17 +88,13 @@
   .btn-danger { background: transparent; color: var(--warning); border: 1.5px solid var(--warning); margin-top: 8px; }
   .btn-danger:hover { background: var(--warning-light); }
 
+  /* Survey shared styles */
   .survey-group { margin-bottom: 26px; }
   .survey-group:last-child { margin-bottom: 0; }
   .likert { display: flex; gap: 6px; margin-top: 7px; }
   .likert > div { flex: 1; }
   .likert input { display: none; }
-  .likert label {
-    display: block; text-align: center; cursor: pointer;
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 8px; padding: 9px 2px; font-size: 0.78rem;
-    font-weight: 400; color: var(--muted); transition: all 0.15s;
-  }
+  .likert label { display: block; text-align: center; cursor: pointer; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 2px; font-size: 0.78rem; font-weight: 400; color: var(--muted); transition: all 0.15s; }
   .likert input:checked + label { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .scale-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
   .radio-group { display: flex; flex-direction: column; gap: 7px; margin-top: 7px; }
@@ -148,14 +103,28 @@
   .radio-opt input { accent-color: var(--accent); }
   .radio-opt span { font-size: 0.88rem; }
 
+  /* Checkbox grid for exit reasons */
+  .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .check-opt { display: flex; align-items: center; gap: 9px; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 0.86rem; }
+  .check-opt:hover { border-color: var(--accent); }
+  .check-opt input { accent-color: var(--accent); width: 15px; height: 15px; flex-shrink: 0; }
+  .check-opt.checked { border-color: var(--accent); background: var(--accent-light); }
+
+  /* Free text */
+  textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--text); background: var(--bg); resize: vertical; min-height: 80px; outline: none; transition: border-color 0.2s; line-height: 1.55; }
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+  .char-count { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 4px; }
+
+  /* Exit screen accent */
+  .exit-header { background: var(--warning-light); border: 1.5px solid var(--warning); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .exit-header .icon { font-size: 1.4rem; flex-shrink: 0; }
+  .exit-header p { margin: 0; color: var(--warning); font-size: 0.88rem; font-weight: 500; }
+
   .scenario-box { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
   .scenario-box p { color: var(--text); margin: 0; font-size: 0.9rem; }
 
-  #inactivity-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
-    z-index: 999; align-items: center; justify-content: center;
-  }
+  #inactivity-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); z-index: 999; align-items: center; justify-content: center; }
   #inactivity-overlay.show { display: flex; }
   .inactivity-box { background: var(--surface); border-radius: var(--radius); padding: 32px; max-width: 360px; width: 90%; text-align: center; }
   .inactivity-box h2 { margin-bottom: 10px; }
@@ -164,14 +133,14 @@
 
   #debug-badge { position: fixed; bottom: 10px; right: 10px; background: #111; color: #888; font-size: 0.68rem; font-family: monospace; padding: 5px 9px; border-radius: 6px; opacity: 0.75; z-index: 100; }
   .thankyou-icon { font-size: 2.8rem; margin-bottom: 14px; }
-  @media (max-width: 500px) { .rec-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+  @media (max-width: 500px) { .rec-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } .checkbox-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">Step 1 of 7 — Study Information</div>
+    <div class="progress-label" id="progress-label">Step 1 of 8 — Study Information</div>
   </div>
   <div id="app"></div>
 </div>
@@ -192,97 +161,105 @@
 // ════════════════════════════════════════════════════════════
 // CONFIG
 // ════════════════════════════════════════════════════════════
-const THRESHOLD = 35;
+const THRESHOLD            = 35;
 const INACTIVITY_WARN_SEC  = 90;
 const INACTIVITY_ABANDON_SEC = 30;
 
-// ── Google Form (live) ──────────────────────────────────────
 const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse";
 
-// Maps JS sessionData keys → Google Form entry IDs
-// Keys present here are submitted; any key not in this map is console-only
 const FIELD_MAP = {
-  // ── Identifiers ─────────────────────────────────────────
+  // Identifiers
   participantId:          "entry.336082628",
-
-  // ── Experimental design ──────────────────────────────────
+  // Experimental design
   condition:              "entry.1363167156",
   conditionDSS:           "entry.1701158278",
   conditionExp:           "entry.699386313",
-
-  // ── Cart / threshold ─────────────────────────────────────
+  // Cart / threshold
   cartSubtotal:           "entry.1915848193",
   gapAtStart:             "entry.521472749",
-
-  // ── Recommendation exposure ───────────────────────────────
+  // Recommendation exposure
   addonsShown:            "entry.387204756",
-
-  // ── Add-on behavior ──────────────────────────────────────
-  addonsSelected:         "entry.999404469",   // binary 0/1
-  addonCount:             "entry.1211689573",  // count
-  addonNames:             "entry.155213739",   // pipe-delimited
-  addonPrices:            "entry.1941662475",  // pipe-delimited
-
-  // ── Completion & abandonment ─────────────────────────────
+  // Add-on behavior
+  addonsSelected:         "entry.999404469",
+  addonCount:             "entry.1211689573",
+  addonNames:             "entry.155213739",
+  addonPrices:            "entry.1941662475",
+  // Completion & abandonment
   checkoutCompleted:      "entry.399283720",
   abandonType:            "entry.1445663391",
-
-  // ── Outcome totals ────────────────────────────────────────
+  // Outcome totals
   finalTotal:             "entry.779625089",
   gapCleared:             "entry.1738303010",
-
-  // ── Timing & engagement ──────────────────────────────────
+  // Timing & engagement
   timeOnRecScreen:        "entry.1188163062",
   timeToFirstSelection:   "entry.1958008072",
   hoverEvents:            "entry.1218658725",
-
-  // ── Pre-survey covariates ─────────────────────────────────
+  // Pre-survey covariates
   shopFreq:               "entry.540119743",
   priceSensitivity:       "entry.223642860",
   algoTrust:              "entry.1481934786",
-
-  // ── Post-survey: trust (H3, H5) ──────────────────────────
+  // Post-survey: trust
   trust1:                 "entry.2117691022",
   trust2:                 "entry.432591211",
   trust3:                 "entry.721379581",
-
-  // ── Post-survey: transparency (H3) ───────────────────────
+  // Post-survey: transparency
   transp1:                "entry.756646952",
   transp2:                "entry.655019999",
-
-  // ── Post-survey: manipulation / reactance (H4, H5) ───────
+  // Post-survey: manipulation
   manip1:                 "entry.94395533",
   manip2:                 "entry.261399405",
-
-  // ── Post-survey: confidence ───────────────────────────────
+  // Post-survey: confidence
   conf1:                  "entry.1576676739",
-
-  // ── Post-survey: cognitive load / NASA-TLX (H2) ──────────
+  // Post-survey: cognitive load
   load1:                  "entry.1866255536",
   load2:                  "entry.1102238274",
   load3:                  "entry.1713932049",
-
-  // ── Post-survey: choice quality (add-on only) ─────────────
+  // Post-survey: choice quality
   fit1:                   "entry.2089146456",
   regret1:                "entry.1829525115",
   value1:                 "entry.1161298534",
-
-  // ── Manipulation checks ───────────────────────────────────
+  // Manipulation checks
   manCheck1:              "entry.656307787",
   manCheck2:              "entry.2141226584",
   manCheck3:              "entry.1638538059",
 
-  // ── NEW fields (add these columns to your Sheet / Form) ───
-  // recDeviationScore: H6 moderator — overlap DSS vs Static recs (0=identical, 1=fully different)
-  // touchDevice:       mobile flag (hover events unreliable on touch)
-  // These are logged to console if not yet wired to the Form.
-  recDeviationScore: "entry.1648697782",
+  // ── EXIT SURVEY fields — add these to your Google Form then fill in entry IDs ──
+  // exitManip1:          "entry.XXXXXXXXX",  // "felt pressured" (maps to manip scale)
+  // exitManip2:          "entry.XXXXXXXXX",  // "felt manipulated"
+  // exitTrust1:          "entry.XXXXXXXXX",  // "recommendations trustworthy"
+  // exitTransp1:         "entry.XXXXXXXXX",  // "understood why items recommended"
+  // exitLoad1:           "entry.XXXXXXXXX",  // "mentally demanding"
+  // exitPrimaryReason:   "entry.XXXXXXXXX",  // coded primary abandon reason
+  // exitReasonsChecked:  "entry.XXXXXXXXX",  // pipe-delimited checked reasons
+  // exitFreeText:        "entry.XXXXXXXXX",  // open-ended comments
+  // exitSuggestion:      "entry.XXXXXXXXX",  // what would have helped
+  // exitItemsAdded:      "entry.XXXXXXXXX",  // how many items added before abandoning
+  // exitGapAtAbandon:    "entry.XXXXXXXXX",  // remaining gap when they left
+  // exitTimeOnScreen:    "entry.XXXXXXXXX",  // seconds on rec screen before abandoning
+  // exitHoverCount:      "entry.XXXXXXXXX",  // number of hover events (engagement)
+  // exitAddThenRemove:   "entry.XXXXXXXXX",  // 1 if participant added then removed items
+  // recDeviationScore:   "entry.XXXXXXXXX",  // H6 moderator
+  // touchDevice:         "entry.XXXXXXXXX",
+   recDeviationScore: "entry.1648697782",
   touchDevice: "entry.257967857" ,
+   exitManip1:          "entry.1900160483",  // "felt pressured" (maps to manip scale)
+  exitManip2:          "entry.115935025",  // "felt manipulated"
+  exitTrust1:          "entry.977674086",  // "recommendations trustworthy"
+  exitTransp1:         "entry.575325771",  // "understood why items recommended"
+   exitLoad1:           "entry.1906937013",  // "mentally demanding"
+  exitPrimaryReason:   "entry.1421685344",  // coded primary abandon reason
+  exitReasonsChecked:  "entry.1111071683",  // pipe-delimited checked reasons
+   exitFreeText:        "entry.227332894",  // open-ended comments
+   exitSuggestion:      "entry.1897370611",  // what would have helped
+   exitItemsAdded:      "entry.457722614",  // how many items added before abandoning
+   exitGapAtAbandon:    "entry.1893427120",  // remaining gap when they left
+   exitTimeOnScreen:    "entry.973032317",  // seconds on rec screen before abandoning
+   exitHoverCount:      "entry.481529522",  // number of hover events (engagement)
+  exitAddThenRemove:    "entry.154643064",
 };
 
 // ════════════════════════════════════════════════════════════
-// CATALOG — Amazon Reviews 2023 categories (AMCIS paper)
-// Health & Personal Care · All Beauty · Grocery & Gourmet · Office Products
+// CATALOG — AMCIS Amazon Reviews 2023 categories
 // ════════════════════════════════════════════════════════════
 const CATALOG = [
   { id:"h1", name:"Vitamin C Serum 30ml",            cat:"Health & Personal Care", price:8.99,  pop:9, rel:8, emoji:"🧴" },
@@ -304,20 +281,20 @@ const CATALOG = [
   { id:"o4", name:"Cable Management Clips 20pk",     cat:"Office Products",        price:5.99,  pop:8, rel:7, emoji:"🔌" },
 ];
 
-// Cart subtotal = $26.47 → gap $8.53 (within AMCIS $5–$15 decision zone)
+// Cart subtotal $26.47 → gap $8.53 (AMCIS $5–$15 decision zone)
 const CART_ITEMS = [
-  { name:"Daily Multivitamin 90ct",     cat:"Health & Personal Care", price:10.49, emoji:"💊" },
-  { name:"Micellar Cleansing Water",    cat:"All Beauty",             price:9.99,  emoji:"💧" },
-  { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet",  price:5.99,  emoji:"🍵" },
+  { name:"Daily Multivitamin 90ct",        cat:"Health & Personal Care", price:10.49, emoji:"💊" },
+  { name:"Micellar Cleansing Water",       cat:"All Beauty",             price:9.99,  emoji:"💧" },
+  { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet",      price:5.99,  emoji:"🍵" },
 ];
-const CART_SUBTOTAL = +(CART_ITEMS.reduce((s,i)=>s+i.price,0).toFixed(2)); // $26.47
-const GAP_INITIAL   = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);             // $8.53
+const CART_SUBTOTAL = +(CART_ITEMS.reduce((s,i)=>s+i.price,0).toFixed(2));
+const GAP_INITIAL   = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);
 
 // ════════════════════════════════════════════════════════════
 // SESSION STATE
 // ════════════════════════════════════════════════════════════
 const participantId = "P_" + Date.now() + "_" + Math.random().toString(36).slice(2,6).toUpperCase();
-const condition     = Math.floor(Math.random()*4)+1; // 1–4
+const condition     = Math.floor(Math.random()*4)+1;
 const isDSS         = condition >= 3;
 const hasExp        = condition === 2 || condition === 4;
 const touchDevice   = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 1 : 0;
@@ -326,47 +303,49 @@ document.getElementById("debug-cond").textContent =
   condition + (isDSS?" DSS":" Static") + (hasExp?" +Exp":" No Exp");
 
 let sessionData = {
-  participantId,
-  condition,
-  conditionDSS:   isDSS ? 1 : 0,
-  conditionExp:   hasExp ? 1 : 0,
-  cartSubtotal:   CART_SUBTOTAL.toFixed(2),
-  gapAtStart:     GAP_INITIAL.toFixed(2),
-  abandonType:    "none",
-  touchDevice,    // logged to console; add to Form when ready
+  participantId, condition,
+  conditionDSS: isDSS ? 1 : 0,
+  conditionExp: hasExp ? 1 : 0,
+  cartSubtotal: CART_SUBTOTAL.toFixed(2),
+  gapAtStart:   GAP_INITIAL.toFixed(2),
+  abandonType:  "none",
+  touchDevice,
 };
 
-let addedItems        = [];
-let shownRecs         = [];
-let recScreenEnter    = null;
-let firstSelectionTime= null;
-let hoverLog          = [];
-let inactivityTimer   = null;
-let countdownTimer    = null;
-let countdownVal      = INACTIVITY_ABANDON_SEC;
-let sessionStartTime  = Date.now();
+let addedItems         = [];
+let itemsAddedThenRemoved = 0; // tracks add→remove behavior (indecision signal)
+let shownRecs          = [];
+let recScreenEnter     = null;
+let firstSelectionTime = null;
+let hoverLog           = [];
+let inactivityTimer    = null;
+let countdownTimer     = null;
+let countdownVal       = INACTIVITY_ABANDON_SEC;
+let sessionStartTime   = Date.now();
 
 // ════════════════════════════════════════════════════════════
 // SCREEN MANAGEMENT
 // ════════════════════════════════════════════════════════════
-const SCREENS       = ["consent","prescreener","scenario","cart","recommendations","posttask","debrief"];
+// Now 8 screens — exit survey inserted between recommendations and debrief
+const SCREENS = ["consent","prescreener","scenario","cart","recommendations","exitsurvey","posttask","debrief"];
 const SCREEN_LABELS = [
-  "Step 1 of 7 — Study Information",
-  "Step 2 of 7 — Background Questions",
-  "Step 3 of 7 — Shopping Scenario",
-  "Step 4 of 7 — Your Cart",
-  "Step 5 of 7 — Add-on Recommendations",
-  "Step 6 of 7 — Post-Task Survey",
-  "Step 7 of 7 — Complete",
+  "Step 1 of 8 — Study Information",
+  "Step 2 of 8 — Background Questions",
+  "Step 3 of 8 — Shopping Scenario",
+  "Step 4 of 8 — Your Cart",
+  "Step 5 of 8 — Add-on Recommendations",
+  "Step 6 of 8 — Brief Exit Questions",
+  "Step 6 of 8 — Post-Task Survey",
+  "Step 8 of 8 — Complete",
 ];
-const SCREEN_PROGRESS = [5,18,32,47,63,82,100];
-let currentScreenIdx  = 0;
+const SCREEN_PROGRESS = [5,16,28,42,57,75,82,100];
+let currentScreenIdx = 0;
 
 function setScreen(name) {
   currentScreenIdx = SCREENS.indexOf(name);
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen-"+name).classList.add("active");
-  document.getElementById("progress").style.width      = SCREEN_PROGRESS[currentScreenIdx]+"%";
+  document.getElementById("progress").style.width       = SCREEN_PROGRESS[currentScreenIdx]+"%";
   document.getElementById("progress-label").textContent = SCREEN_LABELS[currentScreenIdx];
   document.getElementById("debug-screen").textContent   = name;
   window.scrollTo(0,0);
@@ -374,19 +353,18 @@ function setScreen(name) {
   if (name === "recommendations") {
     recScreenEnter = Date.now();
     startInactivityWatch();
-    // Show add-on quality card only if items exist (initially none)
     refreshAddonQualityCard();
   } else {
     stopInactivityWatch();
   }
-  if (name === "posttask") { refreshAddonQualityCard(); }
+  if (name === "posttask") refreshAddonQualityCard();
 }
 
 // ════════════════════════════════════════════════════════════
-// ABANDONMENT — three detection methods
+// ABANDONMENT DETECTION
 // ════════════════════════════════════════════════════════════
 
-// 1. Tab close / navigation away
+// 1. Page close / navigation
 window.addEventListener("beforeunload", function(e) {
   if (currentScreenIdx === 4 && sessionData.checkoutCompleted === undefined) {
     sessionData.abandonType = "pagetransition";
@@ -398,22 +376,18 @@ window.addEventListener("beforeunload", function(e) {
   }
 });
 
-// 2. Inactivity on recommendation screen
+// 2. Inactivity
 function startInactivityWatch() {
   stopInactivityWatch();
   inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
-  document.addEventListener("mousemove", resetInactivityOnMove);
-  document.addEventListener("keydown",   resetInactivityOnMove);
-  document.addEventListener("click",     resetInactivityOnMove);
-  document.addEventListener("touchstart",resetInactivityOnMove);
+  ["mousemove","keydown","click","touchstart"].forEach(ev =>
+    document.addEventListener(ev, resetInactivityOnMove));
 }
 function stopInactivityWatch() {
   clearTimeout(inactivityTimer);
   clearInterval(countdownTimer);
-  document.removeEventListener("mousemove", resetInactivityOnMove);
-  document.removeEventListener("keydown",   resetInactivityOnMove);
-  document.removeEventListener("click",     resetInactivityOnMove);
-  document.removeEventListener("touchstart",resetInactivityOnMove);
+  ["mousemove","keydown","click","touchstart"].forEach(ev =>
+    document.removeEventListener(ev, resetInactivityOnMove));
   hideInactivityOverlay();
 }
 function resetInactivityOnMove() { resetInactivity(); }
@@ -442,25 +416,28 @@ function triggerInactivityAbandon() {
   sessionData.abandonType = "inactivity";
   sessionData.checkoutCompleted = 0;
   recordTimingsAndItems(false);
+  // Inactivity abandons go straight to debrief (no exit survey — participant is gone)
   flushData();
   document.getElementById("debrief-note").textContent =
     "Your session was recorded as incomplete due to inactivity.";
   setScreen("debrief");
 }
 
-// 3. Explicit abandon button (in UI below)
+// 3. Explicit button abandon → exit survey
+function abandonCart() {
+  stopInactivityWatch();
+  sessionData.abandonType = "button";
+  sessionData.checkoutCompleted = 0;
+  recordTimingsAndItems(false);
+  setScreen("exitsurvey"); // goes to exit survey, not debrief directly
+}
 
 // ════════════════════════════════════════════════════════════
-// RECOMMENDATION LOGIC (AMCIS architecture)
+// RECOMMENDATION LOGIC
 // ════════════════════════════════════════════════════════════
-
-// Static: popularity-ranked (Study 1 baseline)
 function getStaticRecs(n=5) {
   return [...CATALOG].sort((a,b)=>b.pop-a.pop).slice(0,n);
 }
-
-// DSS: multi-objective scorer
-// (a) user preference fit · (b) threshold attainment likelihood · (c) retailer margin proxy
 function getDSSRecs(currentTotal, n=5) {
   const gap = Math.max(0, +(THRESHOLD - currentTotal).toFixed(2));
   return [...CATALOG]
@@ -473,35 +450,27 @@ function getDSSRecs(currentTotal, n=5) {
     .sort((a,b)=>b.score-a.score)
     .slice(0,n);
 }
-
-// H6 moderator: how different are DSS picks from Static picks? (0=identical, 1=fully different)
 function computeRecDeviationScore() {
   const staticIds = new Set(getStaticRecs(5).map(r=>r.id));
   const dssIds    = new Set(getDSSRecs(getCurrentTotal(), 5).map(r=>r.id));
   const overlap   = [...staticIds].filter(id=>dssIds.has(id)).length;
   return +(1 - overlap/5).toFixed(2);
 }
-
-// LLM-style explanations — templated, consistent (AMCIS architecture §4)
 function getExplanation(item, currentTotal) {
   const newTotal = +(currentTotal + item.price).toFixed(2);
-  const clears   = newTotal >= THRESHOLD;
-  if (clears) {
+  if (newTotal >= THRESHOLD) {
     return `Adding this item brings your total to $${newTotal.toFixed(2)}, qualifying for free shipping and saving you $5.99 in fees.`;
-  } else {
-    const remaining = +(THRESHOLD - newTotal).toFixed(2);
-    return `This item fits your cart and reduces your shipping gap to $${remaining.toFixed(2)}. It matches your purchase history in ${item.cat}.`;
   }
+  const remaining = +(THRESHOLD - newTotal).toFixed(2);
+  return `This item fits your cart and reduces your shipping gap to $${remaining.toFixed(2)}. It matches your purchase history in ${item.cat}.`;
 }
 
 // ════════════════════════════════════════════════════════════
-// CART STATE HELPERS
+// CART STATE
 // ════════════════════════════════════════════════════════════
-function getCurrentTotal() {
-  return +(CART_SUBTOTAL + addedItems.reduce((s,i)=>s+i.price,0)).toFixed(2);
-}
-function getCurrentGap() { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
-function isGapCleared()  { return getCurrentTotal() >= THRESHOLD; }
+function getCurrentTotal() { return +(CART_SUBTOTAL + addedItems.reduce((s,i)=>s+i.price,0)).toFixed(2); }
+function getCurrentGap()   { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
+function isGapCleared()    { return getCurrentTotal() >= THRESHOLD; }
 
 // ════════════════════════════════════════════════════════════
 // UI HELPERS
@@ -517,14 +486,13 @@ function refreshAddonQualityCard() {
   const card = document.getElementById("addon-quality-card");
   if (card) card.style.display = addedItems.length > 0 ? "block" : "none";
 }
-
 function updateBanner() {
   const banner = document.getElementById("rec-banner");
   if (!banner) return;
   const cleared = isGapCleared();
   banner.className = "shipping-banner " + (cleared ? "success" : "danger");
   banner.innerHTML = `
-    <span class="icon">${cleared ? "✅" : "🚚"}</span>
+    <span class="icon">${cleared?"✅":"🚚"}</span>
     <div class="banner-text">
       <strong>${cleared ? "Free shipping unlocked! 🎉" : `Add $${getCurrentGap().toFixed(2)} more for FREE shipping`}</strong>
       <span>${cleared
@@ -532,14 +500,12 @@ function updateBanner() {
         : `Orders $35+ ship free. Current shipping fee: $5.99.`}</span>
     </div>`;
 }
-
 function updateLivePanel() {
   const panel = document.getElementById("live-cart-panel");
   if (!panel) return;
-  const total   = getCurrentTotal();
-  const gap     = getCurrentGap();
+  const total = getCurrentTotal();
   const cleared = isGapCleared();
-
+  const addedSum = addedItems.reduce((s,i)=>s+i.price,0);
   const addedHTML = addedItems.length === 0
     ? `<p style="font-size:0.8rem;color:var(--muted);margin:0">No items added yet.</p>`
     : addedItems.map(item=>`
@@ -550,8 +516,6 @@ function updateLivePanel() {
           <button class="ai-remove" onclick="removeAddon('${item.id}')">✕</button>
         </span>
       </div>`).join("");
-
-  const addedSum = addedItems.reduce((s,i)=>s+i.price,0);
   panel.innerHTML = `
     <div class="panel-title">Your updated cart</div>
     <div class="added-items">${addedHTML}</div>
@@ -561,26 +525,20 @@ function updateLivePanel() {
       <div class="panel-row bold"><span>New total</span><span>$${total.toFixed(2)}</span></div>
     </div>
     <div class="gap-indicator ${cleared?"met":"short"}">
-      ${cleared ? "✓ Free shipping threshold met!" : `$${gap.toFixed(2)} away from free shipping`}
+      ${cleared ? "✓ Free shipping threshold met!" : `$${getCurrentGap().toFixed(2)} away from free shipping`}
     </div>`;
 }
-
 function renderRecs() {
   const total = getCurrentTotal();
-  if (isDSS) {
-    shownRecs = getDSSRecs(total, 5);
-  } else {
-    // Static: always the same 5 regardless of what's been added
-    shownRecs = getStaticRecs(5).filter(i=>!addedItems.find(a=>a.id===i.id)).slice(0,5);
-  }
+  shownRecs = isDSS
+    ? getDSSRecs(total, 5)
+    : getStaticRecs(5).filter(i=>!addedItems.find(a=>a.id===i.id)).slice(0,5);
   sessionData.addonsShown = shownRecs.map(r=>r.name).join("|");
-
   const grid = document.getElementById("rec-grid");
   if (!grid) return;
   grid.innerHTML = shownRecs.map(item => {
     const isSelected = !!addedItems.find(a=>a.id===item.id);
-    const newTotal   = +(total + item.price).toFixed(2);
-    const clears     = newTotal >= THRESHOLD && !isSelected;
+    const clears = (+(total + item.price).toFixed(2)) >= THRESHOLD && !isSelected;
     return `
     <div class="rec-card ${isSelected?"selected":""}" id="rec-${item.id}"
       onclick="toggleAddon('${item.id}')"
@@ -599,35 +557,25 @@ function renderRecs() {
     </div>`;
   }).join("");
 }
-
 function logHover(id, type) {
   if (recScreenEnter) hoverLog.push({ id, type, ms: Math.round(Date.now() - recScreenEnter) });
 }
-
 function toggleAddon(id) {
-  if (addedItems.find(a=>a.id===id)) {
-    removeAddon(id); return;
-  }
+  if (addedItems.find(a=>a.id===id)) { removeAddon(id); return; }
   const item = CATALOG.find(c=>c.id===id);
   if (!item) return;
   addedItems.push(item);
   if (!firstSelectionTime) firstSelectionTime = Date.now();
-  renderRecs();
-  updateBanner();
-  updateLivePanel();
-  refreshAddonQualityCard();
+  renderRecs(); updateBanner(); updateLivePanel(); refreshAddonQualityCard();
 }
-
 function removeAddon(id) {
+  if (addedItems.find(a=>a.id===id)) itemsAddedThenRemoved++;
   addedItems = addedItems.filter(a=>a.id!==id);
-  renderRecs();
-  updateBanner();
-  updateLivePanel();
-  refreshAddonQualityCard();
+  renderRecs(); updateBanner(); updateLivePanel(); refreshAddonQualityCard();
 }
 
 // ════════════════════════════════════════════════════════════
-// CHECKOUT ACTIONS
+// TIMINGS & ITEM RECORDING
 // ════════════════════════════════════════════════════════════
 function recordTimingsAndItems(completed) {
   const now = Date.now();
@@ -642,62 +590,83 @@ function recordTimingsAndItems(completed) {
   sessionData.finalTotal           = getCurrentTotal().toFixed(2);
   sessionData.gapCleared           = isGapCleared() ? 1 : 0;
   sessionData.hoverEvents          = JSON.stringify(hoverLog);
-  // H6 moderator
   sessionData.recDeviationScore    = computeRecDeviationScore();
-  // Session duration
   sessionData.sessionDurationSeconds = Math.round((now - sessionStartTime)/1000);
+  // Exit-specific computed metrics
+  sessionData.exitItemsAdded       = addedItems.length;
+  sessionData.exitGapAtAbandon     = getCurrentGap().toFixed(2);
+  sessionData.exitTimeOnScreen     = sessionData.timeOnRecScreen;
+  sessionData.exitHoverCount       = hoverLog.filter(h=>h.type==="enter").length;
+  sessionData.exitAddThenRemove    = itemsAddedThenRemoved > 0 ? 1 : 0;
 }
 
+// ════════════════════════════════════════════════════════════
+// CHECKOUT ACTIONS
+// ════════════════════════════════════════════════════════════
 function completeCheckout() {
   stopInactivityWatch();
   sessionData.abandonType = "none";
   recordTimingsAndItems(true);
   setScreen("posttask");
 }
+function goToRecs() {
+  addedItems = []; hoverLog = []; firstSelectionTime = null; itemsAddedThenRemoved = 0;
+  setScreen("recommendations");
+  renderRecs(); updateBanner(); updateLivePanel();
+}
 
-function abandonCart() {
-  stopInactivityWatch();
-  sessionData.abandonType = "button";
-  recordTimingsAndItems(false);
+// ════════════════════════════════════════════════════════════
+// EXIT SURVEY SUBMISSION
+// ════════════════════════════════════════════════════════════
+function submitExitSurvey() {
+  // Only require the primary reason — everything else is optional to reduce friction
+  const primaryReason = getRadio("exitPrimaryReason");
+  if (!primaryReason) {
+    alert("Please select at least one reason for leaving before continuing.");
+    return;
+  }
+
+  // Collect checked reasons (multi-select)
+  const checkedReasons = [...document.querySelectorAll('input[name="exitReasonCheck"]:checked')]
+    .map(el => el.value).join("|");
+
+  // Mechanism measures
+  sessionData.exitManip1   = getRadio("exitManip1");
+  sessionData.exitManip2   = getRadio("exitManip2");
+  sessionData.exitTrust1   = getRadio("exitTrust1");
+  sessionData.exitTransp1  = getRadio("exitTransp1");
+  sessionData.exitLoad1    = getRadio("exitLoad1");
+
+  // Reason coding
+  sessionData.exitPrimaryReason  = primaryReason;
+  sessionData.exitReasonsChecked = checkedReasons;
+
+  // Free text
+  sessionData.exitFreeText   = (document.getElementById("exitFreeText")?.value || "").trim().slice(0,500);
+  sessionData.exitSuggestion = (document.getElementById("exitSuggestion")?.value || "").trim().slice(0,500);
+
   flushData();
-  document.getElementById("debrief-note").textContent =
-    "You chose to leave without completing the purchase. This is a valid outcome — thank you for your participation.";
+  document.getElementById("debrief-note").textContent = "";
   setScreen("debrief");
 }
 
 // ════════════════════════════════════════════════════════════
-// PRE-SCREENER SUBMISSION
+// POST-TASK SURVEY SUBMISSION (completers)
 // ════════════════════════════════════════════════════════════
 function submitPrescreener() {
   const freq  = getRadio("shopFreq");
   const price = getRadio("priceSensitivity");
   const trust = getRadio("algoTrust");
   if (!freq || !price || !trust) { alert("Please answer all questions before continuing."); return; }
-  sessionData.shopFreq         = freq;
-  sessionData.priceSensitivity = price;
-  sessionData.algoTrust        = trust;
+  sessionData.shopFreq = freq; sessionData.priceSensitivity = price; sessionData.algoTrust = trust;
   setScreen("scenario");
 }
-
-// ════════════════════════════════════════════════════════════
-// POST-TASK SURVEY SUBMISSION
-// ════════════════════════════════════════════════════════════
 function submitSurvey() {
-  const required = [
-    "trust1","trust2","trust3",
-    "transp1","transp2",
-    "manip1","manip2",
-    "conf1",
-    "load1","load2","load3",
-    "manCheck1","manCheck2","manCheck3",
-  ];
+  const required = ["trust1","trust2","trust3","transp1","transp2","manip1","manip2",
+                    "conf1","load1","load2","load3","manCheck1","manCheck2","manCheck3"];
   if (addedItems.length > 0) required.push("fit1","regret1","value1");
-
   const missing = required.filter(f=>!getRadio(f));
-  if (missing.length > 0) {
-    alert("Please answer all questions before submitting.");
-    return;
-  }
+  if (missing.length > 0) { alert("Please answer all questions before submitting."); return; }
   required.forEach(f=>{ sessionData[f] = getRadio(f); });
   flushData();
   document.getElementById("debrief-note").textContent = "";
@@ -708,36 +677,24 @@ function submitSurvey() {
 // DATA SUBMISSION
 // ════════════════════════════════════════════════════════════
 function flushData() {
-  // Build FormData using only keys present in FIELD_MAP
   const fd = new FormData();
   Object.keys(FIELD_MAP).forEach(key => {
+    const entryId = FIELD_MAP[key];
+    // Skip comment-only entries (no real entry ID yet)
+    if (!entryId || !entryId.startsWith("entry.")) return;
     if (sessionData[key] !== undefined && sessionData[key] !== null) {
-      fd.append(FIELD_MAP[key], sessionData[key]);
+      fd.append(entryId, sessionData[key]);
     }
   });
-
-  // Submit — Google Forms requires no-cors; response is opaque but data lands in Sheet
   fetch(GOOGLE_FORM_ACTION, { method:"POST", body:fd, mode:"no-cors" }).catch(()=>{});
-
-  // Full session dump to console (includes new fields not yet in Form)
-  console.log("=== STUDY 2 SESSION DATA ===");
-  console.log(JSON.stringify(sessionData, null, 2));
-  console.log("recDeviationScore:", sessionData.recDeviationScore,
-              "| touchDevice:", sessionData.touchDevice,
-              "| sessionDuration:", sessionData.sessionDurationSeconds + "s");
+  console.log("=== STUDY 2 SESSION DATA ===\n" + JSON.stringify(sessionData, null, 2));
 }
 
-// ════════════════════════════════════════════════════════════
-// INIT RECS SCREEN
-// ════════════════════════════════════════════════════════════
-function goToRecs() {
-  addedItems        = [];
-  hoverLog          = [];
-  firstSelectionTime= null;
-  setScreen("recommendations");
-  renderRecs();
-  updateBanner();
-  updateLivePanel();
+// Char counter helper
+function updateCharCount(textareaId, counterId, max) {
+  const ta = document.getElementById(textareaId);
+  const ct = document.getElementById(counterId);
+  if (ta && ct) { ct.textContent = max - ta.value.length + " characters remaining"; }
 }
 
 // ════════════════════════════════════════════════════════════
@@ -806,7 +763,7 @@ document.getElementById("app").innerHTML = `
     <span class="icon">🚚</span>
     <div class="banner-text">
       <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping!</strong>
-      <span>Orders $35.00 and over ship free. You're within the zone.</span>
+      <span>Orders $35.00 and over ship free. You're in the zone.</span>
     </div>
   </div>
   <div class="card">
@@ -830,7 +787,6 @@ document.getElementById("app").innerHTML = `
   <div class="section-label">Suggested Add-Ons</div>
   <h1>Customers also bought</h1>
   <p style="margin-bottom:14px">Select any items you'd like to add, then complete or proceed to checkout. <strong>You can add more than one item.</strong></p>
-
   <div id="rec-banner" class="shipping-banner danger">
     <span class="icon">🚚</span>
     <div class="banner-text">
@@ -838,18 +794,99 @@ document.getElementById("app").innerHTML = `
       <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
     </div>
   </div>
-
   <div class="rec-grid" id="rec-grid"></div>
-
   <div id="live-cart-panel"></div>
-
   <button class="btn btn-primary" onclick="completeCheckout()">✓ Complete Purchase</button>
   <button class="btn btn-secondary" onclick="completeCheckout()">Proceed to Checkout Without Adding Items</button>
   <button class="btn btn-danger" onclick="abandonCart()">✕ Abandon Cart &amp; Leave</button>
-  <p style="font-size:0.75rem;text-align:center;margin-top:10px;color:var(--muted);font-style:italic">Abandoning will end the task. Your session will still be recorded.</p>
+  <p style="font-size:0.75rem;text-align:center;margin-top:10px;color:var(--muted);font-style:italic">If you abandon, we'll ask two quick questions before you go.</p>
 </div>
 
-<!-- ⑥ POST-TASK SURVEY -->
+<!-- ⑥ EXIT SURVEY (abandoners only) -->
+<div class="screen" id="screen-exitsurvey">
+  <div class="exit-header">
+    <span class="icon">📋</span>
+    <p>Before you go — just 5 quick questions. This takes under 60 seconds and helps us improve the experience.</p>
+  </div>
+  <div class="section-label">Exit Questions</div>
+  <h1>Why did you decide to leave?</h1>
+
+  <div class="card">
+    <div class="survey-group">
+      <label>What was the main reason you decided not to complete the purchase? <span style="color:var(--warning);font-size:0.8rem">*required</span></label>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="no_suitable_items"><span>None of the suggested items appealed to me</span></label>
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="too_expensive"><span>The items felt too expensive to add</span></label>
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="felt_pressured"><span>The recommendations felt pushy or manipulative</span></label>
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="didnt_need_items"><span>I didn't need anything extra — the shipping fee was fine</span></label>
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="too_much_effort"><span>It felt like too much effort to find the right item</span></label>
+        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="other"><span>Something else</span></label>
+      </div>
+    </div>
+
+    <div class="survey-group" style="margin-bottom:0">
+      <label>Any other contributing factors? <span style="font-weight:400;color:var(--muted)">(select all that apply)</span></label>
+      <div class="checkbox-grid" style="margin-top:8px">
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="unclear_relevance"> <span>Items didn't feel relevant to me</span></label>
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="no_explanation"> <span>Didn't understand why items were suggested</span></label>
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="distrust_system"> <span>I don't trust recommendation systems</span></label>
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="already_over_budget"> <span>My cart was already over my budget</span></label>
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="confusing_ui"> <span>The interface was confusing</span></label>
+        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="needed_more_time"> <span>I wanted more time to think</span></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Quick Reactions — How did the recommendations feel?</div>
+    <div class="survey-group">
+      <label>The recommendations felt designed to pressure me into spending more. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
+      ${buildLikert("exitManip1")}
+      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+    </div>
+    <div class="survey-group">
+      <label>I felt manipulated by the suggestions. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
+      ${buildLikert("exitManip2")}
+      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+    </div>
+    <div class="survey-group">
+      <label>I understood why these specific items were recommended. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
+      ${buildLikert("exitTransp1")}
+      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+    </div>
+    <div class="survey-group">
+      <label>The recommendations were trustworthy. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
+      ${buildLikert("exitTrust1")}
+      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+    </div>
+    <div class="survey-group" style="margin-bottom:0">
+      <label>This decision felt mentally demanding. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
+      ${buildLikert("exitLoad1")}
+      <div class="scale-labels"><span>Very low</span><span>Very high</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Optional — In your own words</div>
+    <div class="survey-group">
+      <label>Is there anything else that influenced your decision to leave? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <textarea id="exitFreeText" maxlength="500" placeholder="e.g. The items didn't match what I already had in my cart..."
+        oninput="updateCharCount('exitFreeText','exitFreeTextCount',500)"></textarea>
+      <div class="char-count" id="exitFreeTextCount">500 characters remaining</div>
+    </div>
+    <div class="survey-group" style="margin-bottom:0">
+      <label>What would have made you more likely to complete the purchase? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <textarea id="exitSuggestion" maxlength="500" placeholder="e.g. If the recommendations had included lower-priced items that fit my gap exactly..."
+        oninput="updateCharCount('exitSuggestion','exitSuggestionCount',500)"></textarea>
+      <div class="char-count" id="exitSuggestionCount">500 characters remaining</div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="submitExitSurvey()">Submit &amp; Finish →</button>
+  <p style="font-size:0.75rem;text-align:center;margin-top:10px;color:var(--muted);font-style:italic">Only the primary reason above is required. All other fields are optional.</p>
+</div>
+
+<!-- ⑦ POST-TASK SURVEY (completers) -->
 <div class="screen" id="screen-posttask">
   <div class="section-label">Post-Task Survey</div>
   <h1>Almost done</h1>
@@ -978,7 +1015,7 @@ document.getElementById("app").innerHTML = `
   <button class="btn btn-primary" onclick="submitSurvey()">Submit Responses →</button>
 </div>
 
-<!-- ⑦ DEBRIEF -->
+<!-- ⑧ DEBRIEF -->
 <div class="screen" id="screen-debrief">
   <div class="thankyou-icon">🎉</div>
   <h1>Thank you!</h1>
@@ -992,6 +1029,13 @@ document.getElementById("app").innerHTML = `
   </div>
 </div>
 `;
+
+// Highlight checkboxes on click
+document.addEventListener("change", function(e) {
+  if (e.target.name === "exitReasonCheck") {
+    e.target.closest(".check-opt").classList.toggle("checked", e.target.checked);
+  }
+});
 </script>
 </body>
 </html>
