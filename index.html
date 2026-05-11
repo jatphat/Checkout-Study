@@ -53,7 +53,7 @@
   .cart-row.total { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px; }
   .shipping-line { color: var(--warning); font-size: 0.85rem; }
 
-  .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; align-items: start; }
   .rec-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; position: relative; user-select: none; }
   .rec-card:hover { border-color: var(--accent); box-shadow: 0 4px 18px rgba(43,94,63,0.1); transform: translateY(-2px); }
   .rec-card.selected { border-color: var(--accent); background: var(--accent-light); }
@@ -68,15 +68,16 @@
 
   #live-cart-panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
   #live-cart-panel .panel-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-  #live-cart-panel .added-items { margin-bottom: 10px; }
-  #live-cart-panel .added-item { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; padding: 4px 0; }
+  #live-cart-panel .added-items { margin-bottom: 12px; }
+  #live-cart-panel .added-item { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  #live-cart-panel .added-item:last-child { border-bottom: none; }
   #live-cart-panel .added-item .ai-name { color: var(--text); font-weight:500; }
   #live-cart-panel .added-item .ai-remove { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.8rem; padding:2px 4px; border-radius:4px; }
   #live-cart-panel .added-item .ai-remove:hover { color:var(--warning); }
-  .panel-totals { border-top: 1px solid var(--border); padding-top: 10px; }
-  .panel-row { display:flex; justify-content:space-between; font-size:0.84rem; margin-bottom:4px; color:var(--muted); }
-  .panel-row.bold { font-weight:700; color:var(--text); font-size:0.92rem; }
-  .gap-indicator { font-size: 0.8rem; margin-top: 6px; padding: 6px 10px; border-radius: 6px; text-align: center; font-weight: 600; }
+  .panel-totals { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
+  .panel-row { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; margin-bottom:8px; color:var(--muted); }
+  .panel-row.bold { font-weight:700; color:var(--text); font-size:0.92rem; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; margin-bottom: 0; }
+  .gap-indicator { font-size: 0.82rem; margin-top: 12px; padding: 9px 12px; border-radius: 8px; text-align: center; font-weight: 600; line-height: 1.4; }
   .gap-indicator.short { background: var(--warning-light); color: var(--warning); }
   .gap-indicator.met { background: var(--success-light); color: var(--success); }
 
@@ -85,8 +86,6 @@
   .btn-primary:hover { background: #214a30; }
   .btn-secondary { background: transparent; color: var(--muted); border: 1.5px solid var(--border); margin-top: 8px; }
   .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
-  .btn-danger { background: transparent; color: var(--warning); border: 1.5px solid var(--warning); margin-top: 8px; }
-  .btn-danger:hover { background: var(--warning-light); }
 
   /* Survey shared styles */
   .survey-group { margin-bottom: 26px; }
@@ -98,28 +97,10 @@
   .likert input:checked + label { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .scale-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
   .radio-group { display: flex; flex-direction: column; gap: 7px; margin-top: 7px; }
-  .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; }
-  .radio-opt:hover { border-color: var(--accent); }
-  .radio-opt input { accent-color: var(--accent); }
-  .radio-opt span { font-size: 0.88rem; }
-
-  /* Checkbox grid for exit reasons */
-  .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-  .check-opt { display: flex; align-items: center; gap: 9px; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 0.86rem; }
-  .check-opt:hover { border-color: var(--accent); }
-  .check-opt input { accent-color: var(--accent); width: 15px; height: 15px; flex-shrink: 0; }
-  .check-opt.checked { border-color: var(--accent); background: var(--accent-light); }
-
-  /* Free text */
-  textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--text); background: var(--bg); resize: vertical; min-height: 80px; outline: none; transition: border-color 0.2s; line-height: 1.55; }
-  textarea:focus { border-color: var(--accent); }
-  textarea::placeholder { color: var(--muted); }
-  .char-count { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 4px; }
-
-  /* Exit screen accent */
-  .exit-header { background: var(--warning-light); border: 1.5px solid var(--warning); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-  .exit-header .icon { font-size: 1.4rem; flex-shrink: 0; }
-  .exit-header p { margin: 0; color: var(--warning); font-size: 0.88rem; font-weight: 500; }
+  .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; width: 100%; box-sizing: border-box; }
+  .radio-opt:hover { border-color: var(--accent); background: var(--accent-light); }
+  .radio-opt input[type="radio"] { accent-color: var(--accent); flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
+  .radio-opt span { font-size: 0.88rem; cursor: pointer; }
 
   .scenario-box { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
   .scenario-box p { color: var(--text); margin: 0; font-size: 0.9rem; }
@@ -133,14 +114,14 @@
 
   #debug-badge { position: fixed; bottom: 10px; right: 10px; background: #111; color: #888; font-size: 0.68rem; font-family: monospace; padding: 5px 9px; border-radius: 6px; opacity: 0.75; z-index: 100; }
   .thankyou-icon { font-size: 2.8rem; margin-bottom: 14px; }
-  @media (max-width: 500px) { .rec-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } .checkbox-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 500px) { .rec-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">Step 1 of 8 — Study Information</div>
+    <div class="progress-label" id="progress-label">Step 1 of 6 — Study Information</div>
   </div>
   <div id="app"></div>
 </div>
@@ -155,149 +136,256 @@
   </div>
 </div>
 
-<div id="debug-badge">Cond <span id="debug-cond">—</span> | <span id="debug-screen">consent</span></div>
+<div id="debug-badge">Cond <span id="debug-cond">—</span> | <span id="debug-screen">consent</span></label>
 
 <script>
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 // CONFIG
-// ════════════════════════════════════════════════════════════
-const THRESHOLD            = 35;
-const INACTIVITY_WARN_SEC  = 90;
+// ═══════════════════════════════════════════════════════════════════════════════════
+const THRESHOLD = 35;
+const INACTIVITY_WARN_SEC = 90;
 const INACTIVITY_ABANDON_SEC = 30;
 
-const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse";
+// ═══════════════════════════════════════════════════════════════════════════════════
+// LARGE DATASET WITH VENDOR INTEREST DATA
+// ═══════════════════════════════════════════════════════════════════════════════════
 
-const FIELD_MAP = {
-  // Identifiers
-  participantId:          "entry.336082628",
-  // Experimental design
-  condition:              "entry.1363167156",
-  conditionDSS:           "entry.1701158278",
-  conditionExp:           "entry.699386313",
-  // Cart / threshold
-  cartSubtotal:           "entry.1915848193",
-  gapAtStart:             "entry.521472749",
-  // Recommendation exposure
-  addonsShown:            "entry.387204756",
-  // Add-on behavior
-  addonsSelected:         "entry.999404469",
-  addonCount:             "entry.1211689573",
-  addonNames:             "entry.155213739",
-  addonPrices:            "entry.1941662475",
-  // Completion & abandonment
-  checkoutCompleted:      "entry.399283720",
-  abandonType:            "entry.1445663391",
-  // Outcome totals
-  finalTotal:             "entry.779625089",
-  gapCleared:             "entry.1738303010",
-  // Timing & engagement
-  timeOnRecScreen:        "entry.1188163062",
-  timeToFirstSelection:   "entry.1958008072",
-  hoverEvents:            "entry.1218658725",
-  // Pre-survey covariates
-  shopFreq:               "entry.540119743",
-  priceSensitivity:       "entry.223642860",
-  algoTrust:              "entry.1481934786",
-  // Post-survey: trust
-  trust1:                 "entry.2117691022",
-  trust2:                 "entry.432591211",
-  trust3:                 "entry.721379581",
-  // Post-survey: transparency
-  transp1:                "entry.756646952",
-  transp2:                "entry.655019999",
-  // Post-survey: manipulation
-  manip1:                 "entry.94395533",
-  manip2:                 "entry.261399405",
-  // Post-survey: confidence
-  conf1:                  "entry.1576676739",
-  // Post-survey: cognitive load
-  load1:                  "entry.1866255536",
-  load2:                  "entry.1102238274",
-  load3:                  "entry.1713932049",
-  // Post-survey: choice quality
-  fit1:                   "entry.2089146456",
-  regret1:                "entry.1829525115",
-  value1:                 "entry.1161298534",
-  // Manipulation checks
-  manCheck1:              "entry.656307787",
-  manCheck2:              "entry.2141226584",
-  manCheck3:              "entry.1638538059",
-
-  // ── EXIT SURVEY fields — add these to your Google Form then fill in entry IDs ──
-  // exitManip1:          "entry.XXXXXXXXX",  // "felt pressured" (maps to manip scale)
-  // exitManip2:          "entry.XXXXXXXXX",  // "felt manipulated"
-  // exitTrust1:          "entry.XXXXXXXXX",  // "recommendations trustworthy"
-  // exitTransp1:         "entry.XXXXXXXXX",  // "understood why items recommended"
-  // exitLoad1:           "entry.XXXXXXXXX",  // "mentally demanding"
-  // exitPrimaryReason:   "entry.XXXXXXXXX",  // coded primary abandon reason
-  // exitReasonsChecked:  "entry.XXXXXXXXX",  // pipe-delimited checked reasons
-  // exitFreeText:        "entry.XXXXXXXXX",  // open-ended comments
-  // exitSuggestion:      "entry.XXXXXXXXX",  // what would have helped
-  // exitItemsAdded:      "entry.XXXXXXXXX",  // how many items added before abandoning
-  // exitGapAtAbandon:    "entry.XXXXXXXXX",  // remaining gap when they left
-  // exitTimeOnScreen:    "entry.XXXXXXXXX",  // seconds on rec screen before abandoning
-  // exitHoverCount:      "entry.XXXXXXXXX",  // number of hover events (engagement)
-  // exitAddThenRemove:   "entry.XXXXXXXXX",  // 1 if participant added then removed items
-  // recDeviationScore:   "entry.XXXXXXXXX",  // H6 moderator
-  // touchDevice:         "entry.XXXXXXXXX",
-   recDeviationScore: "entry.1648697782",
-  touchDevice: "entry.257967857" ,
-   exitManip1:          "entry.1900160483",  // "felt pressured" (maps to manip scale)
-  exitManip2:          "entry.115935025",  // "felt manipulated"
-  exitTrust1:          "entry.977674086",  // "recommendations trustworthy"
-  exitTransp1:         "entry.575325771",  // "understood why items recommended"
-   exitLoad1:           "entry.1906937013",  // "mentally demanding"
-  exitPrimaryReason:   "entry.1421685344",  // coded primary abandon reason
-  exitReasonsChecked:  "entry.1111071683",  // pipe-delimited checked reasons
-   exitFreeText:        "entry.227332894",  // open-ended comments
-   exitSuggestion:      "entry.1897370611",  // what would have helped
-   exitItemsAdded:      "entry.457722614",  // how many items added before abandoning
-   exitGapAtAbandon:    "entry.1893427120",  // remaining gap when they left
-   exitTimeOnScreen:    "entry.973032317",  // seconds on rec screen before abandoning
-   exitHoverCount:      "entry.481529522",  // number of hover events (engagement)
-  exitAddThenRemove:    "entry.154643064",
-};
-
-// ════════════════════════════════════════════════════════════
-// CATALOG — AMCIS Amazon Reviews 2023 categories
-// ════════════════════════════════════════════════════════════
-const CATALOG = [
-  { id:"h1", name:"Vitamin C Serum 30ml",            cat:"Health & Personal Care", price:8.99,  pop:9, rel:8, emoji:"🧴" },
-  { id:"h2", name:"Collagen Face Moisturizer",       cat:"Health & Personal Care", price:11.49, pop:8, rel:8, emoji:"✨" },
-  { id:"h3", name:"Melatonin Gummies 60ct",          cat:"Health & Personal Care", price:9.99,  pop:9, rel:7, emoji:"💊" },
-  { id:"h4", name:"Zinc + Vitamin D Tablets",        cat:"Health & Personal Care", price:7.49,  pop:8, rel:7, emoji:"💊" },
-  { id:"h5", name:"Natural Lip Balm Set (4pk)",      cat:"Health & Personal Care", price:5.99,  pop:8, rel:6, emoji:"💋" },
-  { id:"b1", name:"Tinted Moisturizer SPF 20",       cat:"All Beauty",             price:10.49, pop:7, rel:7, emoji:"🌟" },
-  { id:"b2", name:"Rose Water Facial Mist",          cat:"All Beauty",             price:7.99,  pop:8, rel:7, emoji:"🌹" },
-  { id:"b3", name:"Bamboo Makeup Brush Set",         cat:"All Beauty",             price:12.99, pop:6, rel:6, emoji:"🖌️" },
-  { id:"b4", name:"Coconut Oil Hair Mask",           cat:"All Beauty",             price:8.49,  pop:7, rel:7, emoji:"🥥" },
-  { id:"g1", name:"Organic Green Tea (40 bags)",     cat:"Grocery & Gourmet",      price:6.99,  pop:9, rel:8, emoji:"🍵" },
-  { id:"g2", name:"Raw Honey 12oz Jar",              cat:"Grocery & Gourmet",      price:8.49,  pop:9, rel:9, emoji:"🍯" },
-  { id:"g3", name:"Mixed Nut Snack Pack (6ct)",      cat:"Grocery & Gourmet",      price:7.99,  pop:8, rel:8, emoji:"🥜" },
-  { id:"g4", name:"Himalayan Pink Salt Grinder",     cat:"Grocery & Gourmet",      price:5.49,  pop:7, rel:6, emoji:"🧂" },
-  { id:"o1", name:"Sticky Note Assortment Pack",     cat:"Office Products",        price:4.99,  pop:9, rel:8, emoji:"📌" },
-  { id:"o2", name:"Gel Pen Set 0.5mm (10pk)",        cat:"Office Products",        price:6.99,  pop:9, rel:8, emoji:"🖊️" },
-  { id:"o3", name:"Mini Stapler + 1000 Staples",     cat:"Office Products",        price:7.49,  pop:8, rel:7, emoji:"📎" },
-  { id:"o4", name:"Cable Management Clips 20pk",     cat:"Office Products",        price:5.99,  pop:8, rel:7, emoji:"🔌" },
+const userProfiles = [
+  { id: "health_conscious", categories: {"Health & Personal Care": 0.5, "All Beauty": 0.3, "Grocery & Gourmet": 0.15, "Office Products": 0.05}, priceRange: [5, 15] },
+  { id: "beauty_focused", categories: {"All Beauty": 0.45, "Health & Personal Care": 0.35, "Grocery & Gourmet": 0.1, "Office Products": 0.1}, priceRange: [8, 20] },
+  { id: "office_worker", categories: {"Office Products": 0.4, "Grocery & Gourmet": 0.3, "Health & Personal Care": 0.2, "All Beauty": 0.1}, priceRange: [4, 12] },
+  { id: "gourmet_shopper", categories: {"Grocery & Gourmet": 0.5, "Health & Personal Care": 0.25, "All Beauty": 0.15, "Office Products": 0.1}, priceRange: [6, 18] },
+  { id: "tech_enthusiast", categories: {"Office Products": 0.5, "Health & Personal Care": 0.2, "All Beauty": 0.1, "Grocery & Gourmet": 0.2}, priceRange: [10, 25] },
+  { id: "wellness_focused", categories: {"Health & Personal Care": 0.6, "Grocery & Gourmet": 0.25, "All Beauty": 0.1, "Office Products": 0.05}, priceRange: [8, 18] }
 ];
 
-// Cart subtotal $26.47 → gap $8.53 (AMCIS $5–$15 decision zone)
-const CART_ITEMS = [
-  { name:"Daily Multivitamin 90ct",        cat:"Health & Personal Care", price:10.49, emoji:"💊" },
-  { name:"Micellar Cleansing Water",       cat:"All Beauty",             price:9.99,  emoji:"💧" },
-  { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet",      price:5.99,  emoji:"🍵" },
-];
-const CART_SUBTOTAL = +(CART_ITEMS.reduce((s,i)=>s+i.price,0).toFixed(2));
-const GAP_INITIAL   = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);
+const currentUser = userProfiles[Math.floor(Math.random() * userProfiles.length)];
+currentUser.userId = "user_" + Math.random().toString(36).slice(2,8);
 
-// ════════════════════════════════════════════════════════════
+// LARGE CATALOG - 100+ items with vendor interest data
+const LARGE_CATALOG = [
+  // Health & Personal Care (30 items)
+  { id:"h1", name:"Vitamin C Serum 30ml", cat:"Health & Personal Care", price:8.99, pop:9, rel:8, emoji:"🧴", margin: 0.45, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.85, svdScore: 0.78 },
+  { id:"h2", name:"Collagen Face Moisturizer", cat:"Health & Personal Care", price:11.49, pop:8, rel:8, emoji:"✨", margin: 0.52, inventory: 120, vendorPriority: 0.8, collaborativeScore: 0.82, svdScore: 0.81 },
+  { id:"h3", name:"Melatonin Gummies 60ct", cat:"Health & Personal Care", price:9.99, pop:9, rel:7, emoji:"💊", margin: 0.38, inventory: 200, vendorPriority: 0.6, collaborativeScore: 0.79, svdScore: 0.75 },
+  { id:"h4", name:"Zinc + Vitamin D Tablets", cat:"Health & Personal Care", price:7.49, pop:8, rel:7, emoji:"💊", margin: 0.41, inventory: 150, vendorPriority: 0.65, collaborativeScore: 0.77, svdScore: 0.73 },
+  { id:"h5", name:"Natural Lip Balm Set (4pk)", cat:"Health & Personal Care", price:5.99, pop:8, rel:6, emoji:"💋", margin: 0.35, inventory: 90, vendorPriority: 0.5, collaborativeScore: 0.71, svdScore: 0.69 },
+  { id:"h6", name:"Probiotics 30 Capsules", cat:"Health & Personal Care", price:12.99, pop:7, rel:8, emoji:"🦠", margin: 0.48, inventory: 110, vendorPriority: 0.75, collaborativeScore: 0.83, svdScore: 0.79 },
+  { id:"h7", name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, pop:9, rel:6, emoji:"🧴", margin: 0.32, inventory: 300, vendorPriority: 0.4, collaborativeScore: 0.68, svdScore: 0.65 },
+  { id:"h8", name:"Biotin Hair Growth Pills", cat:"Health & Personal Care", price:13.49, pop:6, rel:7, emoji:"💊", margin: 0.55, inventory: 80, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.74 },
+  { id:"h9", name:"Magnesium Supplement", cat:"Health & Personal Care", price:8.49, pop:7, rel:7, emoji:"💊", margin: 0.42, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"h10", name:"Omega-3 Fish Oil", cat:"Health & Personal Care", price:15.99, pop:8, rel:8, emoji:"🐟", margin: 0.58, inventory: 95, vendorPriority: 0.85, collaborativeScore: 0.87, svdScore: 0.84 },
+  { id:"h11", name:"Turmeric Curcumin Capsules", cat:"Health & Personal Care", price:11.99, pop:6, rel:7, emoji:"🌿", margin: 0.49, inventory: 75, vendorPriority: 0.7, collaborativeScore: 0.72, svdScore: 0.69 },
+  { id:"h12", name:"Elderberry Immune Support", cat:"Health & Personal Care", price:9.49, pop:7, rel:8, emoji:"🫐", margin: 0.44, inventory: 120, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.76 },
+  { id:"h13", name:"Ashwagandha Stress Relief", cat:"Health & Personal Care", price:14.99, pop:5, rel:7, emoji:"🌱", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"h14", name:"Calcium + Vitamin D3", cat:"Health & Personal Care", price:7.99, pop:8, rel:7, emoji:"🦴", margin: 0.38, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"h15", name:"Iron Supplement 65mg", cat:"Health & Personal Care", price:6.49, pop:7, rel:6, emoji:"💊", margin: 0.35, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.69, svdScore: 0.66 },
+  { id:"h16", name:"Glucosamine Joint Support", cat:"Health & Personal Care", price:16.99, pop:6, rel:8, emoji:"🦴", margin: 0.61, inventory: 70, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.71 },
+  { id:"h17", name:"CoQ10 Heart Health", cat:"Health & Personal Care", price:18.49, pop:5, rel:8, emoji:"❤️", margin: 0.64, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.67 },
+  { id:"h18", name:"Fiber Supplement Powder", cat:"Health & Personal Care", price:12.49, pop:6, rel:7, emoji:"🥄", margin: 0.47, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"h19", name:"Prenatal Vitamins", cat:"Health & Personal Care", price:13.99, pop:7, rel:8, emoji:"🤱", margin: 0.51, inventory: 85, vendorPriority: 0.75, collaborativeScore: 0.79, svdScore: 0.77 },
+  { id:"h20", name:"Men's Daily Multivitamin", cat:"Health & Personal Care", price:10.99, pop:8, rel:7, emoji:"👨", margin: 0.43, inventory: 130, vendorPriority: 0.6, collaborativeScore: 0.76, svdScore: 0.73 },
+
+  // All Beauty (25 items)
+  { id:"b1", name:"Tinted Moisturizer SPF 20", cat:"All Beauty", price:10.49, pop:7, rel:7, emoji:"🌟", margin: 0.48, inventory: 75, vendorPriority: 0.75, collaborativeScore: 0.88, svdScore: 0.84 },
+  { id:"b2", name:"Rose Water Facial Mist", cat:"All Beauty", price:7.99, pop:8, rel:7, emoji:"🌹", margin: 0.42, inventory: 110, vendorPriority: 0.7, collaborativeScore: 0.83, svdScore: 0.79 },
+  { id:"b3", name:"Bamboo Makeup Brush Set", cat:"All Beauty", price:12.99, pop:6, rel:6, emoji:"🖌️", margin: 0.55, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.76, svdScore: 0.72 },
+  { id:"b4", name:"Coconut Oil Hair Mask", cat:"All Beauty", price:8.49, pop:7, rel:7, emoji:"🥥", margin: 0.39, inventory: 95, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"b5", name:"Hyaluronic Acid Serum", cat:"All Beauty", price:14.99, pop:8, rel:8, emoji:"💧", margin: 0.58, inventory: 85, vendorPriority: 0.85, collaborativeScore: 0.89, svdScore: 0.86 },
+  { id:"b6", name:"Retinol Night Cream", cat:"All Beauty", price:16.99, pop:7, rel:8, emoji:"🌙", margin: 0.62, inventory: 70, vendorPriority: 0.9, collaborativeScore: 0.84, svdScore: 0.82 },
+  { id:"b7", name:"Vitamin E Face Oil", cat:"All Beauty", price:11.99, pop:6, rel:7, emoji:"🌿", margin: 0.51, inventory: 80, vendorPriority: 0.75, collaborativeScore: 0.78, svdScore: 0.75 },
+  { id:"b8", name:"Clay Face Mask", cat:"All Beauty", price:6.99, pop:8, rel:6, emoji:"🧴", margin: 0.35, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"b9", name:"Micellar Cleansing Water", cat:"All Beauty", price:9.99, pop:9, rel:7, emoji:"💧", margin: 0.44, inventory: 140, vendorPriority: 0.65, collaborativeScore: 0.82, svdScore: 0.79 },
+  { id:"b10", name:"Argan Oil Hair Treatment", cat:"All Beauty", price:13.49, pop:6, rel:7, emoji:"💇", margin: 0.54, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.73 },
+  { id:"b11", name:"Exfoliating Sugar Scrub", cat:"All Beauty", price:8.99, pop:7, rel:6, emoji:"🍯", margin: 0.41, inventory: 90, vendorPriority: 0.6, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"b12", name:"Niacinamide Pore Serum", cat:"All Beauty", price:12.49, pop:7, rel:8, emoji:"✨", margin: 0.52, inventory: 75, vendorPriority: 0.8, collaborativeScore: 0.81, svdScore: 0.78 },
+  { id:"b13", name:"Peptide Eye Cream", cat:"All Beauty", price:18.99, pop:6, rel:8, emoji:"👁️", margin: 0.65, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.77, svdScore: 0.75 },
+  { id:"b14", name:"Salicylic Acid Cleanser", cat:"All Beauty", price:9.49, pop:8, rel:7, emoji:"🧼", margin: 0.43, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.79, svdScore: 0.76 },
+  { id:"b15", name:"Jojoba Oil Moisturizer", cat:"All Beauty", price:10.99, pop:6, rel:7, emoji:"🌿", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"b16", name:"Charcoal Peel-Off Mask", cat:"All Beauty", price:7.49, pop:7, rel:6, emoji:"🖤", margin: 0.37, inventory: 110, vendorPriority: 0.55, collaborativeScore: 0.72, svdScore: 0.69 },
+  { id:"b17", name:"Caffeine Under-Eye Serum", cat:"All Beauty", price:11.49, pop:6, rel:7, emoji:"☕", margin: 0.49, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"b18", name:"Glycolic Acid Toner", cat:"All Beauty", price:13.99, pop:7, rel:8, emoji:"🧪", margin: 0.56, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.80, svdScore: 0.77 },
+  { id:"b19", name:"Shea Butter Hand Cream", cat:"All Beauty", price:5.99, pop:8, rel:6, emoji:"🤲", margin: 0.32, inventory: 150, vendorPriority: 0.45, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"b20", name:"Keratin Hair Serum", cat:"All Beauty", price:15.49, pop:5, rel:7, emoji:"💇", margin: 0.59, inventory: 55, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.70 },
+
+  // Grocery & Gourmet (25 items)
+  { id:"g1", name:"Organic Green Tea (40 bags)", cat:"Grocery & Gourmet", price:6.99, pop:9, rel:8, emoji:"🍵", margin: 0.33, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.86, svdScore: 0.82 },
+  { id:"g2", name:"Raw Honey 12oz Jar", cat:"Grocery & Gourmet", price:8.49, pop:9, rel:9, emoji:"🍯", margin: 0.36, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.89, svdScore: 0.87 },
+  { id:"g3", name:"Mixed Nut Snack Pack (6ct)", cat:"Grocery & Gourmet", price:7.99, pop:8, rel:8, emoji:"🥜", margin: 0.31, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.81, svdScore: 0.77 },
+  { id:"g4", name:"Himalayan Pink Salt Grinder", cat:"Grocery & Gourmet", price:5.49, pop:7, rel:6, emoji:"🧂", margin: 0.28, inventory: 100, vendorPriority: 0.45, collaborativeScore: 0.73, svdScore: 0.68 },
+  { id:"g5", name:"Organic Coffee Beans 1lb", cat:"Grocery & Gourmet", price:12.99, pop:8, rel:8, emoji:"☕", margin: 0.42, inventory: 90, vendorPriority: 0.7, collaborativeScore: 0.84, svdScore: 0.81 },
+  { id:"g6", name:"Extra Virgin Olive Oil", cat:"Grocery & Gourmet", price:11.49, pop:7, rel:7, emoji:"🫒", margin: 0.38, inventory: 110, vendorPriority: 0.6, collaborativeScore: 0.78, svdScore: 0.75 },
+  { id:"g7", name:"Manuka Honey 8oz", cat:"Grocery & Gourmet", price:24.99, pop:5, rel:9, emoji:"🍯", margin: 0.68, inventory: 40, vendorPriority: 0.95, collaborativeScore: 0.82, svdScore: 0.80 },
+  { id:"g8", name:"Organic Quinoa 2lb", cat:"Grocery & Gourmet", price:9.99, pop:6, rel:7, emoji:"🌾", margin: 0.35, inventory: 85, vendorPriority: 0.55, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"g9", name:"Coconut Oil 16oz", cat:"Grocery & Gourmet", price:8.99, pop:8, rel:7, emoji:"🥥", margin: 0.34, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.79, svdScore: 0.76 },
+  { id:"g10", name:"Chia Seeds 1lb", cat:"Grocery & Gourmet", price:7.49, pop:7, rel:7, emoji:"🌱", margin: 0.31, inventory: 95, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.73 },
+  { id:"g11", name:"Matcha Green Tea Powder", cat:"Grocery & Gourmet", price:15.99, pop:6, rel:8, emoji:"🍃", margin: 0.54, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.77, svdScore: 0.74 },
+  { id:"g12", name:"Protein Energy Bars (12pk)", cat:"Grocery & Gourmet", price:13.49, pop:8, rel:7, emoji:"🍫", margin: 0.45, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.81, svdScore: 0.78 },
+  { id:"g13", name:"Almond Butter 16oz", cat:"Grocery & Gourmet", price:10.99, pop:7, rel:7, emoji:"🥜", margin: 0.39, inventory: 80, vendorPriority: 0.6, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"g14", name:"Dark Chocolate 85% Cacao", cat:"Grocery & Gourmet", price:6.99, pop:8, rel:6, emoji:"🍫", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.78, svdScore: 0.75 },
+  { id:"g15", name:"Organic Maple Syrup", cat:"Grocery & Gourmet", price:12.49, pop:6, rel:7, emoji:"🍁", margin: 0.43, inventory: 70, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"g16", name:"Himalayan Sea Salt", cat:"Grocery & Gourmet", price:4.99, pop:7, rel:6, emoji:"🧂", margin: 0.26, inventory: 150, vendorPriority: 0.4, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"g17", name:"Turmeric Powder Organic", cat:"Grocery & Gourmet", price:6.49, pop:6, rel:7, emoji:"🌿", margin: 0.29, inventory: 90, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
+  { id:"g18", name:"Goji Berries Dried 8oz", cat:"Grocery & Gourmet", price:11.99, pop:5, rel:7, emoji:"🫐", margin: 0.48, inventory: 55, vendorPriority: 0.7, collaborativeScore: 0.69, svdScore: 0.66 },
+  { id:"g19", name:"Spirulina Powder 4oz", cat:"Grocery & Gourmet", price:14.99, pop:4, rel:8, emoji:"🌿", margin: 0.56, inventory: 45, vendorPriority: 0.8, collaborativeScore: 0.65, svdScore: 0.62 },
+  { id:"g20", name:"Cacao Nibs Raw 8oz", cat:"Grocery & Gourmet", price:9.49, pop:5, rel:7, emoji:"🍫", margin: 0.37, inventory: 65, vendorPriority: 0.55, collaborativeScore: 0.67, svdScore: 0.64 },
+
+  // Office Products (25 items)
+  { id:"o1", name:"Sticky Note Assortment Pack", cat:"Office Products", price:4.99, pop:9, rel:8, emoji:"📌", margin: 0.25, inventory: 220, vendorPriority: 0.4, collaborativeScore: 0.78, svdScore: 0.74 },
+  { id:"o2", name:"Gel Pen Set 0.5mm (10pk)", cat:"Office Products", price:6.99, pop:9, rel:8, emoji:"🖊️", margin: 0.29, inventory: 190, vendorPriority: 0.45, collaborativeScore: 0.84, svdScore: 0.80 },
+  { id:"o3", name:"Mini Stapler + 1000 Staples", cat:"Office Products", price:7.49, pop:8, rel:7, emoji:"📎", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.72 },
+  { id:"o4", name:"Cable Management Clips 20pk", cat:"Office Products", price:5.99, pop:8, rel:7, emoji:"🔌", margin: 0.27, inventory: 170, vendorPriority: 0.4, collaborativeScore: 0.72, svdScore: 0.67 },
+  { id:"o5", name:"Wireless Mouse Pad", cat:"Office Products", price:12.99, pop:7, rel:8, emoji:"🖱️", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.79, svdScore: 0.76 },
+  { id:"o6", name:"Desk Organizer Bamboo", cat:"Office Products", price:15.99, pop:6, rel:7, emoji:"📋", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"o7", name:"Notebook Set A5 (3pk)", cat:"Office Products", price:8.99, pop:8, rel:7, emoji:"📓", margin: 0.35, inventory: 140, vendorPriority: 0.55, collaborativeScore: 0.77, svdScore: 0.74 },
+  { id:"o8", name:"Highlighter Set (6 colors)", cat:"Office Products", price:5.49, pop:9, rel:7, emoji:"🖍️", margin: 0.26, inventory: 200, vendorPriority: 0.4, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"o9", name:"Paper Clips 500ct", cat:"Office Products", price:3.99, pop:8, rel:6, emoji:"📎", margin: 0.22, inventory: 250, vendorPriority: 0.3, collaborativeScore: 0.69, svdScore: 0.66 },
+  { id:"o10", name:"Binder Clips Assorted", cat:"Office Products", price:4.49, pop:8, rel:6, emoji:"📎", margin: 0.24, inventory: 180, vendorPriority: 0.35, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"o11", name:"USB Flash Drive 32GB", cat:"Office Products", price:11.99, pop:7, rel:8, emoji:"💾", margin: 0.44, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.75 },
+  { id:"o12", name:"Wireless Keyboard", cat:"Office Products", price:24.99, pop:6, rel:8, emoji:"⌨️", margin: 0.72, inventory: 45, vendorPriority: 0.9, collaborativeScore: 0.76, svdScore: 0.73 },
+  { id:"o13", name:"Monitor Stand Adjustable", cat:"Office Products", price:18.99, pop:5, rel:7, emoji:"🖥️", margin: 0.63, inventory: 50, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"o14", name:"Desk Lamp LED", cat:"Office Products", price:16.49, pop:6, rel:7, emoji:"💡", margin: 0.58, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"o15", name:"File Folders Letter Size", cat:"Office Products", price:6.49, pop:7, rel:6, emoji:"📁", margin: 0.28, inventory: 160, vendorPriority: 0.4, collaborativeScore: 0.70, svdScore: 0.67 },
+  { id:"o16", name:"Whiteboard Markers (4pk)", cat:"Office Products", price:7.99, pop:8, rel:7, emoji:"🖊️", margin: 0.33, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"o17", name:"Calculator Scientific", cat:"Office Products", price:13.49, pop:6, rel:7, emoji:"🧮", margin: 0.51, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.72, svdScore: 0.69 },
+  { id:"o18", name:"Shredder Personal", cat:"Office Products", price:29.99, pop:4, rel:8, emoji:"🗂️", margin: 0.78, inventory: 25, vendorPriority: 0.95, collaborativeScore: 0.68, svdScore: 0.65 },
+  { id:"o19", name:"Label Maker Portable", cat:"Office Products", price:22.99, pop:5, rel:7, emoji:"🏷️", margin: 0.69, inventory: 35, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.66 },
+  { id:"o20", name:"Hole Punch 3-Hole", cat:"Office Products", price:9.99, pop:7, rel:6, emoji:"🕳️", margin: 0.38, inventory: 100, vendorPriority: 0.55, collaborativeScore: 0.71, svdScore: 0.68 },
+
+  // Health & Personal Care (additional 5 — now 25 total)
+  { id:"h21", name:"Vitamin B12 Sublingual", cat:"Health & Personal Care", price:8.99, pop:7, rel:7, emoji:"💊", margin: 0.43, inventory: 110, vendorPriority: 0.62, collaborativeScore: 0.75, svdScore: 0.72 },
+  { id:"h22", name:"Collagen Peptides Powder", cat:"Health & Personal Care", price:19.99, pop:6, rel:8, emoji:"🥛", margin: 0.62, inventory: 65, vendorPriority: 0.88, collaborativeScore: 0.78, svdScore: 0.76 },
+  { id:"h23", name:"Activated Charcoal Capsules", cat:"Health & Personal Care", price:10.49, pop:5, rel:6, emoji:"🖤", margin: 0.46, inventory: 80, vendorPriority: 0.65, collaborativeScore: 0.70, svdScore: 0.67 },
+  { id:"h24", name:"Castor Oil 16oz", cat:"Health & Personal Care", price:7.49, pop:7, rel:7, emoji:"🧴", margin: 0.38, inventory: 130, vendorPriority: 0.52, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"h25", name:"Digestive Enzyme Complex", cat:"Health & Personal Care", price:14.49, pop:6, rel:8, emoji:"🌿", margin: 0.55, inventory: 70, vendorPriority: 0.78, collaborativeScore: 0.76, svdScore: 0.74 },
+
+  // All Beauty (additional 5 — now 25 total)
+  { id:"b21", name:"Tea Tree Face Wash", cat:"All Beauty", price:8.49, pop:8, rel:7, emoji:"🌿", margin: 0.40, inventory: 105, vendorPriority: 0.60, collaborativeScore: 0.76, svdScore: 0.73 },
+  { id:"b22", name:"Vitamin C Brightening Toner", cat:"All Beauty", price:11.99, pop:7, rel:8, emoji:"🍊", margin: 0.51, inventory: 78, vendorPriority: 0.76, collaborativeScore: 0.79, svdScore: 0.77 },
+  { id:"b23", name:"Aloe Vera Gel 8oz", cat:"All Beauty", price:6.49, pop:8, rel:6, emoji:"🌵", margin: 0.34, inventory: 145, vendorPriority: 0.48, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"b24", name:"Biotin Shampoo 16oz", cat:"All Beauty", price:9.99, pop:7, rel:7, emoji:"🚿", margin: 0.43, inventory: 92, vendorPriority: 0.63, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"b25", name:"Snail Mucin Eye Serum", cat:"All Beauty", price:16.49, pop:6, rel:8, emoji:"🐌", margin: 0.60, inventory: 55, vendorPriority: 0.87, collaborativeScore: 0.80, svdScore: 0.78 },
+
+  // Grocery & Gourmet (additional 5 — now 25 total)
+  { id:"g21", name:"Collagen Bone Broth Powder", cat:"Grocery & Gourmet", price:18.49, pop:5, rel:8, emoji:"🍲", margin: 0.60, inventory: 48, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
+  { id:"g22", name:"Pumpkin Seeds Roasted 1lb", cat:"Grocery & Gourmet", price:7.99, pop:7, rel:7, emoji:"🎃", margin: 0.33, inventory: 110, vendorPriority: 0.50, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"g23", name:"Ceylon Cinnamon Powder", cat:"Grocery & Gourmet", price:8.49, pop:6, rel:7, emoji:"🌿", margin: 0.36, inventory: 88, vendorPriority: 0.54, collaborativeScore: 0.70, svdScore: 0.67 },
+  { id:"g24", name:"Grass-Fed Whey Protein 1lb", cat:"Grocery & Gourmet", price:24.49, pop:7, rel:9, emoji:"🏋️", margin: 0.66, inventory: 52, vendorPriority: 0.92, collaborativeScore: 0.83, svdScore: 0.81 },
+  { id:"g25", name:"Flaxseed Meal Organic 2lb", cat:"Grocery & Gourmet", price:9.49, pop:6, rel:7, emoji:"🌾", margin: 0.34, inventory: 82, vendorPriority: 0.52, collaborativeScore: 0.71, svdScore: 0.68 },
+
+  // Office Products (additional 5 — now 25 total)
+  { id:"o21", name:"Mesh Desk Organizer", cat:"Office Products", price:11.49, pop:7, rel:7, emoji:"📐", margin: 0.44, inventory: 78, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
+  { id:"o22", name:"Correction Tape 10-Pack", cat:"Office Products", price:7.99, pop:8, rel:7, emoji:"✏️", margin: 0.31, inventory: 165, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
+  { id:"o23", name:"Lap Desk Portable", cat:"Office Products", price:21.99, pop:6, rel:8, emoji:"💻", margin: 0.67, inventory: 42, vendorPriority: 0.88, collaborativeScore: 0.74, svdScore: 0.71 },
+  { id:"o24", name:"Index Card Dividers 200pk", cat:"Office Products", price:5.49, pop:7, rel:6, emoji:"📇", margin: 0.25, inventory: 190, vendorPriority: 0.38, collaborativeScore: 0.69, svdScore: 0.66 },
+  { id:"o25", name:"Whiteboard Eraser Magnetic", cat:"Office Products", price:6.99, pop:7, rel:6, emoji:"🗑️", margin: 0.29, inventory: 140, vendorPriority: 0.43, collaborativeScore: 0.70, svdScore: 0.67 }
+];
+
+// Large cart item pool - FIXED: Ensure cart stays below $35
+const CART_ITEM_POOL = [
+  { name:"Daily Multivitamin 90ct", cat:"Health & Personal Care", price:8.49, emoji:"💊" },
+  { name:"Micellar Cleansing Water", cat:"All Beauty", price:7.99, emoji:"💧" },
+  { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet", price:5.99, emoji:"🍵" },
+  { name:"Protein Energy Bar (12pk)", cat:"Grocery & Gourmet", price:9.99, emoji:"🍫" },
+  { name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, emoji:"🧴" },
+  { name:"Facial Cleanser Foam", cat:"All Beauty", price:6.49, emoji:"🧼" },
+  { name:"Notebook Set (3pk)", cat:"Office Products", price:7.99, emoji:"📓" },
+  { name:"Organic Coffee Beans 1lb", cat:"Grocery & Gourmet", price:9.99, emoji:"☕" },
+  { name:"Moisturizing Hand Cream", cat:"Health & Personal Care", price:5.49, emoji:"🤲" },
+  { name:"Desk Organizer Tray", cat:"Office Products", price:8.99, emoji:"📋" },
+  { name:"Vitamin D3 Supplement", cat:"Health & Personal Care", price:7.99, emoji:"☀️" },
+  { name:"Lip Balm SPF 15", cat:"All Beauty", price:3.99, emoji:"💋" },
+  { name:"Green Tea Matcha Powder", cat:"Grocery & Gourmet", price:11.99, emoji:"🍃" },
+  { name:"Wireless Mouse", cat:"Office Products", price:12.99, emoji:"🖱️" },
+  { name:"Probiotic Yogurt Starter", cat:"Grocery & Gourmet", price:6.49, emoji:"🥛" },
+  { name:"Eye Cream Anti-Aging", cat:"All Beauty", price:10.99, emoji:"👁️" },
+  { name:"Magnesium Glycinate", cat:"Health & Personal Care", price:9.49, emoji:"💊" },
+  { name:"Sticky Notes Rainbow", cat:"Office Products", price:4.49, emoji:"🌈" },
+  { name:"Almond Milk Unsweetened", cat:"Grocery & Gourmet", price:3.49, emoji:"🥛" },
+  { name:"Sunscreen SPF 50", cat:"All Beauty", price:9.49, emoji:"☀️" },
+  { name:"Omega-3 Fish Oil", cat:"Health & Personal Care", price:12.99, emoji:"🐟" },
+  { name:"Gel Pens Multicolor", cat:"Office Products", price:6.99, emoji:"🖊️" },
+  { name:"Coconut Water 12pk", cat:"Grocery & Gourmet", price:14.99, emoji:"🥥" },
+  { name:"Dry Shampoo Spray", cat:"All Beauty", price:7.99, emoji:"💨" },
+  { name:"Calcium Magnesium Zinc", cat:"Health & Personal Care", price:8.49, emoji:"🦴" },
+  { name:"Highlighter Set Pastel", cat:"Office Products", price:5.99, emoji:"🖍️" },
+  { name:"Kombucha Starter Kit", cat:"Grocery & Gourmet", price:18.99, emoji:"🫧" },
+  { name:"Retinol Serum 1%", cat:"All Beauty", price:15.99, emoji:"🧪" },
+  { name:"Ashwagandha Capsules", cat:"Health & Personal Care", price:11.49, emoji:"🌿" },
+  { name:"Wireless Charger Pad", cat:"Office Products", price:14.99, emoji:"🔋" }
+];
+
+// FIXED: Dynamic cart generation that ENSURES cart stays below $35
+function generateRandomCart() {
+  const shuffled = [...CART_ITEM_POOL].sort(() => Math.random() - 0.5);
+  const numItems = Math.random() > 0.3 ? 3 : 4;
+  let selectedItems = [];
+  let attempts = 0;
+  const maxAttempts = 50;
+
+  while (attempts < maxAttempts) {
+    selectedItems = [];
+    let totalPrice = 0;
+
+    for (let item of shuffled) {
+      if (selectedItems.length >= numItems) break;
+      
+      const categoryPreference = currentUser.categories[item.cat] || 0.1;
+      const selectionProbability = categoryPreference + 0.2;
+      
+      if (Math.random() < selectionProbability) {
+        if (totalPrice + item.price < THRESHOLD - 5) {
+          selectedItems.push(item);
+          totalPrice += item.price;
+        }
+      }
+    }
+
+    while (selectedItems.length < 2) {
+      const randomItem = shuffled[Math.floor(Math.random() * shuffled.length)];
+      if (!selectedItems.find(item => item.name === randomItem.name)) {
+        const newTotal = selectedItems.reduce((sum, item) => sum + item.price, 0) + randomItem.price;
+        if (newTotal < THRESHOLD - 5) {
+          selectedItems.push(randomItem);
+        }
+      }
+    }
+
+    totalPrice = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
+    
+    if (totalPrice < THRESHOLD && (THRESHOLD - totalPrice) >= 5 && (THRESHOLD - totalPrice) <= 20) {
+      break;
+    }
+    
+    attempts++;
+  }
+
+  if (attempts >= maxAttempts) {
+    selectedItems = [
+      { name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, emoji:"🧴" },
+      { name:"Lip Balm SPF 15", cat:"All Beauty", price:3.99, emoji:"💋" },
+      { name:"Sticky Notes Rainbow", cat:"Office Products", price:4.49, emoji:"🌈" },
+      { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet", price:5.99, emoji:"🍵" }
+    ];
+  }
+
+  const finalTotal = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
+  return { items: selectedItems, total: finalTotal };
+}
+
+const cartData = generateRandomCart();
+const CART_ITEMS = cartData.items;
+const CART_SUBTOTAL = cartData.total;
+const GAP_INITIAL = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);
+
+// ═══════════════════════════════════════════════════════════════════════════════════
 // SESSION STATE
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 const participantId = "P_" + Date.now() + "_" + Math.random().toString(36).slice(2,6).toUpperCase();
-const condition     = Math.floor(Math.random()*4)+1;
-const isDSS         = condition >= 3;
-const hasExp        = condition === 2 || condition === 4;
-const touchDevice   = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 1 : 0;
+const condition = Math.floor(Math.random()*4)+1;
+const isDSS = condition >= 3;
+const hasExp = condition === 2 || condition === 4;
+const touchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 1 : 0;
 
 document.getElementById("debug-cond").textContent =
   condition + (isDSS?" DSS":" Static") + (hasExp?" +Exp":" No Exp");
@@ -307,47 +395,421 @@ let sessionData = {
   conditionDSS: isDSS ? 1 : 0,
   conditionExp: hasExp ? 1 : 0,
   cartSubtotal: CART_SUBTOTAL.toFixed(2),
-  gapAtStart:   GAP_INITIAL.toFixed(2),
-  abandonType:  "none",
+  gapAtStart: GAP_INITIAL.toFixed(2),
+  abandonType: "none",
   touchDevice,
 };
 
-let addedItems         = [];
-let itemsAddedThenRemoved = 0; // tracks add→remove behavior (indecision signal)
-let shownRecs          = [];
-let recScreenEnter     = null;
+let addedItems = [];
+let itemsAddedThenRemoved = 0;
+let shownRecs = [];
+let recScreenEnter = null;
 let firstSelectionTime = null;
-let hoverLog           = [];
-let inactivityTimer    = null;
-let countdownTimer     = null;
-let countdownVal       = INACTIVITY_ABANDON_SEC;
-let sessionStartTime   = Date.now();
+let hoverLog = [];
+let inactivityTimer = null;
+let countdownTimer = null;
+let countdownVal = INACTIVITY_ABANDON_SEC;
+let sessionStartTime = Date.now();
 
-// ════════════════════════════════════════════════════════════
-// SCREEN MANAGEMENT
-// ════════════════════════════════════════════════════════════
-// Now 8 screens — exit survey inserted between recommendations and debrief
-const SCREENS = ["consent","prescreener","scenario","cart","recommendations","exitsurvey","posttask","debrief"];
-const SCREEN_LABELS = [
-  "Step 1 of 8 — Study Information",
-  "Step 2 of 8 — Background Questions",
-  "Step 3 of 8 — Shopping Scenario",
-  "Step 4 of 8 — Your Cart",
-  "Step 5 of 8 — Add-on Recommendations",
-  "Step 6 of 8 — Brief Exit Questions",
-  "Step 6 of 8 — Post-Task Survey",
-  "Step 8 of 8 — Complete",
+// ═══════════════════════════════════════════════════════════════════════════════════
+// ENHANCED RECOMMENDATION ALGORITHMS WITH DYNAMIC GAP CALCULATION
+// ═══════════════════════════════════════════════════════════════════════════════════
+
+function getStaticRecs(gap, n=5, usedItemIds = new Set()) {
+  const { priceMin, priceMax } = getGapPriceRange(gap);
+  
+  return [...LARGE_CATALOG]
+    .filter(item => !addedItems.find(a => a.id === item.id))
+    .filter(item => !usedItemIds.has(item.id))
+    .filter(item => item.price >= priceMin && item.price <= priceMax)
+    .sort((a,b) => {
+      const total = getCurrentTotal();
+      const aClears = (total + a.price) >= THRESHOLD;
+      const bClears = (total + b.price) >= THRESHOLD;
+      if (aClears && !bClears) return -1;
+      if (!aClears && bClears) return 1;
+      // Among items that both clear or both don't: sort by popularity with jitter
+      return (b.pop + Math.random() * 2 - 1) - (a.pop + Math.random() * 2 - 1);
+    })
+    .slice(0, n)
+    .map(item => ({
+      ...item,
+      method: 'static',
+      confidence: 0.6 + (Math.random() * 0.2),
+      explanation: hasExp ? generateContextualExplanation(item, 'static') : null
+    }));
+}
+
+function getCollaborativeRecs(gap, n=5, usedItemIds = new Set()) {
+  const { priceMin, priceMax } = getGapPriceRange(gap);
+  
+  return [...LARGE_CATALOG]
+    .filter(item => !addedItems.find(a => a.id === item.id))
+    .filter(item => !usedItemIds.has(item.id))
+    .filter(item => item.price >= priceMin && item.price <= priceMax)
+    .map(item => {
+      let collabScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
+      
+      const categoryPreference = currentUser.categories[item.cat] || 0.1;
+      collabScore += categoryPreference * 0.3;
+      
+      const vendorScore = (item.margin * 0.4) + (item.vendorPriority * 0.6);
+      const finalScore = (0.6 * collabScore) + (0.4 * vendorScore);
+      
+      return {
+        ...item,
+        score: finalScore,
+        method: 'collaborative',
+        confidence: collabScore,
+        vendorScore: vendorScore,
+        explanation: hasExp ? generateContextualExplanation(item, 'collaborative') : null
+      };
+    })
+    .sort((a,b) => b.score - a.score)
+    .slice(0, n);
+}
+
+function getSVDRecs(gap, n=5, usedItemIds = new Set()) {
+  const { priceMin, priceMax } = getGapPriceRange(gap);
+  
+  return [...LARGE_CATALOG]
+    .filter(item => !addedItems.find(a => a.id === item.id))
+    .filter(item => !usedItemIds.has(item.id))
+    .filter(item => item.price >= priceMin && item.price <= priceMax)
+    .map(item => {
+      let svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
+      
+      const categoryPreference = currentUser.categories[item.cat] || 0.1;
+      const priceInRange = item.price >= currentUser.priceRange[0] && 
+                          item.price <= currentUser.priceRange[1];
+      svdScore += categoryPreference * 0.2 + (priceInRange ? 0.1 : 0);
+      
+      const inventoryScore = Math.min(item.inventory / 200, 1);
+      const vendorScore = (item.margin * 0.3) + (item.vendorPriority * 0.4) + (inventoryScore * 0.3);
+      
+      const finalScore = (0.55 * svdScore) + (0.45 * vendorScore);
+      
+      return {
+        ...item,
+        score: finalScore,
+        method: 'svd',
+        confidence: svdScore,
+        vendorScore: vendorScore,
+        explanation: hasExp ? generateContextualExplanation(item, 'svd') : null
+      };
+    })
+    .sort((a,b) => b.score - a.score)
+    .slice(0, n);
+}
+
+function getDSSRecs(gap, n=5, usedItemIds = new Set()) {
+  const { priceMin, priceMax } = getGapPriceRange(gap);
+  
+  return [...LARGE_CATALOG]
+    .filter(item => !addedItems.find(a => a.id === item.id))
+    .filter(item => !usedItemIds.has(item.id))
+    .filter(item => item.price >= priceMin && item.price <= priceMax)
+    .map(item => {
+      const relevanceScore = (item.rel / 10) + (Math.random() * 0.1 - 0.05);
+      const popularityScore = (item.pop / 10) + (Math.random() * 0.1 - 0.05);
+      const collaborativeScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
+      const svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
+      
+      const categoryAffinity = currentUser.categories[item.cat] || 0.1;
+      const priceAffinity = item.price >= currentUser.priceRange[0] && 
+                           item.price <= currentUser.priceRange[1] ? 1 : 0.5;
+      
+      const marginScore = item.margin;
+      const inventoryScore = Math.min(item.inventory / 200, 1);
+      const priorityScore = item.vendorPriority;
+      const vendorScore = (marginScore * 0.4) + (priorityScore * 0.4) + (inventoryScore * 0.2);
+      
+      const gapCenter = (priceMin + priceMax) / 2;
+      const gapFit = Math.max(0, 1 - Math.abs(item.price - gapCenter) / Math.max(gapCenter, 0.01));
+      
+      const userScore = (
+        0.20 * relevanceScore +
+        0.15 * popularityScore +
+        0.25 * collaborativeScore +
+        0.20 * svdScore +
+        0.15 * categoryAffinity +
+        0.05 * priceAffinity
+      );
+      
+      const finalScore = (0.5 * userScore) + (0.3 * vendorScore) + (0.2 * gapFit);
+      
+      return {
+        ...item,
+        score: finalScore,
+        method: 'dss',
+        confidence: userScore,
+        vendorScore: vendorScore,
+        gapFit: gapFit,
+        explanation: hasExp ? generateContextualExplanation(item, 'dss') : null
+      };
+    })
+    .sort((a,b) => b.score - a.score)
+    .slice(0, n);
+}
+
+// ─── Cart-aware contextual explanation engine ─────────────────────────────────
+// Generates natural-language explanations grounded in what's actually in the
+// cart (both original items and anything the tester has already added).
+// Logic priority:
+//   1. Direct name match — a cart item is semantically related to the rec
+//   2. Same-category pairing — rec shares a category with a cart item
+//   3. Cross-category complement — known pairing patterns (e.g. coffee → mug)
+//   4. User profile / wellness routine signal
+//   5. Generic fallback (never mentions gap or popularity)
+
+// Semantic keyword clusters used for name-based matching
+const KEYWORD_CLUSTERS = [
+  { keys: ["vitamin","supplement","capsule","tablet","mineral","zinc","magnesium","calcium","iron","omega","probiotic","biotin","collagen","enzyme","melatonin","turmeric","elderberry","ashwagandha","coq10","glucosamine","fiber","prenatal","multivitamin"], label: "supplement" },
+  { keys: ["serum","moisturizer","cream","toner","cleanser","mask","mist","scrub","oil","eye cream","peel","micellar","retinol","hyaluronic","niacinamide","peptide","glycolic","salicylic","caffeine","vitamin c","spf","tinted"], label: "skincare" },
+  { keys: ["shampoo","conditioner","hair","argan","keratin","biotin shampoo","coconut oil hair"], label: "haircare" },
+  { keys: ["coffee","matcha","tea","green tea","honey","nut","seed","quinoa","chia","cacao","chocolate","maple","olive oil","protein bar","almond butter","coconut water","kombucha","bone broth","whey","flaxseed","pumpkin seed","cinnamon","spirulina"], label: "food" },
+  { keys: ["notebook","pen","stapler","highlighter","sticky note","organizer","clip","folder","calculator","mouse","keyboard","lamp","desk","label","whiteboard","correction","index card","lap desk","eraser","hole punch","binder","usb","flash drive","monitor"], label: "office" },
+  { keys: ["hand sanitizer","hand cream","lip balm","sunscreen","sanitizer"], label: "bodycare" },
 ];
-const SCREEN_PROGRESS = [5,16,28,42,57,75,82,100];
+
+function getItemCluster(itemName) {
+  const lower = itemName.toLowerCase();
+  for (const cluster of KEYWORD_CLUSTERS) {
+    if (cluster.keys.some(k => lower.includes(k))) return cluster.label;
+  }
+  return null;
+}
+
+// Cross-category complement pairs: if cart has A, rec of type B pairs naturally
+const COMPLEMENT_PAIRS = [
+  { cartLabel:"food",       recLabel:"supplement", reason:"pairs naturally with the health foods already in your cart" },
+  { cartLabel:"supplement", recLabel:"food",       reason:"complements the supplements in your cart for a complete wellness routine" },
+  { cartLabel:"skincare",   recLabel:"haircare",   reason:"rounds out your personal care routine alongside the skincare items in your cart" },
+  { cartLabel:"haircare",   recLabel:"skincare",   reason:"pairs well with the hair products already in your cart" },
+  { cartLabel:"office",     recLabel:"food",       reason:"a popular add-on for people stocking up on desk essentials" },
+  { cartLabel:"food",       recLabel:"bodycare",   reason:"complements the pantry items in your cart for an everyday essentials order" },
+  { cartLabel:"bodycare",   recLabel:"skincare",   reason:"extends your personal care selection alongside what's already in your cart" },
+  { cartLabel:"supplement", recLabel:"skincare",   reason:"pairs well with your supplements — many customers combine inner and outer wellness products" },
+  { cartLabel:"skincare",   recLabel:"supplement", reason:"a natural companion to your skincare items — customers who buy these often add a wellness supplement" },
+];
+
+function generateContextualExplanation(item, method) {
+  // Full cart context = original items + anything the tester has added so far
+  const allCartItems = [...CART_ITEMS, ...addedItems.filter(a => a.id !== item.id)];
+
+  const recCluster = getItemCluster(item.name);
+  const recCatShort = item.cat.split(" &")[0];
+
+  // ── 1. Direct name-level match ──────────────────────────────────────────────
+  // Find a cart item whose name shares a meaningful keyword with the rec
+  for (const cartItem of allCartItems) {
+    const cartLower = cartItem.name.toLowerCase();
+    const recLower  = item.name.toLowerCase();
+
+    // Exact product family match (e.g. "Vitamin C Serum" → "Vitamin C Brightening Toner")
+    const sharedWords = recLower.split(" ").filter(w =>
+      w.length > 4 && cartLower.includes(w) &&
+      !["with","from","your","that","this","great","also","item","more"].includes(w)
+    );
+    if (sharedWords.length > 0) {
+      const templates = [
+        `Based on the ${cartItem.name} in your cart, this pairs well as part of the same routine.`,
+        `You already have ${cartItem.name} — customers who buy that often add this as a companion product.`,
+        `A natural match with the ${cartItem.name} you're already getting.`,
+      ];
+      return templates[Math.floor(Math.random() * templates.length)];
+    }
+  }
+
+  // ── 2. Same-category pairing ────────────────────────────────────────────────
+  const sameCatItem = allCartItems.find(c => c.cat === item.cat);
+  if (sameCatItem) {
+    const sameCatTemplates = [
+      `You already have ${sameCatItem.name} in your cart — this is a frequently bought companion in ${recCatShort}.`,
+      `Pairs well with the ${sameCatItem.name} you're getting — customers often stock up on both.`,
+      `Since you're picking up ${sameCatItem.name}, this is a popular addition in the same category.`,
+      `A common pairing with the ${sameCatItem.name} already in your cart.`,
+    ];
+    return sameCatTemplates[Math.floor(Math.random() * sameCatTemplates.length)];
+  }
+
+  // ── 3. Cross-category complement ────────────────────────────────────────────
+  if (recCluster) {
+    for (const cartItem of allCartItems) {
+      const cartCluster = getItemCluster(cartItem.name);
+      const pair = COMPLEMENT_PAIRS.find(p => p.cartLabel === cartCluster && p.recLabel === recCluster);
+      if (pair) {
+        const crossTemplates = [
+          `Based on the ${cartItem.name} in your cart, this ${pair.reason}.`,
+          `Customers who buy ${cartItem.name} frequently add this — it ${pair.reason}.`,
+          `A good companion to your ${cartItem.name}: this ${pair.reason}.`,
+        ];
+        return crossTemplates[Math.floor(Math.random() * crossTemplates.length)];
+      }
+    }
+  }
+
+  // ── 4. Profile / routine signal ─────────────────────────────────────────────
+  const cartCats = [...new Set(allCartItems.map(c => c.cat))];
+  if (cartCats.length >= 2) {
+    return `Based on the mix of items in your cart, this fits the everyday essentials order you're putting together.`;
+  }
+  if (recCluster === "supplement") {
+    return `A well-reviewed addition to any health and wellness routine.`;
+  }
+  if (recCluster === "skincare") {
+    return `Frequently added by customers building out a personal care routine.`;
+  }
+  if (recCluster === "office") {
+    return `A practical pick that works well alongside the other desk and productivity items in your cart.`;
+  }
+
+  // ── 5. Fallback — never mentions gap or popularity ───────────────────────────
+  const fallbacks = [
+    `Matches the type of everyday essentials you're already shopping for.`,
+    `A natural fit with the items you have in your cart.`,
+    `Frequently bought together with items similar to yours.`,
+  ];
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
+
+// ─── Gap-aware price range helper ─────────────────────────────────────────────
+// Goal: surface items that could plausibly complete the threshold (TCP logic).
+// An item "completes" the threshold if: currentTotal + item.price >= THRESHOLD.
+// That means item.price >= gap. But we also want items that get close (within
+// $2 under) so the participant can combine two small items.
+// Upper bound: cap at gap + $12 to avoid recommending wildly over-priced items
+// when the gap is tiny (e.g. gap=$0.05 → don't show $25 items).
+// When gap is already met (≤0): show any item (general "you might also like").
+function getGapPriceRange(gap) {
+  if (gap <= 0) {
+    return { priceMin: 0, priceMax: Infinity };
+  }
+  // Lower bound: items priced at least (gap - $2), floor at $1
+  // Upper bound: items priced at most (gap + $12), so overshoot is reasonable
+  const priceMin = Math.max(1, gap - 2);
+  const priceMax = gap + 12;
+  return { priceMin, priceMax };
+}
+
+// FIXED: Dynamic recommendation generation with real-time gap calculation
+function getRecommendations() {
+  const gap = getCurrentGap();
+  const { priceMin, priceMax } = getGapPriceRange(gap);
+
+  let recommendations = [];
+  let usedItemIds = new Set();
+
+  switch(condition) {
+    case 1:
+      recommendations = getStaticRecs(gap, 5, usedItemIds);
+      break;
+
+    case 2:
+      recommendations = getStaticRecs(gap, 5, usedItemIds);
+      break;
+
+    case 3:
+      const collaborativeRecs = getCollaborativeRecs(gap, 2, usedItemIds);
+      recommendations.push(...collaborativeRecs);
+      collaborativeRecs.forEach(item => usedItemIds.add(item.id));
+
+      const svdRecs = getSVDRecs(gap, 2, usedItemIds);
+      recommendations.push(...svdRecs);
+      svdRecs.forEach(item => usedItemIds.add(item.id));
+
+      const dssRecs = getDSSRecs(gap, 1, usedItemIds);
+      recommendations.push(...dssRecs);
+      break;
+
+    case 4:
+      const collaborativeRecsExp = getCollaborativeRecs(gap, 2, usedItemIds);
+      recommendations.push(...collaborativeRecsExp);
+      collaborativeRecsExp.forEach(item => usedItemIds.add(item.id));
+
+      const svdRecsExp = getSVDRecs(gap, 2, usedItemIds);
+      recommendations.push(...svdRecsExp);
+      svdRecsExp.forEach(item => usedItemIds.add(item.id));
+
+      const dssRecsExp = getDSSRecs(gap, 1, usedItemIds);
+      recommendations.push(...dssRecsExp);
+      break;
+
+    default:
+      recommendations = getStaticRecs(gap, 5, usedItemIds);
+  }
+
+  // Pad to 5 if any algorithm came up short
+  if (recommendations.length < 5) {
+    const total = getCurrentTotal();
+    const fallbackItems = LARGE_CATALOG
+      .filter(item =>
+        !addedItems.find(a => a.id === item.id) &&
+        !usedItemIds.has(item.id) &&
+        item.price >= priceMin &&
+        item.price <= priceMax
+      )
+      // Prefer items that complete the threshold; among those, prefer lowest overshoot; then by popularity
+      .sort((a, b) => {
+        const aClears = (total + a.price) >= THRESHOLD;
+        const bClears = (total + b.price) >= THRESHOLD;
+        if (aClears && !bClears) return -1;
+        if (!aClears && bClears) return 1;
+        if (aClears && bClears) return (total + a.price) - (total + b.price); // least overshoot first
+        return b.pop - a.pop; // neither clears: by popularity
+      })
+      .slice(0, 5 - recommendations.length)
+      .map(item => ({
+        ...item,
+        method: 'fallback',
+        confidence: 0.5,
+        explanation: hasExp ? generateContextualExplanation(item, 'fallback') : null
+      }));
+
+    recommendations.push(...fallbackItems);
+  }
+
+  return recommendations.slice(0, 5);
+}
+
+function computeRecDeviationScore() {
+  const staticIds = new Set(getStaticRecs(getCurrentGap(), 5).map(r=>r.id));
+  const dssIds = new Set(getDSSRecs(getCurrentGap(), 5).map(r=>r.id));
+  const overlap = [...staticIds].filter(id=>dssIds.has(id)).length;
+  return +(1 - overlap/5).toFixed(2);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// CART STATE
+// ═══════════════════════════════════════════════════════════════════════════════════
+function getCurrentTotal() { return +(CART_SUBTOTAL + addedItems.reduce((s,i)=>s+i.price,0)).toFixed(2); }
+function getCurrentGap() { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
+function isGapCleared() { return getCurrentTotal() >= THRESHOLD; }
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// SCREEN MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════════════
+const SCREENS = ["consent","prescreener","scenario","cart","recommendations","abandon-survey","posttask","debrief"];
+const SCREEN_LABELS = [
+  "Step 1 of 6 — Study Information & Consent",
+  "Step 2 of 6 — Background Questions",
+  "Step 3 of 6 — Shopping Scenario",
+  "Step 4 of 6 — Your Cart",
+  "Step 5 of 6 — Add-on Recommendations",
+  "Step 5 of 6 — A Few Quick Questions",
+  "Step 6 of 6 — Survey",
+  "Complete"
+];
+const SCREEN_PROGRESS = [5,16,28,42,57,68,82,100];
 let currentScreenIdx = 0;
 
 function setScreen(name) {
   currentScreenIdx = SCREENS.indexOf(name);
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen-"+name).classList.add("active");
-  document.getElementById("progress").style.width       = SCREEN_PROGRESS[currentScreenIdx]+"%";
+  document.getElementById("progress").style.width = SCREEN_PROGRESS[currentScreenIdx]+"%";
   document.getElementById("progress-label").textContent = SCREEN_LABELS[currentScreenIdx];
-  document.getElementById("debug-screen").textContent   = name;
+  document.getElementById("debug-screen").textContent = name;
   window.scrollTo(0,0);
 
   if (name === "recommendations") {
@@ -358,13 +820,32 @@ function setScreen(name) {
     stopInactivityWatch();
   }
   if (name === "posttask") refreshAddonQualityCard();
+  if (name === "debrief") {
+    const card = document.getElementById("order-summary-card");
+    if (card) {
+      const total = parseFloat(sessionData.finalTotal) || getCurrentTotal();
+      const cleared = isGapCleared();
+      if (cleared) {
+        card.style.background = "var(--success-light)";
+        card.style.borderColor = "var(--success)";
+        card.innerHTML = `
+          <div class="section-label">Your order summary</div>
+          <p style="color:var(--text);margin:0">✅ <strong>Free shipping unlocked!</strong> Your final cart total was <strong>$${total.toFixed(2)}</strong> — above the $35 threshold.</p>`;
+      } else {
+        card.style.background = "var(--warning-light)";
+        card.style.borderColor = "var(--warning)";
+        card.innerHTML = `
+          <div class="section-label">Your order summary</div>
+          <p style="color:var(--text);margin:0">📦 Your final cart total was <strong>$${total.toFixed(2)}</strong>. The $5.99 shipping fee applied.</p>`;
+      }
+    }
+  }
 }
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 // ABANDONMENT DETECTION
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 
-// 1. Page close / navigation
 window.addEventListener("beforeunload", function(e) {
   if (currentScreenIdx === 4 && sessionData.checkoutCompleted === undefined) {
     sessionData.abandonType = "pagetransition";
@@ -376,7 +857,6 @@ window.addEventListener("beforeunload", function(e) {
   }
 });
 
-// 2. Inactivity
 function startInactivityWatch() {
   stopInactivityWatch();
   inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
@@ -416,65 +896,15 @@ function triggerInactivityAbandon() {
   sessionData.abandonType = "inactivity";
   sessionData.checkoutCompleted = 0;
   recordTimingsAndItems(false);
-  // Inactivity abandons go straight to debrief (no exit survey — participant is gone)
   flushData();
   document.getElementById("debrief-note").textContent =
     "Your session was recorded as incomplete due to inactivity.";
   setScreen("debrief");
 }
 
-// 3. Explicit button abandon → exit survey
-function abandonCart() {
-  stopInactivityWatch();
-  sessionData.abandonType = "button";
-  sessionData.checkoutCompleted = 0;
-  recordTimingsAndItems(false);
-  setScreen("exitsurvey"); // goes to exit survey, not debrief directly
-}
-
-// ════════════════════════════════════════════════════════════
-// RECOMMENDATION LOGIC
-// ════════════════════════════════════════════════════════════
-function getStaticRecs(n=5) {
-  return [...CATALOG].sort((a,b)=>b.pop-a.pop).slice(0,n);
-}
-function getDSSRecs(currentTotal, n=5) {
-  const gap = Math.max(0, +(THRESHOLD - currentTotal).toFixed(2));
-  return [...CATALOG]
-    .filter(item => !addedItems.find(a=>a.id===item.id))
-    .map(item => {
-      const gapFit = Math.max(0, 1 - Math.abs(item.price - gap) / Math.max(gap,1));
-      const score  = (0.45*(item.rel/10)) + (0.35*gapFit) + (0.20*(item.pop/10));
-      return { ...item, score };
-    })
-    .sort((a,b)=>b.score-a.score)
-    .slice(0,n);
-}
-function computeRecDeviationScore() {
-  const staticIds = new Set(getStaticRecs(5).map(r=>r.id));
-  const dssIds    = new Set(getDSSRecs(getCurrentTotal(), 5).map(r=>r.id));
-  const overlap   = [...staticIds].filter(id=>dssIds.has(id)).length;
-  return +(1 - overlap/5).toFixed(2);
-}
-function getExplanation(item, currentTotal) {
-  const newTotal = +(currentTotal + item.price).toFixed(2);
-  if (newTotal >= THRESHOLD) {
-    return `Adding this item brings your total to $${newTotal.toFixed(2)}, qualifying for free shipping and saving you $5.99 in fees.`;
-  }
-  const remaining = +(THRESHOLD - newTotal).toFixed(2);
-  return `This item fits your cart and reduces your shipping gap to $${remaining.toFixed(2)}. It matches your purchase history in ${item.cat}.`;
-}
-
-// ════════════════════════════════════════════════════════════
-// CART STATE
-// ════════════════════════════════════════════════════════════
-function getCurrentTotal() { return +(CART_SUBTOTAL + addedItems.reduce((s,i)=>s+i.price,0)).toFixed(2); }
-function getCurrentGap()   { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
-function isGapCleared()    { return getCurrentTotal() >= THRESHOLD; }
-
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 // UI HELPERS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
 function buildLikert(name, n=7) {
   return `<div class="likert">${Array.from({length:n},(_,i)=>`<div><input type="radio" name="${name}" id="${name}_${i+1}" value="${i+1}"><label for="${name}_${i+1}">${i+1}</label></div>`).join("")}</div>`;
 }
@@ -521,521 +951,825 @@ function updateLivePanel() {
     <div class="added-items">${addedHTML}</div>
     <div class="panel-totals">
       <div class="panel-row"><span>Original subtotal</span><span>$${CART_SUBTOTAL.toFixed(2)}</span></div>
-      ${addedItems.length>0?`<div class="panel-row"><span>Add-ons (×${addedItems.length})</span><span>+$${addedSum.toFixed(2)}</span></div>`:""}
+      ${addedItems.length>0?`<div class="panel-row"><span>Add-ons (×${addedItems.length})</span><span style="color:var(--success);font-weight:600">+$${addedSum.toFixed(2)}</span></div>`:""}
       <div class="panel-row bold"><span>New total</span><span>$${total.toFixed(2)}</span></div>
     </div>
     <div class="gap-indicator ${cleared?"met":"short"}">
-      ${cleared ? "✓ Free shipping threshold met!" : `$${getCurrentGap().toFixed(2)} away from free shipping`}
+      ${cleared ? "✅ Free shipping threshold met!" : `🚚 $${getCurrentGap().toFixed(2)} more needed for free shipping`}
     </div>`;
 }
+
+// Render recommendation grid.
+// Added items are always pinned at the top of the grid (selected state, tappable to remove).
+// Below them, up to 5 fresh unselected recommendations fill the rest of the grid.
 function renderRecs() {
   const total = getCurrentTotal();
-  shownRecs = isDSS
-    ? getDSSRecs(total, 5)
-    : getStaticRecs(5).filter(i=>!addedItems.find(a=>a.id===i.id)).slice(0,5);
+
+  // Fresh recs exclude already-added items — these fill the unselected slots
+  shownRecs = getRecommendations();
   sessionData.addonsShown = shownRecs.map(r=>r.name).join("|");
+
   const grid = document.getElementById("rec-grid");
   if (!grid) return;
-  grid.innerHTML = shownRecs.map(item => {
-    const isSelected = !!addedItems.find(a=>a.id===item.id);
-    const clears = (+(total + item.price).toFixed(2)) >= THRESHOLD && !isSelected;
+
+  // Build pinned cards for items already in the cart (so they can be toggled off)
+  const pinnedCards = addedItems.map(item => `
+    <div class="rec-card selected" id="rec-${item.id}"
+      onclick="toggleAddon('${item.id}')"
+      onmouseenter="logHover('${item.id}','enter')"
+      onmouseleave="logHover('${item.id}','leave')"
+      title="Click to remove">
+      <div class="check-badge">✓</div>
+      <div class="rec-emoji">${item.emoji}</div>
+      <div class="rec-name">${item.name}</div>
+      <div class="rec-meta">
+        <span class="rec-price">$${item.price.toFixed(2)}</span>
+        <span class="rec-cat" style="background:var(--accent-light);color:var(--accent)">${item.cat.split(" &")[0]}</span>
+      </div>
+      <div style="font-size:0.72rem;color:var(--accent);margin-top:6px;font-weight:600">Tap to remove</div>
+    </div>`).join("");
+
+  // Build fresh recommendation cards (unselected items only)
+  const freshCards = shownRecs.map(item => {
+    const clears = (+(total + item.price).toFixed(2)) >= THRESHOLD;
+    const showValueBadge = isDSS && item.vendorScore && item.vendorScore >= 0.65;
+    const badge = clears && !hasExp
+      ? `<div class="gap-badge">Clears gap</div>`
+      : (showValueBadge && !hasExp
+        ? `<div class="gap-badge" style="background:var(--warning)">★ Value</div>`
+        : "");
     return `
-    <div class="rec-card ${isSelected?"selected":""}" id="rec-${item.id}"
+    <div class="rec-card" id="rec-${item.id}"
       onclick="toggleAddon('${item.id}')"
       onmouseenter="logHover('${item.id}','enter')"
       onmouseleave="logHover('${item.id}','leave')">
-      ${isSelected
-        ? `<div class="check-badge">✓</div>`
-        : (clears && !hasExp ? `<div class="gap-badge">Clears gap</div>` : "")}
+      ${badge}
       <div class="rec-emoji">${item.emoji}</div>
       <div class="rec-name">${item.name}</div>
       <div class="rec-meta">
         <span class="rec-price">$${item.price.toFixed(2)}</span>
         <span class="rec-cat">${item.cat.split(" &")[0]}</span>
       </div>
-      ${hasExp ? `<div class="rec-explanation">💡 ${getExplanation(item, total)}</div>` : ""}
+      ${hasExp && item.explanation ? `<div class="rec-explanation">💡 ${item.explanation}</div>` : ""}
     </div>`;
   }).join("");
+
+  // Divider shown only when there are both pinned and fresh cards
+  const divider = (addedItems.length > 0 && shownRecs.length > 0)
+    ? `<div style="grid-column:1/-1;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:4px 0 2px">More suggestions</div>`
+    : "";
+
+  grid.innerHTML = pinnedCards + divider + freshCards;
 }
+
+function toggleCartSummary() {
+  const body = document.getElementById("cart-summary-body");
+  const toggle = document.getElementById("cart-summary-toggle");
+  if (!body || !toggle) return;
+  const isHidden = body.style.display === "none";
+  body.style.display = isHidden ? "block" : "none";
+  toggle.textContent = isHidden ? "Hide ▴" : "Show ▾";
+}
+
 function logHover(id, type) {
-  if (recScreenEnter) hoverLog.push({ id, type, ms: Math.round(Date.now() - recScreenEnter) });
+  hoverLog.push({ id, type, time: Date.now() });
 }
-function toggleAddon(id) {
-  if (addedItems.find(a=>a.id===id)) { removeAddon(id); return; }
-  const item = CATALOG.find(c=>c.id===id);
+
+// FIXED: Toggle addon with dynamic recommendation updates - STAY ON RECOMMENDATIONS SCREEN
+function toggleAddon(itemId) {
+  const item = LARGE_CATALOG.find(i => i.id === itemId);
   if (!item) return;
-  addedItems.push(item);
-  if (!firstSelectionTime) firstSelectionTime = Date.now();
-  renderRecs(); updateBanner(); updateLivePanel(); refreshAddonQualityCard();
-}
-function removeAddon(id) {
-  if (addedItems.find(a=>a.id===id)) itemsAddedThenRemoved++;
-  addedItems = addedItems.filter(a=>a.id!==id);
-  renderRecs(); updateBanner(); updateLivePanel(); refreshAddonQualityCard();
+  
+  const existingIndex = addedItems.findIndex(a => a.id === itemId);
+  if (existingIndex >= 0) {
+    addedItems.splice(existingIndex, 1);
+    itemsAddedThenRemoved++;
+  } else {
+    addedItems.push(item);
+    if (!firstSelectionTime) firstSelectionTime = Date.now();
+  }
+  
+  // CRITICAL FIX: Update everything dynamically but STAY ON RECOMMENDATIONS SCREEN
+  renderRecs();
+  updateBanner();
+  updateLivePanel();
+  refreshAddonQualityCard();
+  
+  if (currentScreenIdx === 4) {
+    resetInactivity();
+  }
 }
 
-// ════════════════════════════════════════════════════════════
-// TIMINGS & ITEM RECORDING
-// ════════════════════════════════════════════════════════════
+function removeAddon(itemId) {
+  const existingIndex = addedItems.findIndex(a => a.id === itemId);
+  if (existingIndex >= 0) {
+    addedItems.splice(existingIndex, 1);
+    itemsAddedThenRemoved++;
+    renderRecs();
+    updateBanner();
+    updateLivePanel();
+    refreshAddonQualityCard();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// DATA COLLECTION & SUBMISSION
+// ═══════════════════════════════════════════════════════════════════════════════════
 function recordTimingsAndItems(completed) {
-  const now = Date.now();
-  sessionData.timeOnRecScreen      = recScreenEnter ? Math.round((now - recScreenEnter)/1000) : 0;
-  sessionData.timeToFirstSelection = firstSelectionTime
-    ? Math.round((firstSelectionTime - recScreenEnter)/1000) : "none";
-  sessionData.checkoutCompleted    = completed ? 1 : 0;
-  sessionData.addonCount           = addedItems.length;
-  sessionData.addonsSelected       = addedItems.length > 0 ? 1 : 0;
-  sessionData.addonNames           = addedItems.map(i=>i.name).join("|");
-  sessionData.addonPrices          = addedItems.map(i=>i.price.toFixed(2)).join("|");
-  sessionData.finalTotal           = getCurrentTotal().toFixed(2);
-  sessionData.gapCleared           = isGapCleared() ? 1 : 0;
-  sessionData.hoverEvents          = JSON.stringify(hoverLog);
-  sessionData.recDeviationScore    = computeRecDeviationScore();
-  sessionData.sessionDurationSeconds = Math.round((now - sessionStartTime)/1000);
-  // Exit-specific computed metrics
-  sessionData.exitItemsAdded       = addedItems.length;
-  sessionData.exitGapAtAbandon     = getCurrentGap().toFixed(2);
-  sessionData.exitTimeOnScreen     = sessionData.timeOnRecScreen;
-  sessionData.exitHoverCount       = hoverLog.filter(h=>h.type==="enter").length;
-  sessionData.exitAddThenRemove    = itemsAddedThenRemoved > 0 ? 1 : 0;
+  sessionData.checkoutCompleted = completed ? 1 : 0;
+  sessionData.addonsSelected = addedItems.map(i=>i.name).join("|");
+  sessionData.addonCount = addedItems.length;
+  sessionData.addonNames = addedItems.map(i=>i.name).join("|");
+  sessionData.addonPrices = addedItems.map(i=>i.price.toFixed(2)).join("|");
+  sessionData.finalTotal = getCurrentTotal().toFixed(2);
+  sessionData.gapCleared = isGapCleared() ? 1 : 0;
+  sessionData.timeOnRecScreen = recScreenEnter ? Math.round((Date.now() - recScreenEnter) / 1000) : 0;
+  sessionData.timeToFirstSelection = firstSelectionTime && recScreenEnter ? Math.round((firstSelectionTime - recScreenEnter) / 1000) : 0;
+  sessionData.hoverEvents = hoverLog.length;
+  sessionData.hoverEventsPerMinute = sessionData.timeOnRecScreen > 0
+    ? +(hoverLog.length / (sessionData.timeOnRecScreen / 60)).toFixed(2)
+    : 0;
+  sessionData.itemsAddedThenRemoved = itemsAddedThenRemoved;
+  sessionData.recDeviationScore = computeRecDeviationScore();
+}
+function flushData() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  
+  const formData = new URLSearchParams();
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 1. EXPERIMENTAL CONDITIONS & IDENTIFIERS
+  // ══════════════════════════════════════════════════════════════════════════
+  // Unique ID to track individual participant responses for data cleaning
+  formData.append('entry.336082628', sessionData.participantId || '');
+  // Combined group index (1-4) representing the 2x2 factorial cells
+  formData.append('entry.1363167156', sessionData.condition || '');
+  // Independent Factor A: Recommendation Logic (0=Standard, 1=Threshold-Aware DSS)
+  formData.append('entry.1701158278', sessionData.conditionDSS || '');
+  // Independent Factor B: Explanation Presence (0=No Explanation, 1=LLM-Generated)
+  formData.append('entry.699386313', sessionData.conditionExp || '');
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 2. SHOPPING TASK PERFORMANCE (SCREEN: RECOMMENDATIONS)
+  // ══════════════════════════════════════════════════════════════════════════
+  // Baseline: Subtotal of the pre-filled cart before participant intervention
+  formData.append('entry.1915848193', sessionData.cartSubtotal || 0);
+  // Initial Goal: The dollar amount needed to reach the $35 free-shipping mark
+  formData.append('entry.521472749', sessionData.gapAtStart || 0);
+  // Exposure: Total number of recommendation cards displayed in the UI
+  formData.append('entry.387204756', sessionData.addonsShown || 0);
+  // Selection Metric: Number of checkboxes currently selected by the participant
+  formData.append('entry.999404469', sessionData.addonsSelected || 0);
+  // Selection Metric: Final count of add-on items in the cart at checkout
+  formData.append('entry.1211689573', sessionData.addonCount || 0);
+  // Qualitative Audit: Literal names of items added (e.g., "Organic Rice")
+  formData.append('entry.155213739', sessionData.addonNames || '');
+  // Price Audit: Literal prices of selected items used for total verification
+  formData.append('entry.1941662475', sessionData.addonPrices || '');
+  // Binary Outcome: Clicked "Complete Purchase" (1) or "Decided to Leave" (0)
+  formData.append('entry.399283720', sessionData.checkoutCompleted ? 1 : 0);
+  // Transaction Value: The final total dollar amount calculated in the cart
+  formData.append('entry.779625089', sessionData.finalTotal || 0);
+  // Goal Outcome: Binary check if the subtotal reached or exceeded $35.00
+  formData.append('entry.1738303010', sessionData.gapCleared ? 1 : 0);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 3. ABANDONMENT ANALYSIS (SCREEN: EXIT DIALOG & REASONS)
+  // ══════════════════════════════════════════════════════════════════════════
+  // Categorical Logic: Abandoned early (0 items) or after partial selection?
+  formData.append('entry.1445663391', sessionData.abandonType || 'N/A');
+  // Q: "During the shopping task, I was focused on avoiding the shipping fee"
+  formData.append('entry.421685344', sessionData.abandonReason || '');
+  // Q: "Please select all that apply" ( Irrelevant items / Too expensive / etc. )
+  formData.append('entry.1111071683', sessionData.exitReasonsChecked || '');
+  // Q: "Please tell us more about why you decided to leave" (Open text field)
+  formData.append('entry.227332894', sessionData.exitFreeText || '');
+  // Q: "What could we have done to make it easier for you to reach the threshold?"
+  formData.append('entry.1897370611', sessionData.exitSuggestion || '');
+  // Engagement at Exit: Number of items checked at the moment of abandonment
+  formData.append('entry.457722614', sessionData.exitItemsAdded || 0);
+  // Proximity at Exit: Dollar amount remaining to reach $35 when user quit
+  formData.append('entry.1893427120', sessionData.exitGapAtAbandon || 0);
+  // Temporal Exit: Seconds elapsed on the task screen before deciding to quit
+  formData.append('entry.973032317', sessionData.exitTimeOnScreen || 0);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 4. PROCESS TRACING & BACKEND RESEARCH METRICS (H2, H5, H6)
+  // ══════════════════════════════════════════════════════════════════════════
+  // Efficiency: Total interaction time on the recommendations screen in seconds
+  formData.append('entry.1188163062', sessionData.timeOnRecScreen || 0);
+  // Latency: Seconds elapsed before the participant made their first item click
+  formData.append('entry.1958008072', sessionData.timeToFirstSelection || 0);
+  // Search Intensity: Total number of hover events over items (Engagement proxy)
+  formData.append('entry.1218658725', sessionData.hoverEvents || 0);
+  // H2 Effort: Number of times an item was unchecked after being checked (Flipping)
+  formData.append('entry.1649885971', sessionData.itemsAddedThenRemoved || 0);
+  // H2 Binary: Did the participant exhibit any add-then-remove behavior? (1/0)
+  formData.append('entry.154643064', sessionData.itemsAddedThenRemoved > 0 ? 1 : 0);
+  // H2 Complexity: Mathematical score of decision conflict/indecision density
+  formData.append('entry.1214928906', sessionData.indecisionScore || 0);
+  // H6 Algorithmic Deviation: Measure of how DSS differed from static baseline (0-1)
+  formData.append('entry.1755997909', sessionData.recDeviationScore || 0);
+  // Control: Was the participant using a touch-based device for the interaction?
+  formData.append('entry.257967857', sessionData.touchDevice ? 1 : 0);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 5. POST-TASK SURVEY (SCREENSHOTS: LIKERT SCALES 1-7)
+  // ══════════════════════════════════════════════════════════════════════════
+  // Q: "How often do you shop online for groceries?" (Pre-Survey Baseline)
+  formData.append('entry.540119743', sessionData.shopFreq || '');
+  // Q: "How important are prices when making purchase decisions?" (Pre-Survey)
+  formData.append('entry.223642860', sessionData.priceSensitivity || '');
+  // Q: "How much do you trust algorithm-based recommendations in general?"
+  formData.append('entry.1481934786', sessionData.algoTrust || '');
+
+  // [PERCEIVED AUTONOMY - H2]
+  // Q: "I felt free to make my own decisions."
+  formData.append('entry.2036109088', sessionData.autonom1 || '');
+  // Q: "I felt in control of the shopping task."
+  formData.append('entry.1345472111', sessionData.autonom2 || '');
+
+  // [COGNITIVE LOAD - H2]
+  // Q: "The process of choosing was mentally taxing."
+  formData.append('entry.1866255536', sessionData.load1 || '');
+  // Q: "I found the task easy to complete." (REVERSE CODED LOAD)
+  formData.append('entry.1102238274', sessionData.load2 || '');
+  // Q: "The information provided was overwhelming."
+  formData.append('entry.1713932049', sessionData.load3 || '');
+  // Q: "I spent a lot of effort to reach the free-shipping threshold."
+  formData.append('entry.1340156972', sessionData.load4 || '');
+
+  // [TRUST & TRANSPARENCY - H3/H5]
+  // Q: "I trust the recommendations provided."
+  formData.append('entry.2117691022', sessionData.trust1 || '');
+  // Q: "The recommendations appeared to be based on my likely preferences."
+  formData.append('entry.432591211', sessionData.trust2 || '');
+  // Q: "The system was transparent about why it suggested these items."
+  formData.append('entry.756646952', sessionData.transp1 || '');
+  // Q: "I understood how the system works."
+  formData.append('entry.655019999', sessionData.transp2 || '');
+
+  // [MANIPULATIVE INTENT - H4/H5]
+  // Q: "I felt the system was trying to trick me into buying more."
+  formData.append('entry.94395533', sessionData.manip1 || '');
+  // Q: "The system seemed to prioritize the store's profit over my needs."
+  formData.append('entry.261399405', sessionData.manip2 || '');
+  // Q: "The recommendations felt pushy."
+  formData.append('entry.1633519159', sessionData.manip3 || '');
+
+  // [CHOICE QUALITY]
+  // Q: "The recommendations appeared to fit my needs."
+  formData.append('entry.2089146456', sessionData.fit1 || '');
+  // Q: "I am satisfied with the items I chose."
+  formData.append('entry.1161298534', sessionData.value1 || '');
+  // Q: "I feel regret regarding the items I did not choose."
+  formData.append('entry.1829525115', sessionData.regret1 || '');
+
+  // [MANIPULATION CHECKS]
+  // Q: "I was shown explanations for why items were recommended."
+  formData.append('entry.2141226584', sessionData.manCheck2 || '');
+
+  xhr.send(formData.toString());
+  console.log("PhD Data Collection: All 45+ entries dynamically mapped and sent.");
 }
 
-// ════════════════════════════════════════════════════════════
-// CHECKOUT ACTIONS
-// ════════════════════════════════════════════════════════════
-function completeCheckout() {
+function proceedToCheckout() {
   stopInactivityWatch();
-  sessionData.abandonType = "none";
+  sessionData.abandonType = sessionData.abandonType || "none";
   recordTimingsAndItems(true);
   setScreen("posttask");
 }
-function goToRecs() {
-  addedItems = []; hoverLog = []; firstSelectionTime = null; itemsAddedThenRemoved = 0;
-  setScreen("recommendations");
-  renderRecs(); updateBanner(); updateLivePanel();
+
+function proceedSkipRecs() {
+  stopInactivityWatch();
+  sessionData.skipRecs = 1;
+  sessionData.abandonType = "deliberate_skip";
+  recordTimingsAndItems(addedItems.length > 0);
+  // Route to short abandonment follow-up before the main post-task survey
+  setScreen("abandon-survey");
 }
 
-// ════════════════════════════════════════════════════════════
-// EXIT SURVEY SUBMISSION
-// ════════════════════════════════════════════════════════════
-function submitExitSurvey() {
-  // Only require the primary reason — everything else is optional to reduce friction
-  const primaryReason = getRadio("exitPrimaryReason");
-  if (!primaryReason) {
-    alert("Please select at least one reason for leaving before continuing.");
-    return;
-  }
-
-  // Collect checked reasons (multi-select)
-  const checkedReasons = [...document.querySelectorAll('input[name="exitReasonCheck"]:checked')]
-    .map(el => el.value).join("|");
-
-  // Mechanism measures
-  sessionData.exitManip1   = getRadio("exitManip1");
-  sessionData.exitManip2   = getRadio("exitManip2");
-  sessionData.exitTrust1   = getRadio("exitTrust1");
-  sessionData.exitTransp1  = getRadio("exitTransp1");
-  sessionData.exitLoad1    = getRadio("exitLoad1");
-
-  // Reason coding
-  sessionData.exitPrimaryReason  = primaryReason;
-  sessionData.exitReasonsChecked = checkedReasons;
-
-  // Free text
-  sessionData.exitFreeText   = (document.getElementById("exitFreeText")?.value || "").trim().slice(0,500);
-  sessionData.exitSuggestion = (document.getElementById("exitSuggestion")?.value || "").trim().slice(0,500);
-
-  flushData();
-  document.getElementById("debrief-note").textContent = "";
-  setScreen("debrief");
+function submitAbandonSurvey() {
+  sessionData.abandonReason = getRadio("abandonReason");
+  sessionData.abandonBarrier = getRadio("abandonBarrier");
+  sessionData.abandonShipIntent = getRadio("abandonShipIntent");
+  setScreen("posttask");
 }
 
-// ════════════════════════════════════════════════════════════
-// POST-TASK SURVEY SUBMISSION (completers)
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════════
+// SCREEN CONTENT GENERATION
+// ═══════════════════════════════════════════════════════════════════════════════════
+function renderApp() {
+  document.getElementById("app").innerHTML = `
+    <!-- CONSENT SCREEN -->
+    <div class="screen active" id="screen-consent">
+      <h1>Research Study Participation</h1>
+      <p>You are invited to participate in a research study about online shopping experiences. This study is conducted by researchers at a university and should take approximately 8–10 minutes to complete.</p>
+
+      <div class="card">
+        <h2>What you'll do:</h2>
+        <p>You will be placed at a simulated online checkout with items already in your cart. You will review product recommendations and decide whether to add items, then answer a brief survey about your experience.</p>
+
+        <h2>Your privacy:</h2>
+        <p>Your responses are anonymous and will only be used for research purposes. No personal identifying information will be collected.</p>
+
+        <h2>Voluntary participation:</h2>
+        <p>Participation is completely voluntary. You may withdraw at any time without penalty. You will receive the study completion payment regardless of your shopping decisions — there are no right or wrong choices.</p>
+      </div>
+
+      <button class="btn btn-primary" onclick="setScreen('prescreener')">I understand and agree to participate</button>
+    </div>
+
+    <!-- PRESCREENER SCREEN -->
+    <div class="screen" id="screen-prescreener">
+      <h1>Background Questions</h1>
+      <p>Please answer a few quick questions about your shopping habits.</p>
+      
+      <div class="card">
+        <div class="survey-group">
+          <label>How often do you shop online?</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="shopFreq" value="1"><span>Never</span></label>
+            <label class="radio-opt"><input type="radio" name="shopFreq" value="2"><span>Rarely (few times a year)</span></label>
+            <label class="radio-opt"><input type="radio" name="shopFreq" value="3"><span>Sometimes (monthly)</span></label>
+            <label class="radio-opt"><input type="radio" name="shopFreq" value="4"><span>Often (weekly)</span></label>
+            <label class="radio-opt"><input type="radio" name="shopFreq" value="5"><span>Very often (multiple times per week)</span></label>
+          </div>
+        </div>
+        
+        <div class="survey-group">
+          <label>How important are prices when making purchase decisions?</label>
+          ${buildLikert("priceSensitivity")}
+          <div class="scale-labels"><span>Not important</span><span>Very important</span></div>
+        </div>
+        
+        <div class="survey-group">
+          <label>How much do you trust algorithm-based product recommendations?</label>
+          ${buildLikert("algoTrust")}
+          <div class="scale-labels"><span>Don't trust at all</span><span>Trust completely</span></div>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="submitPrescreener()">Continue</button>
+    </div>
+
+    <!-- SCENARIO SCREEN -->
+    <div class="screen" id="screen-scenario">
+      <h1>Shopping Scenario</h1>
+      <p>Please read the following carefully before proceeding.</p>
+
+      <div class="scenario-box">
+        <p>You are restocking <strong>everyday personal care and household essentials</strong> online — things like health supplements, skincare basics, and pantry staples. You've already added a few items to your cart and are now at checkout. The store offers <strong>free shipping on orders of $35 or more</strong>, but your cart is currently below that amount.</p>
+      </div>
+
+      <div class="card">
+        <h2>Your task:</h2>
+        <p>Review your cart, then decide whether to add any of the recommended items to reach the free-shipping threshold, or proceed as-is and pay the $5.99 shipping fee. <strong>Please shop as you genuinely would in this situation.</strong> There are no right or wrong choices.</p>
+      </div>
+
+      <button class="btn btn-primary" onclick="setScreen('cart')">View my cart →</button>
+    </div>
+
+    <!-- CART SCREEN -->
+    <div class="screen" id="screen-cart">
+      <h1>Your Shopping Cart</h1>
+      <p>Here are the items currently in your cart:</p>
+      
+      <div class="card">
+        <div class="section-label">Cart Items</div>
+        ${CART_ITEMS.map(item => `
+          <div class="cart-item">
+            <div class="item-emoji">${item.emoji}</div>
+            <div class="item-info">
+              <div class="item-name">${item.name}</div>
+              <div class="item-cat">${item.cat}</div>
+            </div>
+            <div class="item-price">$${item.price.toFixed(2)}</div>
+          </div>
+        `).join("")}
+        
+        <div class="cart-footer">
+          <div class="cart-row">
+            <span>Subtotal</span>
+            <span>$${CART_SUBTOTAL.toFixed(2)}</span>
+          </div>
+          <div class="cart-row">
+            <span>Shipping</span>
+            <span class="shipping-line">$5.99</span>
+          </div>
+          <div class="cart-row total">
+            <span>Total (with shipping)</span>
+            <span>$${(CART_SUBTOTAL + 5.99).toFixed(2)}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="shipping-banner danger">
+        <span class="icon">🚚</span>
+        <div class="banner-text">
+          <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping</strong>
+          <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="setScreen('recommendations')">See recommendations →</button>
+      <button class="btn btn-secondary" onclick="proceedToCheckout()">Continue without adding items</button>
+    </div>
+
+    <!-- RECOMMENDATIONS SCREEN -->
+    <div class="screen" id="screen-recommendations">
+      <h1>Recommended for You</h1>
+      <p>Here are some items that might interest you. Take your time — tap any item to add or remove it, then proceed when you're ready.</p>
+      
+      <div id="rec-banner" class="shipping-banner danger">
+        <span class="icon">🚚</span>
+        <div class="banner-text">
+          <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping</strong>
+          <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
+        </div>
+      </div>
+
+      <!-- Compact collapsible cart summary -->
+      <div class="card" style="margin-bottom:14px;padding:14px 18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleCartSummary()">
+          <div>
+            <div class="section-label" style="margin-bottom:2px">Your current cart</div>
+            <div style="font-size:0.82rem;color:var(--muted)" id="cart-summary-subtitle">
+              ${CART_ITEMS.length} items · $${CART_SUBTOTAL.toFixed(2)} subtotal
+            </div>
+          </div>
+          <span id="cart-summary-toggle" style="font-size:0.8rem;color:var(--accent);font-weight:600">Show ▾</span>
+        </div>
+        <div id="cart-summary-body" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+          ${CART_ITEMS.map(item => `
+            <div style="display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:1.2rem;width:28px;text-align:center">${item.emoji}</span>
+              <span style="flex:1;font-size:0.84rem;font-weight:500;color:var(--text)">${item.name}</span>
+              <span style="font-size:0.84rem;font-weight:600;color:var(--muted)">$${item.price.toFixed(2)}</span>
+            </div>`).join("")}
+          <div style="display:flex;justify-content:space-between;padding-top:8px;font-size:0.84rem;">
+            <span style="color:var(--muted)">Subtotal</span>
+            <span style="font-weight:700">$${CART_SUBTOTAL.toFixed(2)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="live-cart-panel"></div>
+      
+      <div class="section-label">Recommended Items</div>
+      <div id="rec-grid" class="rec-grid"></div>
+
+      <div id="addon-quality-card" style="display:none;"></div>
+
+      <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 20px;">
+        <p style="text-align:center; font-size:0.82rem; color:var(--muted); margin-bottom:14px;">
+          When you're done selecting items (or if you'd like to skip), click below to continue.
+        </p>
+        <button class="btn btn-primary" onclick="proceedToCheckout()">Continue to checkout →</button>
+        <button class="btn btn-secondary" onclick="proceedSkipRecs()">No thanks, proceed with current cart</button>
+      </div>
+    </div>
+
+    <!-- POST-TASK SCREEN -->
+    <div class="screen" id="screen-posttask">
+      <h1>Survey Questions</h1>
+      <p>Please answer these questions about your experience. There are no right or wrong answers — we want your honest impressions.</p>
+
+      <!-- ── SECTION 1: Manipulation Checks ────────────────────────── -->
+      <div class="card">
+        <div class="section-label">About the shopping task</div>
+
+        <div class="survey-group">
+          <label>How far below the free-shipping threshold was your cart when you first saw the recommendations? (Best estimate)</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="1"><span>Less than $5 below</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="2"><span>$5–$9 below</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="3"><span>$10–$14 below</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="4"><span>$15–$19 below</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="5"><span>$20 or more below</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck1" value="0"><span>I'm not sure</span></label>
+          </div>
+        </div>
+
+        <div class="survey-group">
+          <label>Did the recommendations include a written reason or explanation for why each item was suggested?</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="manCheck2" value="1"><span>Yes, each recommendation had a short explanation</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck2" value="0"><span>No, recommendations were shown without any explanation</span></label>
+            <label class="radio-opt"><input type="radio" name="manCheck2" value="-1"><span>I'm not sure / I didn't notice</span></label>
+          </div>
+        </div>
+
+        <div class="survey-group">
+          <label>During the shopping task, I was focused on avoiding the shipping fee</label>
+          ${buildLikert("manCheck3")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 2: Trust in Recommendations ───────────────────── -->
+      <div class="card">
+        <div class="section-label">Trust in recommendations</div>
+
+        <div class="survey-group">
+          <label>The recommendations were trustworthy</label>
+          ${buildLikert("trust1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendations were reliable</label>
+          ${buildLikert("trust2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I could depend on the recommendations</label>
+          ${buildLikert("trust3")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendation system seemed competent at its job</label>
+          ${buildLikert("percComp1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 3: Transparency & Perceived Manipulation ───────── -->
+      <div class="card">
+        <div class="section-label">Transparency &amp; manipulation perceptions</div>
+
+        <div class="survey-group">
+          <label>The recommendation process was transparent</label>
+          ${buildLikert("transp1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I understood how the recommendations were generated</label>
+          ${buildLikert("transp2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendations tried to manipulate my choices</label>
+          ${buildLikert("manip1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendations were biased toward expensive items</label>
+          ${buildLikert("manip2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I felt pressured to add items I didn't really want</label>
+          ${buildLikert("manip3")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 4: Decision Autonomy & Confidence ─────────────── -->
+      <div class="card">
+        <div class="section-label">Decision confidence &amp; autonomy</div>
+
+        <div class="survey-group">
+          <label>I am confident in my purchase decisions</label>
+          ${buildLikert("conf1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I felt free to make my own choices during this task</label>
+          ${buildLikert("autonom1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I felt in control of my shopping decisions</label>
+          ${buildLikert("autonom2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 5: Cognitive Load (adapted NASA-TLX) ──────────── -->
+      <div class="card">
+        <div class="section-label">Mental effort (during the recommendations step)</div>
+
+        <div class="survey-group">
+          <label>The recommendation system was easy to use</label>
+          ${buildLikert("load1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The interface was intuitive</label>
+          ${buildLikert("load2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>Deciding which items to add required a lot of mental effort</label>
+          ${buildLikert("load3")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I felt frustrated or confused while choosing items</label>
+          ${buildLikert("load4")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <!-- ── SECTION 6: Choice Quality ─────────────────────────────── -->
+      <div class="card">
+        <div class="section-label">About the items you considered</div>
+
+        <div class="survey-group">
+          <label>The recommended items fit my actual needs</label>
+          ${buildLikert("fit1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I genuinely needed or wanted the items I added (if any)</label>
+          ${buildLikert("fit2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendations provided good value for money</label>
+          ${buildLikert("value1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I will probably regret the decisions I made in this task</label>
+          ${buildLikert("regret1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I would add similar items in a real shopping situation</label>
+          ${buildLikert("ecoval1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="submitPostTask()">Complete study →</button>
+    </div>
+
+    <!-- ABANDON SURVEY SCREEN -->
+    <div class="screen" id="screen-abandon-survey">
+      <h1>A Few Quick Questions</h1>
+      <p>You chose to proceed without adding any recommended items. We have just a few short questions about that decision before the main survey.</p>
+
+      <div class="card">
+        <div class="section-label">Your decision</div>
+
+        <div class="survey-group">
+          <label>What best describes why you chose not to add any of the recommended items?</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="1"><span>None of the items appealed to me</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="2"><span>The items were not relevant to what I was shopping for</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="3"><span>I was happy to pay the shipping fee instead</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="4"><span>I couldn't find an item close enough to the amount I needed</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="5"><span>The prices of the recommended items were too high</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="6"><span>I didn't feel I needed anything extra</span></label>
+            <label class="radio-opt"><input type="radio" name="abandonReason" value="7"><span>Other reason</span></label>
+          </div>
+        </div>
+
+        <div class="survey-group">
+          <label>How much did the following make it harder to choose an add-on item?</label>
+          <div style="margin-top:10px">
+            <div style="font-size:0.84rem;font-weight:500;margin-bottom:4px">Difficulty finding a suitable item</div>
+            ${buildLikert("abandonBarrier")}
+            <div class="scale-labels"><span>Not at all difficult</span><span>Very difficult</span></div>
+          </div>
+        </div>
+
+        <div class="survey-group">
+          <label>In a real shopping situation, how likely would you be to pay the shipping fee rather than add an item you didn't plan to buy?</label>
+          ${buildLikert("abandonShipIntent")}
+          <div class="scale-labels"><span>Very unlikely</span><span>Very likely</span></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="submitAbandonSurvey()">Continue to survey →</button>
+    </div>
+
+    <!-- DEBRIEF SCREEN -->
+    <div class="screen" id="screen-debrief">
+      <div class="thankyou-icon">🎉</div>
+      <h1>Thank You!</h1>
+      <p>Your participation in this study is complete. Your responses have been recorded.</p>
+
+      <div id="order-summary-card" class="card"></div>
+
+      <div class="card">
+        <h2>Study Purpose</h2>
+        <p>This study examined how different types of product recommendations affect shopping decisions and user experience. Specifically, we are comparing recommendation systems that use a multi-objective algorithm (optimizing simultaneously for your product fit, the free-shipping goal, and item quality) against systems that rely on simpler popularity-based suggestions — and whether explaining the reasoning behind recommendations changes trust and decision quality.</p>
+        <p>Your data will contribute to improving online shopping experiences and to research on recommendation transparency.</p>
+
+        <h2>Questions?</h2>
+        <p>If you have any questions about this research, please contact the research team.</p>
+      </div>
+
+      <p id="debrief-note" style="font-size:0.9rem;color:var(--muted);text-align:center;margin-top:20px;">
+        Thank you for your time and participation!
+      </p>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════════
+// EVENT HANDLERS
+// ═══════════════════════════════════════════════════════════════════════════════════
+
 function submitPrescreener() {
-  const freq  = getRadio("shopFreq");
-  const price = getRadio("priceSensitivity");
-  const trust = getRadio("algoTrust");
-  if (!freq || !price || !trust) { alert("Please answer all questions before continuing."); return; }
-  sessionData.shopFreq = freq; sessionData.priceSensitivity = price; sessionData.algoTrust = trust;
+  sessionData.shopFreq = getRadio("shopFreq");
+  sessionData.priceSensitivity = getRadio("priceSensitivity");
+  sessionData.algoTrust = getRadio("algoTrust");
   setScreen("scenario");
 }
-function submitSurvey() {
-  const required = ["trust1","trust2","trust3","transp1","transp2","manip1","manip2",
-                    "conf1","load1","load2","load3","manCheck1","manCheck2","manCheck3"];
-  if (addedItems.length > 0) required.push("fit1","regret1","value1");
-  const missing = required.filter(f=>!getRadio(f));
-  if (missing.length > 0) { alert("Please answer all questions before submitting."); return; }
-  required.forEach(f=>{ sessionData[f] = getRadio(f); });
+
+function submitPostTask() {
+  // Manipulation checks
+  sessionData.manCheck1 = getRadio("manCheck1");
+  sessionData.manCheck2 = getRadio("manCheck2");
+  sessionData.manCheck3 = getRadio("manCheck3");
+  // Trust
+  sessionData.trust1 = getRadio("trust1");
+  sessionData.trust2 = getRadio("trust2");
+  sessionData.trust3 = getRadio("trust3");
+  sessionData.percComp1 = getRadio("percComp1");
+  // Transparency & manipulation
+  sessionData.transp1 = getRadio("transp1");
+  sessionData.transp2 = getRadio("transp2");
+  sessionData.manip1 = getRadio("manip1");
+  sessionData.manip2 = getRadio("manip2");
+  sessionData.manip3 = getRadio("manip3");
+  // Autonomy & confidence
+  sessionData.conf1 = getRadio("conf1");
+  sessionData.autonom1 = getRadio("autonom1");
+  sessionData.autonom2 = getRadio("autonom2");
+  // Cognitive load
+  sessionData.load1 = getRadio("load1");
+  sessionData.load2 = getRadio("load2");
+  sessionData.load3 = getRadio("load3");
+  sessionData.load4 = getRadio("load4");
+  // Choice quality
+  sessionData.fit1 = getRadio("fit1");
+  sessionData.fit2 = getRadio("fit2");
+  sessionData.value1 = getRadio("value1");
+  sessionData.regret1 = getRadio("regret1");
+  sessionData.ecoval1 = getRadio("ecoval1");
+
   flushData();
-  document.getElementById("debrief-note").textContent = "";
   setScreen("debrief");
 }
 
-// ════════════════════════════════════════════════════════════
-// DATA SUBMISSION
-// ════════════════════════════════════════════════════════════
-function flushData() {
-  const fd = new FormData();
-  Object.keys(FIELD_MAP).forEach(key => {
-    const entryId = FIELD_MAP[key];
-    // Skip comment-only entries (no real entry ID yet)
-    if (!entryId || !entryId.startsWith("entry.")) return;
-    if (sessionData[key] !== undefined && sessionData[key] !== null) {
-      fd.append(entryId, sessionData[key]);
-    }
-  });
-  fetch(GOOGLE_FORM_ACTION, { method:"POST", body:fd, mode:"no-cors" }).catch(()=>{});
-  console.log("=== STUDY 2 SESSION DATA ===\n" + JSON.stringify(sessionData, null, 2));
-}
+// ═══════════════════════════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════════════════════════
+renderApp();
 
-// Char counter helper
-function updateCharCount(textareaId, counterId, max) {
-  const ta = document.getElementById(textareaId);
-  const ct = document.getElementById(counterId);
-  if (ta && ct) { ct.textContent = max - ta.value.length + " characters remaining"; }
-}
-
-// ════════════════════════════════════════════════════════════
-// RENDER ALL SCREENS
-// ════════════════════════════════════════════════════════════
-document.getElementById("app").innerHTML = `
-
-<!-- ① CONSENT -->
-<div class="screen active" id="screen-consent">
-  <div class="section-label">Study Information</div>
-  <h1>Online Shopping Study</h1>
-  <p>Thank you for participating. This study takes approximately <strong>8–12 minutes</strong> and involves a realistic online shopping task.</p>
-  <div class="card">
-    <h2>What you'll do</h2>
-    <p>You'll be shown a shopping cart and asked to make a real purchase decision. Afterwards, you'll complete a short survey.</p>
-    <p><strong>Bonus incentive:</strong> If your final cart meets the $35.00 free shipping threshold, you earn a <strong>$1.50 bonus</strong> on top of your base pay.</p>
-    <p style="font-size:0.8rem;color:var(--muted);margin:0">All responses are anonymous and used for academic research only. You may withdraw at any time.</p>
-  </div>
-  <button class="btn btn-primary" onclick="setScreen('prescreener')">I agree — Begin →</button>
-</div>
-
-<!-- ② PRE-SCREENER -->
-<div class="screen" id="screen-prescreener">
-  <div class="section-label">Background Questions</div>
-  <h1>A few quick questions</h1>
-  <div class="card">
-    <div class="survey-group">
-      <label>How often do you shop online?</label>
-      <div class="radio-group">
-        <label class="radio-opt"><input type="radio" name="shopFreq" value="1"><span>Less than once a month</span></label>
-        <label class="radio-opt"><input type="radio" name="shopFreq" value="2"><span>About once a month</span></label>
-        <label class="radio-opt"><input type="radio" name="shopFreq" value="3"><span>2–3 times a month</span></label>
-        <label class="radio-opt"><input type="radio" name="shopFreq" value="4"><span>Once a week or more</span></label>
-      </div>
-    </div>
-    <div class="survey-group">
-      <label>How sensitive are you to shipping costs? <span style="font-weight:400;color:var(--muted)">(1 = Not at all, 7 = Extremely)</span></label>
-      ${buildLikert("priceSensitivity")}
-      <div class="scale-labels"><span>Not at all</span><span>Extremely</span></div>
-    </div>
-    <div class="survey-group" style="margin-bottom:0">
-      <label>How much do you trust product recommendation systems online? <span style="font-weight:400;color:var(--muted)">(1 = Not at all, 7 = Completely)</span></label>
-      ${buildLikert("algoTrust")}
-      <div class="scale-labels"><span>Don't trust</span><span>Fully trust</span></div>
-    </div>
-  </div>
-  <button class="btn btn-primary" onclick="submitPrescreener()">Continue →</button>
-</div>
-
-<!-- ③ SCENARIO -->
-<div class="screen" id="screen-scenario">
-  <div class="section-label">Shopping Scenario</div>
-  <h1>Imagine this situation</h1>
-  <div class="scenario-box">
-    <p>You're shopping online for health, beauty, and food items. You've added a few things to your cart and you're about to check out — but you notice you're a few dollars short of the <strong>free shipping minimum</strong>. The site suggests some additional items you might want to add.</p>
-  </div>
-  <p>Please make decisions exactly as you would when shopping for real. <strong>If your final cart meets the $35 free shipping threshold, you earn a $1.50 bonus.</strong></p>
-  <button class="btn btn-primary" onclick="setScreen('cart')">See My Cart →</button>
-</div>
-
-<!-- ④ CART REVIEW -->
-<div class="screen" id="screen-cart">
-  <div class="section-label">Your Cart</div>
-  <h1>Review your cart</h1>
-  <div class="shipping-banner danger">
-    <span class="icon">🚚</span>
-    <div class="banner-text">
-      <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping!</strong>
-      <span>Orders $35.00 and over ship free. You're in the zone.</span>
-    </div>
-  </div>
-  <div class="card">
-    ${CART_ITEMS.map(i=>`
-    <div class="cart-item">
-      <div class="item-emoji">${i.emoji}</div>
-      <div class="item-info"><div class="item-name">${i.name}</div><div class="item-cat">${i.cat}</div></div>
-      <div class="item-price">$${i.price.toFixed(2)}</div>
-    </div>`).join("")}
-    <div class="cart-footer">
-      <div class="cart-row"><span style="color:var(--muted)">Subtotal</span><span style="font-weight:600">$${CART_SUBTOTAL.toFixed(2)}</span></div>
-      <div class="cart-row"><span class="shipping-line">Shipping fee (if threshold not met)</span><span class="shipping-line">$5.99</span></div>
-      <div class="cart-row total"><span>Estimated total</span><span>$${(CART_SUBTOTAL+5.99).toFixed(2)}</span></div>
-    </div>
-  </div>
-  <button class="btn btn-primary" onclick="goToRecs()">See Suggested Add-Ons →</button>
-</div>
-
-<!-- ⑤ RECOMMENDATIONS -->
-<div class="screen" id="screen-recommendations">
-  <div class="section-label">Suggested Add-Ons</div>
-  <h1>Customers also bought</h1>
-  <p style="margin-bottom:14px">Select any items you'd like to add, then complete or proceed to checkout. <strong>You can add more than one item.</strong></p>
-  <div id="rec-banner" class="shipping-banner danger">
-    <span class="icon">🚚</span>
-    <div class="banner-text">
-      <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping</strong>
-      <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
-    </div>
-  </div>
-  <div class="rec-grid" id="rec-grid"></div>
-  <div id="live-cart-panel"></div>
-  <button class="btn btn-primary" onclick="completeCheckout()">✓ Complete Purchase</button>
-  <button class="btn btn-secondary" onclick="completeCheckout()">Proceed to Checkout Without Adding Items</button>
-  <button class="btn btn-danger" onclick="abandonCart()">✕ Abandon Cart &amp; Leave</button>
-  <p style="font-size:0.75rem;text-align:center;margin-top:10px;color:var(--muted);font-style:italic">If you abandon, we'll ask two quick questions before you go.</p>
-</div>
-
-<!-- ⑥ EXIT SURVEY (abandoners only) -->
-<div class="screen" id="screen-exitsurvey">
-  <div class="exit-header">
-    <span class="icon">📋</span>
-    <p>Before you go — just 5 quick questions. This takes under 60 seconds and helps us improve the experience.</p>
-  </div>
-  <div class="section-label">Exit Questions</div>
-  <h1>Why did you decide to leave?</h1>
-
-  <div class="card">
-    <div class="survey-group">
-      <label>What was the main reason you decided not to complete the purchase? <span style="color:var(--warning);font-size:0.8rem">*required</span></label>
-      <div class="radio-group">
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="no_suitable_items"><span>None of the suggested items appealed to me</span></label>
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="too_expensive"><span>The items felt too expensive to add</span></label>
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="felt_pressured"><span>The recommendations felt pushy or manipulative</span></label>
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="didnt_need_items"><span>I didn't need anything extra — the shipping fee was fine</span></label>
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="too_much_effort"><span>It felt like too much effort to find the right item</span></label>
-        <label class="radio-opt"><input type="radio" name="exitPrimaryReason" value="other"><span>Something else</span></label>
-      </div>
-    </div>
-
-    <div class="survey-group" style="margin-bottom:0">
-      <label>Any other contributing factors? <span style="font-weight:400;color:var(--muted)">(select all that apply)</span></label>
-      <div class="checkbox-grid" style="margin-top:8px">
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="unclear_relevance"> <span>Items didn't feel relevant to me</span></label>
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="no_explanation"> <span>Didn't understand why items were suggested</span></label>
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="distrust_system"> <span>I don't trust recommendation systems</span></label>
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="already_over_budget"> <span>My cart was already over my budget</span></label>
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="confusing_ui"> <span>The interface was confusing</span></label>
-        <label class="check-opt"><input type="checkbox" name="exitReasonCheck" value="needed_more_time"> <span>I wanted more time to think</span></label>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Quick Reactions — How did the recommendations feel?</div>
-    <div class="survey-group">
-      <label>The recommendations felt designed to pressure me into spending more. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
-      ${buildLikert("exitManip1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>I felt manipulated by the suggestions. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
-      ${buildLikert("exitManip2")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>I understood why these specific items were recommended. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
-      ${buildLikert("exitTransp1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>The recommendations were trustworthy. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
-      ${buildLikert("exitTrust1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group" style="margin-bottom:0">
-      <label>This decision felt mentally demanding. <span style="font-weight:400;color:var(--muted)">(1–7)</span></label>
-      ${buildLikert("exitLoad1")}
-      <div class="scale-labels"><span>Very low</span><span>Very high</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Optional — In your own words</div>
-    <div class="survey-group">
-      <label>Is there anything else that influenced your decision to leave? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <textarea id="exitFreeText" maxlength="500" placeholder="e.g. The items didn't match what I already had in my cart..."
-        oninput="updateCharCount('exitFreeText','exitFreeTextCount',500)"></textarea>
-      <div class="char-count" id="exitFreeTextCount">500 characters remaining</div>
-    </div>
-    <div class="survey-group" style="margin-bottom:0">
-      <label>What would have made you more likely to complete the purchase? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-      <textarea id="exitSuggestion" maxlength="500" placeholder="e.g. If the recommendations had included lower-priced items that fit my gap exactly..."
-        oninput="updateCharCount('exitSuggestion','exitSuggestionCount',500)"></textarea>
-      <div class="char-count" id="exitSuggestionCount">500 characters remaining</div>
-    </div>
-  </div>
-
-  <button class="btn btn-primary" onclick="submitExitSurvey()">Submit &amp; Finish →</button>
-  <p style="font-size:0.75rem;text-align:center;margin-top:10px;color:var(--muted);font-style:italic">Only the primary reason above is required. All other fields are optional.</p>
-</div>
-
-<!-- ⑦ POST-TASK SURVEY (completers) -->
-<div class="screen" id="screen-posttask">
-  <div class="section-label">Post-Task Survey</div>
-  <h1>Almost done</h1>
-  <p>Please rate your experience with the product recommendations you just saw.</p>
-
-  <div class="card">
-    <div class="section-label">Trust in Recommendations</div>
-    <div class="survey-group">
-      <label>The product recommendations were trustworthy.</label>
-      ${buildLikert("trust1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>I felt confident relying on these recommendations.</label>
-      ${buildLikert("trust2")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>The recommendations seemed to have my best interests in mind.</label>
-      ${buildLikert("trust3")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Transparency &amp; Understanding</div>
-    <div class="survey-group">
-      <label>I understood why these specific items were recommended to me.</label>
-      ${buildLikert("transp1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>The recommendation process felt transparent.</label>
-      ${buildLikert("transp2")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Perceived Manipulation / Reactance</div>
-    <div class="survey-group">
-      <label>The recommendations felt designed to pressure me into spending more.</label>
-      ${buildLikert("manip1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>I felt manipulated by the product suggestions.</label>
-      ${buildLikert("manip2")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Decision Confidence</div>
-    <div class="survey-group">
-      <label>I felt confident in the decision I made at checkout.</label>
-      ${buildLikert("conf1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Cognitive Load (NASA-TLX adapted)</div>
-    <div class="survey-group">
-      <label>How mentally demanding was this checkout decision?</label>
-      ${buildLikert("load1")}
-      <div class="scale-labels"><span>Very low</span><span>Very high</span></div>
-    </div>
-    <div class="survey-group">
-      <label>How much effort did you put into making your decision?</label>
-      ${buildLikert("load2")}
-      <div class="scale-labels"><span>Very little</span><span>Very much</span></div>
-    </div>
-    <div class="survey-group">
-      <label>How rushed did you feel during the task?</label>
-      ${buildLikert("load3")}
-      <div class="scale-labels"><span>Not at all</span><span>Very rushed</span></div>
-    </div>
-  </div>
-
-  <div class="card" id="addon-quality-card" style="display:none">
-    <div class="section-label">About the Item(s) You Added</div>
-    <div class="survey-group">
-      <label>The item(s) I added were relevant to my needs.</label>
-      ${buildLikert("fit1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>I might regret adding item(s) to my cart.</label>
-      ${buildLikert("regret1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-    <div class="survey-group">
-      <label>The item(s) I added offered good value for their price.</label>
-      ${buildLikert("value1")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-label">Manipulation Checks</div>
-    <div class="survey-group">
-      <label>Approximately how much more did you need to add to reach free shipping?</label>
-      <div class="radio-group">
-        <label class="radio-opt"><input type="radio" name="manCheck1" value="1"><span>Less than $5</span></label>
-        <label class="radio-opt"><input type="radio" name="manCheck1" value="2"><span>Between $5 and $15 <em style="color:var(--muted);font-size:0.8rem">(correct)</em></span></label>
-        <label class="radio-opt"><input type="radio" name="manCheck1" value="3"><span>More than $15</span></label>
-        <label class="radio-opt"><input type="radio" name="manCheck1" value="4"><span>I wasn't sure</span></label>
-      </div>
-    </div>
-    <div class="survey-group">
-      <label>Did the product recommendations include reasons explaining why each item was suggested?</label>
-      <div class="radio-group">
-        <label class="radio-opt"><input type="radio" name="manCheck2" value="yes"><span>Yes</span></label>
-        <label class="radio-opt"><input type="radio" name="manCheck2" value="no"><span>No</span></label>
-        <label class="radio-opt"><input type="radio" name="manCheck2" value="unsure"><span>I'm not sure</span></label>
-      </div>
-    </div>
-    <div class="survey-group" style="margin-bottom:0">
-      <label>"I was focused on avoiding the shipping fee during this task." <span style="font-weight:400;color:var(--muted)">(1 = Strongly disagree, 7 = Strongly agree)</span></label>
-      ${buildLikert("manCheck3")}
-      <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-    </div>
-  </div>
-
-  <button class="btn btn-primary" onclick="submitSurvey()">Submit Responses →</button>
-</div>
-
-<!-- ⑧ DEBRIEF -->
-<div class="screen" id="screen-debrief">
-  <div class="thankyou-icon">🎉</div>
-  <h1>Thank you!</h1>
-  <p id="debrief-note" style="color:var(--warning);font-weight:500;margin-bottom:8px"></p>
-  <p>Your responses have been recorded successfully.</p>
-  <div class="card">
-    <h2>About this study</h2>
-    <p>This study examines how different product recommendation systems affect checkout decisions near a free-shipping threshold. We compared a <em>threshold-aware multi-objective recommendation system</em> — which balances your preferences, threshold completion, and retailer priorities — against a <em>standard popularity-based system</em>.</p>
-    <p>We are also testing how LLM-generated explanations for recommendations affect trust, perceived manipulation, and decision quality.</p>
-    <p style="margin:0">This work is part of an AMCIS 2026 paper on multi-objective decision support for checkout optimization. Your bonus will be applied to your Prolific account within 24 hours.</p>
-  </div>
-</div>
-`;
-
-// Highlight checkboxes on click
-document.addEventListener("change", function(e) {
-  if (e.target.name === "exitReasonCheck") {
-    e.target.closest(".check-opt").classList.toggle("checked", e.target.checked);
+// Initialize recommendations screen when it loads
+document.addEventListener('DOMContentLoaded', function() {
+  if (currentScreenIdx === 4) {
+    renderRecs();
+    updateBanner();
+    updateLivePanel();
   }
 });
+
+// Update recommendations when screen becomes active
+const observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      const target = mutation.target;
+      if (target.id === 'screen-recommendations' && target.classList.contains('active')) {
+        setTimeout(() => {
+          renderRecs();
+          updateBanner();
+          updateLivePanel();
+        }, 100);
+      }
+    }
+  });
+});
+
+observer.observe(document.getElementById('app'), {
+  attributes: true,
+  subtree: true,
+  attributeFilter: ['class']
+});
+
 </script>
 </body>
 </html>
