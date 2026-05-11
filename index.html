@@ -1093,148 +1093,151 @@ function recordTimingsAndItems(completed) {
   sessionData.recDeviationScore = computeRecDeviationScore();
 }
 function flushData() {
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse', true);
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  
-  const formData = new URLSearchParams();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // 1. EXPERIMENTAL CONDITIONS & IDENTIFIERS
-  // ══════════════════════════════════════════════════════════════════════════
-  // Unique ID to track individual participant responses for data cleaning
-  formData.append('entry.336082628', sessionData.participantId || '');
-  // Combined group index (1-4) representing the 2x2 factorial cells
-  formData.append('entry.1363167156', sessionData.condition || '');
-  // Independent Factor A: Recommendation Logic (0=Standard, 1=Threshold-Aware DSS)
-  formData.append('entry.1701158278', sessionData.conditionDSS || '');
-  // Independent Factor B: Explanation Presence (0=No Explanation, 1=LLM-Generated)
-  formData.append('entry.699386313', sessionData.conditionExp || '');
+        const formData = new URLSearchParams();
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // 2. SHOPPING TASK PERFORMANCE (SCREEN: RECOMMENDATIONS)
-  // ══════════════════════════════════════════════════════════════════════════
-  // Baseline: Subtotal of the pre-filled cart before participant intervention
-  formData.append('entry.1915848193', sessionData.cartSubtotal || 0);
-  // Initial Goal: The dollar amount needed to reach the $35 free-shipping mark
-  formData.append('entry.521472749', sessionData.gapAtStart || 0);
-  // Exposure: Total number of recommendation cards displayed in the UI
-  formData.append('entry.387204756', sessionData.addonsShown || 0);
-  // Selection Metric: Number of checkboxes currently selected by the participant
-  formData.append('entry.999404469', sessionData.addonsSelected || 0);
-  // Selection Metric: Final count of add-on items in the cart at checkout
-  formData.append('entry.1211689573', sessionData.addonCount || 0);
-  // Qualitative Audit: Literal names of items added (e.g., "Organic Rice")
-  formData.append('entry.155213739', sessionData.addonNames || '');
-  // Price Audit: Literal prices of selected items used for total verification
-  formData.append('entry.1941662475', sessionData.addonPrices || '');
-  // Binary Outcome: Clicked "Complete Purchase" (1) or "Decided to Leave" (0)
-  formData.append('entry.399283720', sessionData.checkoutCompleted ? 1 : 0);
-  // Transaction Value: The final total dollar amount calculated in the cart
-  formData.append('entry.779625089', sessionData.finalTotal || 0);
-  // Goal Outcome: Binary check if the subtotal reached or exceeded $35.00
-  formData.append('entry.1738303010', sessionData.gapCleared ? 1 : 0);
+        // ══════════════════════════════════════════════════════════════════════════
+        // 1. EXPERIMENTAL CONDITIONS & IDENTIFIERS
+        // ══════════════════════════════════════════════════════════════════════════
+        // Unique ID to track individual participant responses for data cleaning
+        formData.append('entry.336082628', sessionData.participantId || '');
+        // Combined group index (1-4) representing the 2x2 factorial cells
+        formData.append('entry.1363167156', sessionData.condition || '');
+        // Independent Factor A: Recommendation Logic (0=Standard, 1=Threshold-Aware DSS)
+        formData.append('entry.1701158278', sessionData.conditionDSS || '');
+        // Independent Factor B: Explanation Presence (0=No Explanation, 1=LLM-Generated)
+        formData.append('entry.699386313', sessionData.conditionExp || '');
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // 3. ABANDONMENT ANALYSIS (SCREEN: EXIT DIALOG & REASONS)
-  // ══════════════════════════════════════════════════════════════════════════
-  // Categorical Logic: Abandoned early (0 items) or after partial selection?
-  formData.append('entry.1445663391', sessionData.abandonType || 'N/A');
-  // Q: "During the shopping task, I was focused on avoiding the shipping fee"
-  formData.append('entry.421685344', sessionData.abandonReason || '');
-  // Q: "Please select all that apply" ( Irrelevant items / Too expensive / etc. )
-  formData.append('entry.1111071683', sessionData.exitReasonsChecked || '');
-  // Q: "Please tell us more about why you decided to leave" (Open text field)
-  formData.append('entry.227332894', sessionData.exitFreeText || '');
-  // Q: "What could we have done to make it easier for you to reach the threshold?"
-  formData.append('entry.1897370611', sessionData.exitSuggestion || '');
-  // Engagement at Exit: Number of items checked at the moment of abandonment
-  formData.append('entry.457722614', sessionData.exitItemsAdded || 0);
-  // Proximity at Exit: Dollar amount remaining to reach $35 when user quit
-  formData.append('entry.1893427120', sessionData.exitGapAtAbandon || 0);
-  // Temporal Exit: Seconds elapsed on the task screen before deciding to quit
-  formData.append('entry.973032317', sessionData.exitTimeOnScreen || 0);
+        // ══════════════════════════════════════════════════════════════════════════
+        // 2. SHOPPING TASK PERFORMANCE (SCREEN: RECOMMENDATIONS)
+        // ══════════════════════════════════════════════════════════════════════════
+        // Baseline: Subtotal of the pre-filled cart before participant intervention
+        formData.append('entry.1915848193', sessionData.cartSubtotal || 0);
+        // Initial Goal: The dollar amount needed to reach the $35 free-shipping mark
+        formData.append('entry.521472749', sessionData.gapAtStart || 0);
+        // Exposure: Total number of recommendation cards displayed in the UI
+        formData.append('entry.387204756', sessionData.addonsShown || 0);
+        // Selection Metric: Number of checkboxes currently selected by the participant
+        formData.append('entry.999404469', sessionData.addonsSelected || 0);
+        // Selection Metric: Final count of add-on items in the cart at checkout
+        formData.append('entry.1211689573', sessionData.addonCount || 0);
+        // Qualitative Audit: Literal names of items added (e.g., "Organic Rice")
+        formData.append('entry.155213739', sessionData.addonNames || '');
+        // Price Audit: Literal prices of selected items used for total verification
+        formData.append('entry.1941662475', sessionData.addonPrices || '');
+        // Binary Outcome: Clicked "Complete Purchase" (1) or "Decided to Leave" (0)
+        formData.append('entry.399283720', sessionData.checkoutCompleted ? 1 : 0);
+        // Transaction Value: The final total dollar amount calculated in the cart
+        formData.append('entry.779625089', sessionData.finalTotal || 0);
+        // Goal Outcome: Binary check if the subtotal reached or exceeded $35.00
+        formData.append('entry.1738303010', sessionData.gapCleared ? 1 : 0);
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // 4. PROCESS TRACING & BACKEND RESEARCH METRICS (H2, H5, H6)
-  // ══════════════════════════════════════════════════════════════════════════
-  // Efficiency: Total interaction time on the recommendations screen in seconds
-  formData.append('entry.1188163062', sessionData.timeOnRecScreen || 0);
-  // Latency: Seconds elapsed before the participant made their first item click
-  formData.append('entry.1958008072', sessionData.timeToFirstSelection || 0);
-  // Search Intensity: Total number of hover events over items (Engagement proxy)
-  formData.append('entry.1218658725', sessionData.hoverEvents || 0);
-  // H2 Effort: Number of times an item was unchecked after being checked (Flipping)
-  formData.append('entry.1649885971', sessionData.itemsAddedThenRemoved || 0);
-  // H2 Binary: Did the participant exhibit any add-then-remove behavior? (1/0)
-  formData.append('entry.154643064', sessionData.itemsAddedThenRemoved > 0 ? 1 : 0);
-  // H2 Complexity: Mathematical score of decision conflict/indecision density
-  formData.append('entry.1214928906', sessionData.indecisionScore || 0);
-  // H6 Algorithmic Deviation: Measure of how DSS differed from static baseline (0-1)
-  formData.append('entry.1755997909', sessionData.recDeviationScore || 0);
-  // Control: Was the participant using a touch-based device for the interaction?
-  formData.append('entry.257967857', sessionData.touchDevice ? 1 : 0);
+        // ══════════════════════════════════════════════════════════════════════════
+        // 3. ABANDONMENT ANALYSIS (SCREEN: EXIT DIALOG & REASONS)
+        // ══════════════════════════════════════════════════════════════════════════
+        // Categorical Logic: Abandoned early (0 items) or after partial selection?
+        formData.append('entry.1445663391', sessionData.abandonType || 'N/A');
+        // Q: "During the shopping task, I was focused on avoiding the shipping fee"
+        formData.append('entry.1421685344', sessionData.abandonReason || '');
+        // Q: "Please select all that apply" ( Irrelevant items / Too expensive / etc. )
+        formData.append('entry.1111071683', sessionData.exitReasonsChecked || '');
+        // Q: "Please tell us more about why you decided to leave" (Open text field)
+        formData.append('entry.227332894', sessionData.exitFreeText || '');
+        // Q: "What could we have done to make it easier for you to reach the threshold?"
+        formData.append('entry.1897370611', sessionData.exitSuggestion || '');
+        // Engagement at Exit: Number of items checked at the moment of abandonment
+        formData.append('entry.457722614', sessionData.exitItemsAdded || 0);
+        // Proximity at Exit: Dollar amount remaining to reach $35 when user quit
+        formData.append('entry.1893427120', sessionData.exitGapAtAbandon || 0);
+        // Temporal Exit: Seconds elapsed on the task screen before deciding to quit
+        formData.append('entry.973032317', sessionData.exitTimeOnScreen || 0);
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // 5. POST-TASK SURVEY (SCREENSHOTS: LIKERT SCALES 1-7)
-  // ══════════════════════════════════════════════════════════════════════════
-  // Q: "How often do you shop online for groceries?" (Pre-Survey Baseline)
-  formData.append('entry.540119743', sessionData.shopFreq || '');
-  // Q: "How important are prices when making purchase decisions?" (Pre-Survey)
-  formData.append('entry.223642860', sessionData.priceSensitivity || '');
-  // Q: "How much do you trust algorithm-based recommendations in general?"
-  formData.append('entry.1481934786', sessionData.algoTrust || '');
+        // ══════════════════════════════════════════════════════════════════════════
+        // 4. PROCESS TRACING & BACKEND RESEARCH METRICS (H2, H5, H6)
+        // ══════════════════════════════════════════════════════════════════════════
+        // Efficiency: Total interaction time on the recommendations screen in seconds
+        formData.append('entry.1188163062', sessionData.timeOnRecScreen || 0);
+        // Latency: Seconds elapsed before the participant made their first item click
+        formData.append('entry.1958008072', sessionData.timeToFirstSelection || 0);
+        // Search Intensity: Total number of hover events over items (Engagement proxy)
+        formData.append('entry.1218658725', sessionData.hoverEvents || 0);
+        // H2 Effort: Number of times an item was unchecked after being checked (Flipping)
+        formData.append('entry.1649885971', sessionData.itemsAddedThenRemoved || 0);
+        // H2 Binary: Did the participant exhibit any add-then-remove behavior? (1/0)
+        formData.append('entry.154643064', sessionData.itemsAddedThenRemoved > 0 ? 1 : 0);
+        // H2 Complexity: Mathematical score of decision conflict/indecision density
+        formData.append('entry.1214928906', sessionData.indecisionScore || 0);
+        // H6 Algorithmic Deviation: Measure of how DSS differed from static baseline (0-1)
+        formData.append('entry.1755997909', sessionData.recDeviationScore || 0);
+        // Control: Was the participant using a touch-based device for the interaction?
+        formData.append('entry.257967857', sessionData.touchDevice ? 1 : 0);
 
-  // [PERCEIVED AUTONOMY - H2]
-  // Q: "I felt free to make my own decisions."
-  formData.append('entry.2036109088', sessionData.autonom1 || '');
-  // Q: "I felt in control of the shopping task."
-  formData.append('entry.1345472111', sessionData.autonom2 || '');
+        // ══════════════════════════════════════════════════════════════════════════
+        // 5. POST-TASK SURVEY (SCREENSHOTS: LIKERT SCALES 1-7)
+        // ══════════════════════════════════════════════════════════════════════════
+        // Q: "How often do you shop online for groceries?" (Pre-Survey Baseline)
+        formData.append('entry.540119743', sessionData.shopFreq || '');
+        // Q: "How important are prices when making purchase decisions?" (Pre-Survey)
+        formData.append('entry.223642860', sessionData.priceSensitivity || '');
+        // Q: "How much do you trust algorithm-based recommendations in general?"
+        formData.append('entry.1481934786', sessionData.algoTrust || '');
 
-  // [COGNITIVE LOAD - H2]
-  // Q: "The process of choosing was mentally taxing."
-  formData.append('entry.1866255536', sessionData.load1 || '');
-  // Q: "I found the task easy to complete." (REVERSE CODED LOAD)
-  formData.append('entry.1102238274', sessionData.load2 || '');
-  // Q: "The information provided was overwhelming."
-  formData.append('entry.1713932049', sessionData.load3 || '');
-  // Q: "I spent a lot of effort to reach the free-shipping threshold."
-  formData.append('entry.1340156972', sessionData.load4 || '');
+        // [PERCEIVED AUTONOMY - H2]
+        // Q: "I felt free to make my own decisions."
+        formData.append('entry.2036109088', sessionData.autonom1 || '');
+        // Q: "I felt in control of the shopping task."
+        formData.append('entry.1357028410', sessionData.autonom2 || '');
 
-  // [TRUST & TRANSPARENCY - H3/H5]
-  // Q: "I trust the recommendations provided."
-  formData.append('entry.2117691022', sessionData.trust1 || '');
-  // Q: "The recommendations appeared to be based on my likely preferences."
-  formData.append('entry.432591211', sessionData.trust2 || '');
-  // Q: "The system was transparent about why it suggested these items."
-  formData.append('entry.756646952', sessionData.transp1 || '');
-  // Q: "I understood how the system works."
-  formData.append('entry.655019999', sessionData.transp2 || '');
+        // [COGNITIVE LOAD - H2]
+        // Q: "The process of choosing was mentally taxing."
+        formData.append('entry.1866255536', sessionData.load1 || '');
+        // Q: "I found the task easy to complete." (REVERSE CODED LOAD)
+        formData.append('entry.1102238274', sessionData.load2 || '');
+        // Q: "The information provided was overwhelming."
+        formData.append('entry.1713932049', sessionData.load3 || '');
+        // Q: "I spent a lot of effort to reach the free-shipping threshold."
+        formData.append('entry.1340156972', sessionData.load4 || '');
 
-  // [MANIPULATIVE INTENT - H4/H5]
-  // Q: "I felt the system was trying to trick me into buying more."
-  formData.append('entry.94395533', sessionData.manip1 || '');
-  // Q: "The system seemed to prioritize the store's profit over my needs."
-  formData.append('entry.261399405', sessionData.manip2 || '');
-  // Q: "The recommendations felt pushy."
-  formData.append('entry.1633519159', sessionData.manip3 || '');
+        // [TRUST & TRANSPARENCY - H3/H5]
+        // Q: "I trust the recommendations provided."
+        formData.append('entry.2117691022', sessionData.trust1 || '');
+        // Q: "The recommendations appeared to be based on my likely preferences."
+        formData.append('entry.432591211', sessionData.trust2 || '');
+        // Q: "The system was transparent about why it suggested these items."
+        formData.append('entry.756646952', sessionData.transp1 || '');
+        // Q: "I understood how the system works."
+        formData.append('entry.655019999', sessionData.transp2 || '');
 
-  // [CHOICE QUALITY]
-  // Q: "The recommendations appeared to fit my needs."
-  formData.append('entry.2089146456', sessionData.fit1 || '');
-  // Q: "I am satisfied with the items I chose."
-  formData.append('entry.1161298534', sessionData.value1 || '');
-  // Q: "I feel regret regarding the items I did not choose."
-  formData.append('entry.1829525115', sessionData.regret1 || '');
+        // [MANIPULATIVE INTENT - H4/H5]
+        // Q: "I felt the system was trying to trick me into buying more."
+        formData.append('entry.755621104', sessionData.manip1 || '');
+        // Q: "The system seemed to prioritize the store's profit over my needs."
+        formData.append('entry.261399405', sessionData.manip2 || '');
+        // Q: "The recommendations felt pushy."
+        formData.append('entry.1633519159', sessionData.manip3 || '');
 
-  // [MANIPULATION CHECKS]
-  // Q: "I was shown explanations for why items were recommended."
-  formData.append('entry.2141226584', sessionData.manCheck2 || '');
+        // [CHOICE QUALITY]
+        // Q: "The recommendations appeared to fit my needs."
+        formData.append('entry.2089146456', sessionData.fit1 || '');
+        // Q: "I am satisfied with the items I chose."
+        formData.append('entry.1742512153', sessionData.value1 || '');
+        // Q: "I feel regret regarding the items I did not choose."
+        formData.append('entry.1829525115', sessionData.regret1 || '');
 
-  xhr.send(formData.toString());
-  console.log("PhD Data Collection: All 45+ entries dynamically mapped and sent.");
-}
+        // Q: "Choice Speed: I could make my choice quickly."
+        // HTML variable: conf1 (or choiceSpeed) | Google ID: 1073493008
+        formData.append('entry.1073493008', sessionData.conf1 || '');
 
+        // [MANIPULATION CHECKS]
+        // Q: "I was shown explanations for why items were recommended."
+        formData.append('entry.2141226584', sessionData.manCheck2 || '');
+
+        xhr.send(formData.toString());
+        console.log("PhD Data Collection: All 45+ entries dynamically mapped and sent.");
+      }
 function proceedToCheckout() {
   stopInactivityWatch();
   sessionData.abandonType = sessionData.abandonType || "none";
