@@ -1,944 +1,1484 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout Study</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #F7F5F0; --surface: #FFFFFF; --text: #1A1A18; --muted: #6B6B65;
-    --accent: #2B5E3F; --accent-light: #EAF2ED; --border: #E0DDD6;
-    --warning: #C84B0F; --warning-light: #FDF0EA;
-    --success: #1A6B3C; --success-light: #D6F0E2;
-    --shadow: 0 2px 16px rgba(0,0,0,0.07); --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px 80px; }
-  .container { width: 100%; max-width: 740px; }
-  .screen { display: none; animation: fadeIn 0.3s ease; }
-  .screen.active { display: block; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Study</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F5F0;
+      --surface: #FFFFFF;
+      --text: #1A1A18;
+      --muted: #6B6B65;
+      --accent: #2B5E3F;
+      --accent-light: #EAF2ED;
+      --border: #E0DDD6;
+      --warning: #C84B0F;
+      --warning-light: #FDF0EA;
+      --success: #1A6B3C;
+      --success-light: #D6F0E2;
+      --shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+      --radius: 12px;
+    }
 
-  .progress-wrap { margin-bottom: 36px; }
-  .progress-bar { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
-  .progress-label { font-size: 0.72rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  h1 { font-family: 'DM Serif Display', serif; font-size: 1.9rem; line-height: 1.2; margin-bottom: 10px; }
-  h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: 14px; }
-  p { color: var(--muted); line-height: 1.65; margin-bottom: 14px; font-size: 0.93rem; }
-  label { display: block; font-size: 0.84rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px 80px;
+    }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 14px; box-shadow: var(--shadow); }
-  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .container {
+      width: 100%;
+      max-width: 740px;
+    }
 
-  .shipping-banner { border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; transition: background 0.4s, border-color 0.4s; }
-  .shipping-banner.danger { background: var(--warning-light); border: 1.5px solid var(--warning); }
-  .shipping-banner.success { background: var(--success-light); border: 1.5px solid var(--success); }
-  .shipping-banner .icon { font-size: 1.3rem; flex-shrink: 0; }
-  .shipping-banner .banner-text strong { font-size: 0.92rem; }
-  .shipping-banner .banner-text span { font-size: 0.82rem; color: var(--muted); display: block; margin-top: 2px; }
+    .screen {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
 
-  .cart-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .cart-item:last-child { border-bottom: none; }
-  .item-emoji { font-size: 1.6rem; width: 40px; text-align: center; flex-shrink: 0; }
-  .item-info { flex: 1; }
-  .item-name { font-weight: 500; font-size: 0.92rem; }
-  .item-cat { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-  .item-price { font-weight: 600; font-size: 0.92rem; flex-shrink: 0; }
+    .screen.active {
+      display: block;
+    }
 
-  .cart-footer { padding-top: 14px; margin-top: 4px; }
-  .cart-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; margin-bottom: 6px; }
-  .cart-row.total { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px; }
-  .shipping-line { color: var(--warning); font-size: 0.85rem; }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
 
-  .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; align-items: start; }
-  .rec-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; position: relative; user-select: none; }
-  .rec-card:hover { border-color: var(--accent); box-shadow: 0 4px 18px rgba(43,94,63,0.1); transform: translateY(-2px); }
-  .rec-card.selected { border-color: var(--accent); background: var(--accent-light); }
-  .rec-card .rec-emoji { font-size: 1.5rem; margin-bottom: 7px; }
-  .rec-card .rec-name { font-weight: 500; font-size: 0.84rem; line-height: 1.3; margin-bottom: 5px; }
-  .rec-card .rec-meta { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-  .rec-card .rec-price { font-weight: 700; color: var(--accent); font-size: 0.92rem; }
-  .rec-card .rec-cat { font-size: 0.72rem; color: var(--muted); background: var(--bg); padding: 2px 6px; border-radius: 99px; }
-  .rec-card .rec-explanation { margin-top: 8px; font-size: 0.76rem; color: var(--muted); line-height: 1.45; border-top: 1px solid var(--border); padding-top: 8px; }
-  .rec-card .check-badge { position: absolute; top: 9px; right: 9px; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.65rem; font-weight: 700; }
-  .rec-card .gap-badge { position: absolute; top: 9px; right: 9px; background: var(--accent); color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 99px; text-transform: uppercase; }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
 
-  #live-cart-panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
-  #live-cart-panel .panel-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-  #live-cart-panel .added-items { margin-bottom: 12px; }
-  #live-cart-panel .added-item { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; padding: 7px 0; border-bottom: 1px solid var(--border); }
-  #live-cart-panel .added-item:last-child { border-bottom: none; }
-  #live-cart-panel .added-item .ai-name { color: var(--text); font-weight:500; }
-  #live-cart-panel .added-item .ai-remove { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.8rem; padding:2px 4px; border-radius:4px; }
-  #live-cart-panel .added-item .ai-remove:hover { color:var(--warning); }
-  .panel-totals { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 4px; }
-  .panel-row { display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; margin-bottom:8px; color:var(--muted); }
-  .panel-row.bold { font-weight:700; color:var(--text); font-size:0.92rem; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; margin-bottom: 0; }
-  .gap-indicator { font-size: 0.82rem; margin-top: 12px; padding: 9px 12px; border-radius: 8px; text-align: center; font-weight: 600; line-height: 1.4; }
-  .gap-indicator.short { background: var(--warning-light); color: var(--warning); }
-  .gap-indicator.met { background: var(--success-light); color: var(--success); }
+    .progress-wrap {
+      margin-bottom: 36px;
+    }
 
-  .btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 24px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; width: 100%; }
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: #214a30; }
-  .btn-secondary { background: transparent; color: var(--muted); border: 1.5px solid var(--border); margin-top: 8px; }
-  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
 
-  /* Survey shared styles */
-  .survey-group { margin-bottom: 26px; }
-  .survey-group:last-child { margin-bottom: 0; }
-  .likert { display: flex; gap: 6px; margin-top: 7px; }
-  .likert > div { flex: 1; }
-  .likert input { display: none; }
-  .likert label { display: block; text-align: center; cursor: pointer; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 2px; font-size: 0.78rem; font-weight: 400; color: var(--muted); transition: all 0.15s; }
-  .likert input:checked + label { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 600; }
-  .scale-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
-  .radio-group { display: flex; flex-direction: column; gap: 7px; margin-top: 7px; }
-  .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; width: 100%; box-sizing: border-box; }
-  .radio-opt:hover { border-color: var(--accent); background: var(--accent-light); }
-  .radio-opt input[type="radio"] { accent-color: var(--accent); flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
-  .radio-opt span { font-size: 0.88rem; cursor: pointer; }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
 
-  .scenario-box { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; }
-  .scenario-box p { color: var(--text); margin: 0; font-size: 0.9rem; }
+    .progress-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
-  #inactivity-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); z-index: 999; align-items: center; justify-content: center; }
-  #inactivity-overlay.show { display: flex; }
-  .inactivity-box { background: var(--surface); border-radius: var(--radius); padding: 32px; max-width: 360px; width: 90%; text-align: center; }
-  .inactivity-box h2 { margin-bottom: 10px; }
-  .inactivity-box p { font-size: 0.88rem; margin-bottom: 20px; }
-  .inactivity-countdown { font-size: 2rem; font-weight: 700; color: var(--warning); margin-bottom: 16px; }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
 
-  #debug-badge { position: fixed; bottom: 10px; right: 10px; background: #111; color: #888; font-size: 0.68rem; font-family: monospace; padding: 5px 9px; border-radius: 6px; opacity: 0.75; z-index: 100; }
-  .thankyou-icon { font-size: 2.8rem; margin-bottom: 14px; }
-  @media (max-width: 500px) { .rec-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
-</style>
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+      font-size: 0.93rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .shipping-banner {
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .shipping-banner.danger {
+      background: var(--warning-light);
+      border: 1.5px solid var(--warning);
+    }
+
+    .shipping-banner.success {
+      background: var(--success-light);
+      border: 1.5px solid var(--success);
+    }
+
+    .shipping-banner .icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .shipping-banner .banner-text strong {
+      font-size: 0.92rem;
+    }
+
+    .shipping-banner .banner-text span {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-emoji {
+      font-size: 1.6rem;
+      width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 500;
+      font-size: 0.92rem;
+    }
+
+    .item-cat {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .item-price {
+      font-weight: 600;
+      font-size: 0.92rem;
+      flex-shrink: 0;
+    }
+
+    .cart-footer {
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .cart-row.total {
+      font-weight: 700;
+      font-size: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 6px;
+    }
+
+    .shipping-line {
+      color: var(--warning);
+      font-size: 0.85rem;
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+      align-items: start;
+    }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      position: relative;
+      user-select: none;
+    }
+
+    .rec-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 18px rgba(43, 94, 63, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .rec-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .rec-card .rec-emoji {
+      font-size: 1.5rem;
+      margin-bottom: 7px;
+    }
+
+    .rec-card .rec-name {
+      font-weight: 500;
+      font-size: 0.84rem;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+
+    .rec-card .rec-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .rec-card .rec-price {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.92rem;
+    }
+
+    .rec-card .rec-cat {
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 99px;
+    }
+
+    .rec-card .rec-explanation {
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.45;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .rec-card .check-badge {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .rec-card .gap-badge {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+
+    #live-cart-panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    #live-cart-panel .panel-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    #live-cart-panel .added-items {
+      margin-bottom: 12px;
+    }
+
+    #live-cart-panel .added-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #live-cart-panel .added-item:last-child {
+      border-bottom: none;
+    }
+
+    #live-cart-panel .added-item .ai-name {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    #live-cart-panel .added-item .ai-remove {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    #live-cart-panel .added-item .ai-remove:hover {
+      color: var(--warning);
+    }
+
+    .panel-totals {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    .panel-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.84rem;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    .panel-row.bold {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.92rem;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 4px;
+      margin-bottom: 0;
+    }
+
+    .gap-indicator {
+      font-size: 0.82rem;
+      margin-top: 12px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .gap-indicator.short {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .gap-indicator.met {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 13px 24px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #214a30;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    /* Survey shared styles */
+    .survey-group {
+      margin-bottom: 26px;
+    }
+
+    .survey-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .likert {
+      display: flex;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .likert>div {
+      flex: 1;
+    }
+
+    .likert input {
+      display: none;
+    }
+
+    .likert label {
+      display: block;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 2px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+
+    .likert input:checked+label {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 7px;
+    }
+
+    .radio-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .radio-opt:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-opt input[type="radio"] {
+      accent-color: var(--accent);
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .radio-opt span {
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .scenario-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+    }
+
+    .scenario-box p {
+      color: var(--text);
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    #inactivity-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #inactivity-overlay.show {
+      display: flex;
+    }
+
+    .inactivity-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .inactivity-box h2 {
+      margin-bottom: 10px;
+    }
+
+    .inactivity-box p {
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+    }
+
+    .inactivity-countdown {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--warning);
+      margin-bottom: 16px;
+    }
+
+    #debug-badge {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #111;
+      color: #888;
+      font-size: 0.68rem;
+      font-family: monospace;
+      padding: 5px 9px;
+      border-radius: 6px;
+      opacity: 0.75;
+      z-index: 100;
+    }
+
+    .thankyou-icon {
+      font-size: 2.8rem;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .rec-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">Step 1 of 6 — Study Information</div>
+  <div class="container">
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress" style="width:0%"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Step 1 of 6 — Study Information</div>
+    </div>
+    <div id="app"></div>
   </div>
-  <div id="app"></div>
-</div>
 
-<div id="inactivity-overlay">
-  <div class="inactivity-box">
-    <div style="font-size:2rem;margin-bottom:8px">⏱️</div>
-    <h2>Still there?</h2>
-    <p>You've been inactive. Your session will be recorded as <strong>abandoned</strong> in:</p>
-    <div class="inactivity-countdown" id="countdown-num">30</div>
-    <button class="btn btn-primary" onclick="resetInactivity()" style="width:100%">I'm still here</button>
+  <div id="inactivity-overlay">
+    <div class="inactivity-box">
+      <div style="font-size:2rem;margin-bottom:8px">⏱️</div>
+      <h2>Still there?</h2>
+      <p>You've been inactive. Your session will be recorded as <strong>abandoned</strong> in:</p>
+      <div class="inactivity-countdown" id="countdown-num">30</div>
+      <button class="btn btn-primary" onclick="resetInactivity()" style="width:100%">I'm still here</button>
+    </div>
   </div>
-</div>
 
-<div id="debug-badge">Cond <span id="debug-cond">—</span> | <span id="debug-screen">consent</span></label>
+  <div id="debug-badge">Cond <span id="debug-cond">—</span> | <span id="debug-screen">consent</span></label>
 
-<script>
-// ═══════════════════════════════════════════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════════════════════════════════════════
-const THRESHOLD = 35;
-const INACTIVITY_WARN_SEC = 90;
-const INACTIVITY_ABANDON_SEC = 30;
+    <script>
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // CONFIG
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      const THRESHOLD = 35;
+      const INACTIVITY_WARN_SEC = 90;
+      const INACTIVITY_ABANDON_SEC = 30;
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// LARGE DATASET WITH VENDOR INTEREST DATA
-// ═══════════════════════════════════════════════════════════════════════════════════
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // LARGE DATASET WITH VENDOR INTEREST DATA
+      // ═══════════════════════════════════════════════════════════════════════════════════
 
-const userProfiles = [
-  { id: "health_conscious", categories: {"Health & Personal Care": 0.5, "All Beauty": 0.3, "Grocery & Gourmet": 0.15, "Office Products": 0.05}, priceRange: [5, 15] },
-  { id: "beauty_focused", categories: {"All Beauty": 0.45, "Health & Personal Care": 0.35, "Grocery & Gourmet": 0.1, "Office Products": 0.1}, priceRange: [8, 20] },
-  { id: "office_worker", categories: {"Office Products": 0.4, "Grocery & Gourmet": 0.3, "Health & Personal Care": 0.2, "All Beauty": 0.1}, priceRange: [4, 12] },
-  { id: "gourmet_shopper", categories: {"Grocery & Gourmet": 0.5, "Health & Personal Care": 0.25, "All Beauty": 0.15, "Office Products": 0.1}, priceRange: [6, 18] },
-  { id: "tech_enthusiast", categories: {"Office Products": 0.5, "Health & Personal Care": 0.2, "All Beauty": 0.1, "Grocery & Gourmet": 0.2}, priceRange: [10, 25] },
-  { id: "wellness_focused", categories: {"Health & Personal Care": 0.6, "Grocery & Gourmet": 0.25, "All Beauty": 0.1, "Office Products": 0.05}, priceRange: [8, 18] }
-];
-
-const currentUser = userProfiles[Math.floor(Math.random() * userProfiles.length)];
-currentUser.userId = "user_" + Math.random().toString(36).slice(2,8);
-
-// LARGE CATALOG - 100+ items with vendor interest data
-const LARGE_CATALOG = [
-  // Health & Personal Care (30 items)
-  { id:"h1", name:"Vitamin C Serum 30ml", cat:"Health & Personal Care", price:8.99, pop:9, rel:8, emoji:"🧴", margin: 0.45, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.85, svdScore: 0.78 },
-  { id:"h2", name:"Collagen Face Moisturizer", cat:"Health & Personal Care", price:11.49, pop:8, rel:8, emoji:"✨", margin: 0.52, inventory: 120, vendorPriority: 0.8, collaborativeScore: 0.82, svdScore: 0.81 },
-  { id:"h3", name:"Melatonin Gummies 60ct", cat:"Health & Personal Care", price:9.99, pop:9, rel:7, emoji:"💊", margin: 0.38, inventory: 200, vendorPriority: 0.6, collaborativeScore: 0.79, svdScore: 0.75 },
-  { id:"h4", name:"Zinc + Vitamin D Tablets", cat:"Health & Personal Care", price:7.49, pop:8, rel:7, emoji:"💊", margin: 0.41, inventory: 150, vendorPriority: 0.65, collaborativeScore: 0.77, svdScore: 0.73 },
-  { id:"h5", name:"Natural Lip Balm Set (4pk)", cat:"Health & Personal Care", price:5.99, pop:8, rel:6, emoji:"💋", margin: 0.35, inventory: 90, vendorPriority: 0.5, collaborativeScore: 0.71, svdScore: 0.69 },
-  { id:"h6", name:"Probiotics 30 Capsules", cat:"Health & Personal Care", price:12.99, pop:7, rel:8, emoji:"🦠", margin: 0.48, inventory: 110, vendorPriority: 0.75, collaborativeScore: 0.83, svdScore: 0.79 },
-  { id:"h7", name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, pop:9, rel:6, emoji:"🧴", margin: 0.32, inventory: 300, vendorPriority: 0.4, collaborativeScore: 0.68, svdScore: 0.65 },
-  { id:"h8", name:"Biotin Hair Growth Pills", cat:"Health & Personal Care", price:13.49, pop:6, rel:7, emoji:"💊", margin: 0.55, inventory: 80, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.74 },
-  { id:"h9", name:"Magnesium Supplement", cat:"Health & Personal Care", price:8.49, pop:7, rel:7, emoji:"💊", margin: 0.42, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"h10", name:"Omega-3 Fish Oil", cat:"Health & Personal Care", price:15.99, pop:8, rel:8, emoji:"🐟", margin: 0.58, inventory: 95, vendorPriority: 0.85, collaborativeScore: 0.87, svdScore: 0.84 },
-  { id:"h11", name:"Turmeric Curcumin Capsules", cat:"Health & Personal Care", price:11.99, pop:6, rel:7, emoji:"🌿", margin: 0.49, inventory: 75, vendorPriority: 0.7, collaborativeScore: 0.72, svdScore: 0.69 },
-  { id:"h12", name:"Elderberry Immune Support", cat:"Health & Personal Care", price:9.49, pop:7, rel:8, emoji:"🫐", margin: 0.44, inventory: 120, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.76 },
-  { id:"h13", name:"Ashwagandha Stress Relief", cat:"Health & Personal Care", price:14.99, pop:5, rel:7, emoji:"🌱", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"h14", name:"Calcium + Vitamin D3", cat:"Health & Personal Care", price:7.99, pop:8, rel:7, emoji:"🦴", margin: 0.38, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"h15", name:"Iron Supplement 65mg", cat:"Health & Personal Care", price:6.49, pop:7, rel:6, emoji:"💊", margin: 0.35, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.69, svdScore: 0.66 },
-  { id:"h16", name:"Glucosamine Joint Support", cat:"Health & Personal Care", price:16.99, pop:6, rel:8, emoji:"🦴", margin: 0.61, inventory: 70, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.71 },
-  { id:"h17", name:"CoQ10 Heart Health", cat:"Health & Personal Care", price:18.49, pop:5, rel:8, emoji:"❤️", margin: 0.64, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.67 },
-  { id:"h18", name:"Fiber Supplement Powder", cat:"Health & Personal Care", price:12.49, pop:6, rel:7, emoji:"🥄", margin: 0.47, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"h19", name:"Prenatal Vitamins", cat:"Health & Personal Care", price:13.99, pop:7, rel:8, emoji:"🤱", margin: 0.51, inventory: 85, vendorPriority: 0.75, collaborativeScore: 0.79, svdScore: 0.77 },
-  { id:"h20", name:"Men's Daily Multivitamin", cat:"Health & Personal Care", price:10.99, pop:8, rel:7, emoji:"👨", margin: 0.43, inventory: 130, vendorPriority: 0.6, collaborativeScore: 0.76, svdScore: 0.73 },
-
-  // All Beauty (25 items)
-  { id:"b1", name:"Tinted Moisturizer SPF 20", cat:"All Beauty", price:10.49, pop:7, rel:7, emoji:"🌟", margin: 0.48, inventory: 75, vendorPriority: 0.75, collaborativeScore: 0.88, svdScore: 0.84 },
-  { id:"b2", name:"Rose Water Facial Mist", cat:"All Beauty", price:7.99, pop:8, rel:7, emoji:"🌹", margin: 0.42, inventory: 110, vendorPriority: 0.7, collaborativeScore: 0.83, svdScore: 0.79 },
-  { id:"b3", name:"Bamboo Makeup Brush Set", cat:"All Beauty", price:12.99, pop:6, rel:6, emoji:"🖌️", margin: 0.55, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.76, svdScore: 0.72 },
-  { id:"b4", name:"Coconut Oil Hair Mask", cat:"All Beauty", price:8.49, pop:7, rel:7, emoji:"🥥", margin: 0.39, inventory: 95, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"b5", name:"Hyaluronic Acid Serum", cat:"All Beauty", price:14.99, pop:8, rel:8, emoji:"💧", margin: 0.58, inventory: 85, vendorPriority: 0.85, collaborativeScore: 0.89, svdScore: 0.86 },
-  { id:"b6", name:"Retinol Night Cream", cat:"All Beauty", price:16.99, pop:7, rel:8, emoji:"🌙", margin: 0.62, inventory: 70, vendorPriority: 0.9, collaborativeScore: 0.84, svdScore: 0.82 },
-  { id:"b7", name:"Vitamin E Face Oil", cat:"All Beauty", price:11.99, pop:6, rel:7, emoji:"🌿", margin: 0.51, inventory: 80, vendorPriority: 0.75, collaborativeScore: 0.78, svdScore: 0.75 },
-  { id:"b8", name:"Clay Face Mask", cat:"All Beauty", price:6.99, pop:8, rel:6, emoji:"🧴", margin: 0.35, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"b9", name:"Micellar Cleansing Water", cat:"All Beauty", price:9.99, pop:9, rel:7, emoji:"💧", margin: 0.44, inventory: 140, vendorPriority: 0.65, collaborativeScore: 0.82, svdScore: 0.79 },
-  { id:"b10", name:"Argan Oil Hair Treatment", cat:"All Beauty", price:13.49, pop:6, rel:7, emoji:"💇", margin: 0.54, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.73 },
-  { id:"b11", name:"Exfoliating Sugar Scrub", cat:"All Beauty", price:8.99, pop:7, rel:6, emoji:"🍯", margin: 0.41, inventory: 90, vendorPriority: 0.6, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"b12", name:"Niacinamide Pore Serum", cat:"All Beauty", price:12.49, pop:7, rel:8, emoji:"✨", margin: 0.52, inventory: 75, vendorPriority: 0.8, collaborativeScore: 0.81, svdScore: 0.78 },
-  { id:"b13", name:"Peptide Eye Cream", cat:"All Beauty", price:18.99, pop:6, rel:8, emoji:"👁️", margin: 0.65, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.77, svdScore: 0.75 },
-  { id:"b14", name:"Salicylic Acid Cleanser", cat:"All Beauty", price:9.49, pop:8, rel:7, emoji:"🧼", margin: 0.43, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.79, svdScore: 0.76 },
-  { id:"b15", name:"Jojoba Oil Moisturizer", cat:"All Beauty", price:10.99, pop:6, rel:7, emoji:"🌿", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"b16", name:"Charcoal Peel-Off Mask", cat:"All Beauty", price:7.49, pop:7, rel:6, emoji:"🖤", margin: 0.37, inventory: 110, vendorPriority: 0.55, collaborativeScore: 0.72, svdScore: 0.69 },
-  { id:"b17", name:"Caffeine Under-Eye Serum", cat:"All Beauty", price:11.49, pop:6, rel:7, emoji:"☕", margin: 0.49, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"b18", name:"Glycolic Acid Toner", cat:"All Beauty", price:13.99, pop:7, rel:8, emoji:"🧪", margin: 0.56, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.80, svdScore: 0.77 },
-  { id:"b19", name:"Shea Butter Hand Cream", cat:"All Beauty", price:5.99, pop:8, rel:6, emoji:"🤲", margin: 0.32, inventory: 150, vendorPriority: 0.45, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"b20", name:"Keratin Hair Serum", cat:"All Beauty", price:15.49, pop:5, rel:7, emoji:"💇", margin: 0.59, inventory: 55, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.70 },
-
-  // Grocery & Gourmet (25 items)
-  { id:"g1", name:"Organic Green Tea (40 bags)", cat:"Grocery & Gourmet", price:6.99, pop:9, rel:8, emoji:"🍵", margin: 0.33, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.86, svdScore: 0.82 },
-  { id:"g2", name:"Raw Honey 12oz Jar", cat:"Grocery & Gourmet", price:8.49, pop:9, rel:9, emoji:"🍯", margin: 0.36, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.89, svdScore: 0.87 },
-  { id:"g3", name:"Mixed Nut Snack Pack (6ct)", cat:"Grocery & Gourmet", price:7.99, pop:8, rel:8, emoji:"🥜", margin: 0.31, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.81, svdScore: 0.77 },
-  { id:"g4", name:"Himalayan Pink Salt Grinder", cat:"Grocery & Gourmet", price:5.49, pop:7, rel:6, emoji:"🧂", margin: 0.28, inventory: 100, vendorPriority: 0.45, collaborativeScore: 0.73, svdScore: 0.68 },
-  { id:"g5", name:"Organic Coffee Beans 1lb", cat:"Grocery & Gourmet", price:12.99, pop:8, rel:8, emoji:"☕", margin: 0.42, inventory: 90, vendorPriority: 0.7, collaborativeScore: 0.84, svdScore: 0.81 },
-  { id:"g6", name:"Extra Virgin Olive Oil", cat:"Grocery & Gourmet", price:11.49, pop:7, rel:7, emoji:"🫒", margin: 0.38, inventory: 110, vendorPriority: 0.6, collaborativeScore: 0.78, svdScore: 0.75 },
-  { id:"g7", name:"Manuka Honey 8oz", cat:"Grocery & Gourmet", price:24.99, pop:5, rel:9, emoji:"🍯", margin: 0.68, inventory: 40, vendorPriority: 0.95, collaborativeScore: 0.82, svdScore: 0.80 },
-  { id:"g8", name:"Organic Quinoa 2lb", cat:"Grocery & Gourmet", price:9.99, pop:6, rel:7, emoji:"🌾", margin: 0.35, inventory: 85, vendorPriority: 0.55, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"g9", name:"Coconut Oil 16oz", cat:"Grocery & Gourmet", price:8.99, pop:8, rel:7, emoji:"🥥", margin: 0.34, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.79, svdScore: 0.76 },
-  { id:"g10", name:"Chia Seeds 1lb", cat:"Grocery & Gourmet", price:7.49, pop:7, rel:7, emoji:"🌱", margin: 0.31, inventory: 95, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.73 },
-  { id:"g11", name:"Matcha Green Tea Powder", cat:"Grocery & Gourmet", price:15.99, pop:6, rel:8, emoji:"🍃", margin: 0.54, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.77, svdScore: 0.74 },
-  { id:"g12", name:"Protein Energy Bars (12pk)", cat:"Grocery & Gourmet", price:13.49, pop:8, rel:7, emoji:"🍫", margin: 0.45, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.81, svdScore: 0.78 },
-  { id:"g13", name:"Almond Butter 16oz", cat:"Grocery & Gourmet", price:10.99, pop:7, rel:7, emoji:"🥜", margin: 0.39, inventory: 80, vendorPriority: 0.6, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"g14", name:"Dark Chocolate 85% Cacao", cat:"Grocery & Gourmet", price:6.99, pop:8, rel:6, emoji:"🍫", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.78, svdScore: 0.75 },
-  { id:"g15", name:"Organic Maple Syrup", cat:"Grocery & Gourmet", price:12.49, pop:6, rel:7, emoji:"🍁", margin: 0.43, inventory: 70, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"g16", name:"Himalayan Sea Salt", cat:"Grocery & Gourmet", price:4.99, pop:7, rel:6, emoji:"🧂", margin: 0.26, inventory: 150, vendorPriority: 0.4, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"g17", name:"Turmeric Powder Organic", cat:"Grocery & Gourmet", price:6.49, pop:6, rel:7, emoji:"🌿", margin: 0.29, inventory: 90, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
-  { id:"g18", name:"Goji Berries Dried 8oz", cat:"Grocery & Gourmet", price:11.99, pop:5, rel:7, emoji:"🫐", margin: 0.48, inventory: 55, vendorPriority: 0.7, collaborativeScore: 0.69, svdScore: 0.66 },
-  { id:"g19", name:"Spirulina Powder 4oz", cat:"Grocery & Gourmet", price:14.99, pop:4, rel:8, emoji:"🌿", margin: 0.56, inventory: 45, vendorPriority: 0.8, collaborativeScore: 0.65, svdScore: 0.62 },
-  { id:"g20", name:"Cacao Nibs Raw 8oz", cat:"Grocery & Gourmet", price:9.49, pop:5, rel:7, emoji:"🍫", margin: 0.37, inventory: 65, vendorPriority: 0.55, collaborativeScore: 0.67, svdScore: 0.64 },
-
-  // Office Products (25 items)
-  { id:"o1", name:"Sticky Note Assortment Pack", cat:"Office Products", price:4.99, pop:9, rel:8, emoji:"📌", margin: 0.25, inventory: 220, vendorPriority: 0.4, collaborativeScore: 0.78, svdScore: 0.74 },
-  { id:"o2", name:"Gel Pen Set 0.5mm (10pk)", cat:"Office Products", price:6.99, pop:9, rel:8, emoji:"🖊️", margin: 0.29, inventory: 190, vendorPriority: 0.45, collaborativeScore: 0.84, svdScore: 0.80 },
-  { id:"o3", name:"Mini Stapler + 1000 Staples", cat:"Office Products", price:7.49, pop:8, rel:7, emoji:"📎", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.72 },
-  { id:"o4", name:"Cable Management Clips 20pk", cat:"Office Products", price:5.99, pop:8, rel:7, emoji:"🔌", margin: 0.27, inventory: 170, vendorPriority: 0.4, collaborativeScore: 0.72, svdScore: 0.67 },
-  { id:"o5", name:"Wireless Mouse Pad", cat:"Office Products", price:12.99, pop:7, rel:8, emoji:"🖱️", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.79, svdScore: 0.76 },
-  { id:"o6", name:"Desk Organizer Bamboo", cat:"Office Products", price:15.99, pop:6, rel:7, emoji:"📋", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"o7", name:"Notebook Set A5 (3pk)", cat:"Office Products", price:8.99, pop:8, rel:7, emoji:"📓", margin: 0.35, inventory: 140, vendorPriority: 0.55, collaborativeScore: 0.77, svdScore: 0.74 },
-  { id:"o8", name:"Highlighter Set (6 colors)", cat:"Office Products", price:5.49, pop:9, rel:7, emoji:"🖍️", margin: 0.26, inventory: 200, vendorPriority: 0.4, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"o9", name:"Paper Clips 500ct", cat:"Office Products", price:3.99, pop:8, rel:6, emoji:"📎", margin: 0.22, inventory: 250, vendorPriority: 0.3, collaborativeScore: 0.69, svdScore: 0.66 },
-  { id:"o10", name:"Binder Clips Assorted", cat:"Office Products", price:4.49, pop:8, rel:6, emoji:"📎", margin: 0.24, inventory: 180, vendorPriority: 0.35, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"o11", name:"USB Flash Drive 32GB", cat:"Office Products", price:11.99, pop:7, rel:8, emoji:"💾", margin: 0.44, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.75 },
-  { id:"o12", name:"Wireless Keyboard", cat:"Office Products", price:24.99, pop:6, rel:8, emoji:"⌨️", margin: 0.72, inventory: 45, vendorPriority: 0.9, collaborativeScore: 0.76, svdScore: 0.73 },
-  { id:"o13", name:"Monitor Stand Adjustable", cat:"Office Products", price:18.99, pop:5, rel:7, emoji:"🖥️", margin: 0.63, inventory: 50, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"o14", name:"Desk Lamp LED", cat:"Office Products", price:16.49, pop:6, rel:7, emoji:"💡", margin: 0.58, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"o15", name:"File Folders Letter Size", cat:"Office Products", price:6.49, pop:7, rel:6, emoji:"📁", margin: 0.28, inventory: 160, vendorPriority: 0.4, collaborativeScore: 0.70, svdScore: 0.67 },
-  { id:"o16", name:"Whiteboard Markers (4pk)", cat:"Office Products", price:7.99, pop:8, rel:7, emoji:"🖊️", margin: 0.33, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"o17", name:"Calculator Scientific", cat:"Office Products", price:13.49, pop:6, rel:7, emoji:"🧮", margin: 0.51, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.72, svdScore: 0.69 },
-  { id:"o18", name:"Shredder Personal", cat:"Office Products", price:29.99, pop:4, rel:8, emoji:"🗂️", margin: 0.78, inventory: 25, vendorPriority: 0.95, collaborativeScore: 0.68, svdScore: 0.65 },
-  { id:"o19", name:"Label Maker Portable", cat:"Office Products", price:22.99, pop:5, rel:7, emoji:"🏷️", margin: 0.69, inventory: 35, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.66 },
-  { id:"o20", name:"Hole Punch 3-Hole", cat:"Office Products", price:9.99, pop:7, rel:6, emoji:"🕳️", margin: 0.38, inventory: 100, vendorPriority: 0.55, collaborativeScore: 0.71, svdScore: 0.68 },
-
-  // Health & Personal Care (additional 5 — now 25 total)
-  { id:"h21", name:"Vitamin B12 Sublingual", cat:"Health & Personal Care", price:8.99, pop:7, rel:7, emoji:"💊", margin: 0.43, inventory: 110, vendorPriority: 0.62, collaborativeScore: 0.75, svdScore: 0.72 },
-  { id:"h22", name:"Collagen Peptides Powder", cat:"Health & Personal Care", price:19.99, pop:6, rel:8, emoji:"🥛", margin: 0.62, inventory: 65, vendorPriority: 0.88, collaborativeScore: 0.78, svdScore: 0.76 },
-  { id:"h23", name:"Activated Charcoal Capsules", cat:"Health & Personal Care", price:10.49, pop:5, rel:6, emoji:"🖤", margin: 0.46, inventory: 80, vendorPriority: 0.65, collaborativeScore: 0.70, svdScore: 0.67 },
-  { id:"h24", name:"Castor Oil 16oz", cat:"Health & Personal Care", price:7.49, pop:7, rel:7, emoji:"🧴", margin: 0.38, inventory: 130, vendorPriority: 0.52, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"h25", name:"Digestive Enzyme Complex", cat:"Health & Personal Care", price:14.49, pop:6, rel:8, emoji:"🌿", margin: 0.55, inventory: 70, vendorPriority: 0.78, collaborativeScore: 0.76, svdScore: 0.74 },
-
-  // All Beauty (additional 5 — now 25 total)
-  { id:"b21", name:"Tea Tree Face Wash", cat:"All Beauty", price:8.49, pop:8, rel:7, emoji:"🌿", margin: 0.40, inventory: 105, vendorPriority: 0.60, collaborativeScore: 0.76, svdScore: 0.73 },
-  { id:"b22", name:"Vitamin C Brightening Toner", cat:"All Beauty", price:11.99, pop:7, rel:8, emoji:"🍊", margin: 0.51, inventory: 78, vendorPriority: 0.76, collaborativeScore: 0.79, svdScore: 0.77 },
-  { id:"b23", name:"Aloe Vera Gel 8oz", cat:"All Beauty", price:6.49, pop:8, rel:6, emoji:"🌵", margin: 0.34, inventory: 145, vendorPriority: 0.48, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"b24", name:"Biotin Shampoo 16oz", cat:"All Beauty", price:9.99, pop:7, rel:7, emoji:"🚿", margin: 0.43, inventory: 92, vendorPriority: 0.63, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"b25", name:"Snail Mucin Eye Serum", cat:"All Beauty", price:16.49, pop:6, rel:8, emoji:"🐌", margin: 0.60, inventory: 55, vendorPriority: 0.87, collaborativeScore: 0.80, svdScore: 0.78 },
-
-  // Grocery & Gourmet (additional 5 — now 25 total)
-  { id:"g21", name:"Collagen Bone Broth Powder", cat:"Grocery & Gourmet", price:18.49, pop:5, rel:8, emoji:"🍲", margin: 0.60, inventory: 48, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
-  { id:"g22", name:"Pumpkin Seeds Roasted 1lb", cat:"Grocery & Gourmet", price:7.99, pop:7, rel:7, emoji:"🎃", margin: 0.33, inventory: 110, vendorPriority: 0.50, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"g23", name:"Ceylon Cinnamon Powder", cat:"Grocery & Gourmet", price:8.49, pop:6, rel:7, emoji:"🌿", margin: 0.36, inventory: 88, vendorPriority: 0.54, collaborativeScore: 0.70, svdScore: 0.67 },
-  { id:"g24", name:"Grass-Fed Whey Protein 1lb", cat:"Grocery & Gourmet", price:24.49, pop:7, rel:9, emoji:"🏋️", margin: 0.66, inventory: 52, vendorPriority: 0.92, collaborativeScore: 0.83, svdScore: 0.81 },
-  { id:"g25", name:"Flaxseed Meal Organic 2lb", cat:"Grocery & Gourmet", price:9.49, pop:6, rel:7, emoji:"🌾", margin: 0.34, inventory: 82, vendorPriority: 0.52, collaborativeScore: 0.71, svdScore: 0.68 },
-
-  // Office Products (additional 5 — now 25 total)
-  { id:"o21", name:"Mesh Desk Organizer", cat:"Office Products", price:11.49, pop:7, rel:7, emoji:"📐", margin: 0.44, inventory: 78, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
-  { id:"o22", name:"Correction Tape 10-Pack", cat:"Office Products", price:7.99, pop:8, rel:7, emoji:"✏️", margin: 0.31, inventory: 165, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
-  { id:"o23", name:"Lap Desk Portable", cat:"Office Products", price:21.99, pop:6, rel:8, emoji:"💻", margin: 0.67, inventory: 42, vendorPriority: 0.88, collaborativeScore: 0.74, svdScore: 0.71 },
-  { id:"o24", name:"Index Card Dividers 200pk", cat:"Office Products", price:5.49, pop:7, rel:6, emoji:"📇", margin: 0.25, inventory: 190, vendorPriority: 0.38, collaborativeScore: 0.69, svdScore: 0.66 },
-  { id:"o25", name:"Whiteboard Eraser Magnetic", cat:"Office Products", price:6.99, pop:7, rel:6, emoji:"🗑️", margin: 0.29, inventory: 140, vendorPriority: 0.43, collaborativeScore: 0.70, svdScore: 0.67 }
-];
-
-// Large cart item pool - FIXED: Ensure cart stays below $35
-const CART_ITEM_POOL = [
-  { name:"Daily Multivitamin 90ct", cat:"Health & Personal Care", price:8.49, emoji:"💊" },
-  { name:"Micellar Cleansing Water", cat:"All Beauty", price:7.99, emoji:"💧" },
-  { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet", price:5.99, emoji:"🍵" },
-  { name:"Protein Energy Bar (12pk)", cat:"Grocery & Gourmet", price:9.99, emoji:"🍫" },
-  { name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, emoji:"🧴" },
-  { name:"Facial Cleanser Foam", cat:"All Beauty", price:6.49, emoji:"🧼" },
-  { name:"Notebook Set (3pk)", cat:"Office Products", price:7.99, emoji:"📓" },
-  { name:"Organic Coffee Beans 1lb", cat:"Grocery & Gourmet", price:9.99, emoji:"☕" },
-  { name:"Moisturizing Hand Cream", cat:"Health & Personal Care", price:5.49, emoji:"🤲" },
-  { name:"Desk Organizer Tray", cat:"Office Products", price:8.99, emoji:"📋" },
-  { name:"Vitamin D3 Supplement", cat:"Health & Personal Care", price:7.99, emoji:"☀️" },
-  { name:"Lip Balm SPF 15", cat:"All Beauty", price:3.99, emoji:"💋" },
-  { name:"Green Tea Matcha Powder", cat:"Grocery & Gourmet", price:11.99, emoji:"🍃" },
-  { name:"Wireless Mouse", cat:"Office Products", price:12.99, emoji:"🖱️" },
-  { name:"Probiotic Yogurt Starter", cat:"Grocery & Gourmet", price:6.49, emoji:"🥛" },
-  { name:"Eye Cream Anti-Aging", cat:"All Beauty", price:10.99, emoji:"👁️" },
-  { name:"Magnesium Glycinate", cat:"Health & Personal Care", price:9.49, emoji:"💊" },
-  { name:"Sticky Notes Rainbow", cat:"Office Products", price:4.49, emoji:"🌈" },
-  { name:"Almond Milk Unsweetened", cat:"Grocery & Gourmet", price:3.49, emoji:"🥛" },
-  { name:"Sunscreen SPF 50", cat:"All Beauty", price:9.49, emoji:"☀️" },
-  { name:"Omega-3 Fish Oil", cat:"Health & Personal Care", price:12.99, emoji:"🐟" },
-  { name:"Gel Pens Multicolor", cat:"Office Products", price:6.99, emoji:"🖊️" },
-  { name:"Coconut Water 12pk", cat:"Grocery & Gourmet", price:14.99, emoji:"🥥" },
-  { name:"Dry Shampoo Spray", cat:"All Beauty", price:7.99, emoji:"💨" },
-  { name:"Calcium Magnesium Zinc", cat:"Health & Personal Care", price:8.49, emoji:"🦴" },
-  { name:"Highlighter Set Pastel", cat:"Office Products", price:5.99, emoji:"🖍️" },
-  { name:"Kombucha Starter Kit", cat:"Grocery & Gourmet", price:18.99, emoji:"🫧" },
-  { name:"Retinol Serum 1%", cat:"All Beauty", price:15.99, emoji:"🧪" },
-  { name:"Ashwagandha Capsules", cat:"Health & Personal Care", price:11.49, emoji:"🌿" },
-  { name:"Wireless Charger Pad", cat:"Office Products", price:14.99, emoji:"🔋" }
-];
-
-// FIXED: Dynamic cart generation that ENSURES cart stays below $35
-function generateRandomCart() {
-  const shuffled = [...CART_ITEM_POOL].sort(() => Math.random() - 0.5);
-  const numItems = Math.random() > 0.3 ? 3 : 4;
-  let selectedItems = [];
-  let attempts = 0;
-  const maxAttempts = 50;
-
-  while (attempts < maxAttempts) {
-    selectedItems = [];
-    let totalPrice = 0;
-
-    for (let item of shuffled) {
-      if (selectedItems.length >= numItems) break;
-      
-      const categoryPreference = currentUser.categories[item.cat] || 0.1;
-      const selectionProbability = categoryPreference + 0.2;
-      
-      if (Math.random() < selectionProbability) {
-        if (totalPrice + item.price < THRESHOLD - 5) {
-          selectedItems.push(item);
-          totalPrice += item.price;
-        }
-      }
-    }
-
-    while (selectedItems.length < 2) {
-      const randomItem = shuffled[Math.floor(Math.random() * shuffled.length)];
-      if (!selectedItems.find(item => item.name === randomItem.name)) {
-        const newTotal = selectedItems.reduce((sum, item) => sum + item.price, 0) + randomItem.price;
-        if (newTotal < THRESHOLD - 5) {
-          selectedItems.push(randomItem);
-        }
-      }
-    }
-
-    totalPrice = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
-    
-    if (totalPrice < THRESHOLD && (THRESHOLD - totalPrice) >= 5 && (THRESHOLD - totalPrice) <= 20) {
-      break;
-    }
-    
-    attempts++;
-  }
-
-  if (attempts >= maxAttempts) {
-    selectedItems = [
-      { name:"Hand Sanitizer 8oz", cat:"Health & Personal Care", price:4.99, emoji:"🧴" },
-      { name:"Lip Balm SPF 15", cat:"All Beauty", price:3.99, emoji:"💋" },
-      { name:"Sticky Notes Rainbow", cat:"Office Products", price:4.49, emoji:"🌈" },
-      { name:"Chamomile Herbal Tea (20 bags)", cat:"Grocery & Gourmet", price:5.99, emoji:"🍵" }
-    ];
-  }
-
-  const finalTotal = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
-  return { items: selectedItems, total: finalTotal };
-}
-
-const cartData = generateRandomCart();
-const CART_ITEMS = cartData.items;
-const CART_SUBTOTAL = cartData.total;
-const GAP_INITIAL = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);
-
-// ═══════════════════════════════════════════════════════════════════════════════════
-// SESSION STATE
-// ═══════════════════════════════════════════════════════════════════════════════════
-const participantId = "P_" + Date.now() + "_" + Math.random().toString(36).slice(2,6).toUpperCase();
-const condition = Math.floor(Math.random()*4)+1;
-const isDSS = condition >= 3;
-const hasExp = condition === 2 || condition === 4;
-const touchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 1 : 0;
-
-document.getElementById("debug-cond").textContent =
-  condition + (isDSS?" DSS":" Static") + (hasExp?" +Exp":" No Exp");
-
-let sessionData = {
-  participantId, condition,
-  conditionDSS: isDSS ? 1 : 0,
-  conditionExp: hasExp ? 1 : 0,
-  cartSubtotal: CART_SUBTOTAL.toFixed(2),
-  gapAtStart: GAP_INITIAL.toFixed(2),
-  abandonType: "none",
-  touchDevice,
-};
-
-let addedItems = [];
-let itemsAddedThenRemoved = 0;
-let shownRecs = [];
-let recScreenEnter = null;
-let firstSelectionTime = null;
-let hoverLog = [];
-let inactivityTimer = null;
-let countdownTimer = null;
-let countdownVal = INACTIVITY_ABANDON_SEC;
-let sessionStartTime = Date.now();
-
-// ═══════════════════════════════════════════════════════════════════════════════════
-// ENHANCED RECOMMENDATION ALGORITHMS WITH DYNAMIC GAP CALCULATION
-// ═══════════════════════════════════════════════════════════════════════════════════
-
-function getStaticRecs(gap, n=5, usedItemIds = new Set()) {
-  const { priceMin, priceMax } = getGapPriceRange(gap);
-  
-  return [...LARGE_CATALOG]
-    .filter(item => !addedItems.find(a => a.id === item.id))
-    .filter(item => !usedItemIds.has(item.id))
-    .filter(item => item.price >= priceMin && item.price <= priceMax)
-    .sort((a,b) => {
-      const total = getCurrentTotal();
-      const aClears = (total + a.price) >= THRESHOLD;
-      const bClears = (total + b.price) >= THRESHOLD;
-      if (aClears && !bClears) return -1;
-      if (!aClears && bClears) return 1;
-      // Among items that both clear or both don't: sort by popularity with jitter
-      return (b.pop + Math.random() * 2 - 1) - (a.pop + Math.random() * 2 - 1);
-    })
-    .slice(0, n)
-    .map(item => ({
-      ...item,
-      method: 'static',
-      confidence: 0.6 + (Math.random() * 0.2),
-      explanation: hasExp ? generateContextualExplanation(item, 'static') : null
-    }));
-}
-
-function getCollaborativeRecs(gap, n=5, usedItemIds = new Set()) {
-  const { priceMin, priceMax } = getGapPriceRange(gap);
-  
-  return [...LARGE_CATALOG]
-    .filter(item => !addedItems.find(a => a.id === item.id))
-    .filter(item => !usedItemIds.has(item.id))
-    .filter(item => item.price >= priceMin && item.price <= priceMax)
-    .map(item => {
-      let collabScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
-      
-      const categoryPreference = currentUser.categories[item.cat] || 0.1;
-      collabScore += categoryPreference * 0.3;
-      
-      const vendorScore = (item.margin * 0.4) + (item.vendorPriority * 0.6);
-      const finalScore = (0.6 * collabScore) + (0.4 * vendorScore);
-      
-      return {
-        ...item,
-        score: finalScore,
-        method: 'collaborative',
-        confidence: collabScore,
-        vendorScore: vendorScore,
-        explanation: hasExp ? generateContextualExplanation(item, 'collaborative') : null
-      };
-    })
-    .sort((a,b) => b.score - a.score)
-    .slice(0, n);
-}
-
-function getSVDRecs(gap, n=5, usedItemIds = new Set()) {
-  const { priceMin, priceMax } = getGapPriceRange(gap);
-  
-  return [...LARGE_CATALOG]
-    .filter(item => !addedItems.find(a => a.id === item.id))
-    .filter(item => !usedItemIds.has(item.id))
-    .filter(item => item.price >= priceMin && item.price <= priceMax)
-    .map(item => {
-      let svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
-      
-      const categoryPreference = currentUser.categories[item.cat] || 0.1;
-      const priceInRange = item.price >= currentUser.priceRange[0] && 
-                          item.price <= currentUser.priceRange[1];
-      svdScore += categoryPreference * 0.2 + (priceInRange ? 0.1 : 0);
-      
-      const inventoryScore = Math.min(item.inventory / 200, 1);
-      const vendorScore = (item.margin * 0.3) + (item.vendorPriority * 0.4) + (inventoryScore * 0.3);
-      
-      const finalScore = (0.55 * svdScore) + (0.45 * vendorScore);
-      
-      return {
-        ...item,
-        score: finalScore,
-        method: 'svd',
-        confidence: svdScore,
-        vendorScore: vendorScore,
-        explanation: hasExp ? generateContextualExplanation(item, 'svd') : null
-      };
-    })
-    .sort((a,b) => b.score - a.score)
-    .slice(0, n);
-}
-
-function getDSSRecs(gap, n=5, usedItemIds = new Set()) {
-  const { priceMin, priceMax } = getGapPriceRange(gap);
-  
-  return [...LARGE_CATALOG]
-    .filter(item => !addedItems.find(a => a.id === item.id))
-    .filter(item => !usedItemIds.has(item.id))
-    .filter(item => item.price >= priceMin && item.price <= priceMax)
-    .map(item => {
-      const relevanceScore = (item.rel / 10) + (Math.random() * 0.1 - 0.05);
-      const popularityScore = (item.pop / 10) + (Math.random() * 0.1 - 0.05);
-      const collaborativeScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
-      const svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
-      
-      const categoryAffinity = currentUser.categories[item.cat] || 0.1;
-      const priceAffinity = item.price >= currentUser.priceRange[0] && 
-                           item.price <= currentUser.priceRange[1] ? 1 : 0.5;
-      
-      const marginScore = item.margin;
-      const inventoryScore = Math.min(item.inventory / 200, 1);
-      const priorityScore = item.vendorPriority;
-      const vendorScore = (marginScore * 0.4) + (priorityScore * 0.4) + (inventoryScore * 0.2);
-      
-      const gapCenter = (priceMin + priceMax) / 2;
-      const gapFit = Math.max(0, 1 - Math.abs(item.price - gapCenter) / Math.max(gapCenter, 0.01));
-      
-      const userScore = (
-        0.20 * relevanceScore +
-        0.15 * popularityScore +
-        0.25 * collaborativeScore +
-        0.20 * svdScore +
-        0.15 * categoryAffinity +
-        0.05 * priceAffinity
-      );
-      
-      const finalScore = (0.5 * userScore) + (0.3 * vendorScore) + (0.2 * gapFit);
-      
-      return {
-        ...item,
-        score: finalScore,
-        method: 'dss',
-        confidence: userScore,
-        vendorScore: vendorScore,
-        gapFit: gapFit,
-        explanation: hasExp ? generateContextualExplanation(item, 'dss') : null
-      };
-    })
-    .sort((a,b) => b.score - a.score)
-    .slice(0, n);
-}
-
-// ─── Cart-aware contextual explanation engine ─────────────────────────────────
-// Generates natural-language explanations grounded in what's actually in the
-// cart (both original items and anything the tester has already added).
-// Logic priority:
-//   1. Direct name match — a cart item is semantically related to the rec
-//   2. Same-category pairing — rec shares a category with a cart item
-//   3. Cross-category complement — known pairing patterns (e.g. coffee → mug)
-//   4. User profile / wellness routine signal
-//   5. Generic fallback (never mentions gap or popularity)
-
-// Semantic keyword clusters used for name-based matching
-const KEYWORD_CLUSTERS = [
-  { keys: ["vitamin","supplement","capsule","tablet","mineral","zinc","magnesium","calcium","iron","omega","probiotic","biotin","collagen","enzyme","melatonin","turmeric","elderberry","ashwagandha","coq10","glucosamine","fiber","prenatal","multivitamin"], label: "supplement" },
-  { keys: ["serum","moisturizer","cream","toner","cleanser","mask","mist","scrub","oil","eye cream","peel","micellar","retinol","hyaluronic","niacinamide","peptide","glycolic","salicylic","caffeine","vitamin c","spf","tinted"], label: "skincare" },
-  { keys: ["shampoo","conditioner","hair","argan","keratin","biotin shampoo","coconut oil hair"], label: "haircare" },
-  { keys: ["coffee","matcha","tea","green tea","honey","nut","seed","quinoa","chia","cacao","chocolate","maple","olive oil","protein bar","almond butter","coconut water","kombucha","bone broth","whey","flaxseed","pumpkin seed","cinnamon","spirulina"], label: "food" },
-  { keys: ["notebook","pen","stapler","highlighter","sticky note","organizer","clip","folder","calculator","mouse","keyboard","lamp","desk","label","whiteboard","correction","index card","lap desk","eraser","hole punch","binder","usb","flash drive","monitor"], label: "office" },
-  { keys: ["hand sanitizer","hand cream","lip balm","sunscreen","sanitizer"], label: "bodycare" },
-];
-
-function getItemCluster(itemName) {
-  const lower = itemName.toLowerCase();
-  for (const cluster of KEYWORD_CLUSTERS) {
-    if (cluster.keys.some(k => lower.includes(k))) return cluster.label;
-  }
-  return null;
-}
-
-// Cross-category complement pairs: if cart has A, rec of type B pairs naturally
-const COMPLEMENT_PAIRS = [
-  { cartLabel:"food",       recLabel:"supplement", reason:"pairs naturally with the health foods already in your cart" },
-  { cartLabel:"supplement", recLabel:"food",       reason:"complements the supplements in your cart for a complete wellness routine" },
-  { cartLabel:"skincare",   recLabel:"haircare",   reason:"rounds out your personal care routine alongside the skincare items in your cart" },
-  { cartLabel:"haircare",   recLabel:"skincare",   reason:"pairs well with the hair products already in your cart" },
-  { cartLabel:"office",     recLabel:"food",       reason:"a popular add-on for people stocking up on desk essentials" },
-  { cartLabel:"food",       recLabel:"bodycare",   reason:"complements the pantry items in your cart for an everyday essentials order" },
-  { cartLabel:"bodycare",   recLabel:"skincare",   reason:"extends your personal care selection alongside what's already in your cart" },
-  { cartLabel:"supplement", recLabel:"skincare",   reason:"pairs well with your supplements — many customers combine inner and outer wellness products" },
-  { cartLabel:"skincare",   recLabel:"supplement", reason:"a natural companion to your skincare items — customers who buy these often add a wellness supplement" },
-];
-
-function generateContextualExplanation(item, method) {
-  // Full cart context = original items + anything the tester has added so far
-  const allCartItems = [...CART_ITEMS, ...addedItems.filter(a => a.id !== item.id)];
-
-  const recCluster = getItemCluster(item.name);
-  const recCatShort = item.cat.split(" &")[0];
-
-  // ── 1. Direct name-level match ──────────────────────────────────────────────
-  // Find a cart item whose name shares a meaningful keyword with the rec
-  for (const cartItem of allCartItems) {
-    const cartLower = cartItem.name.toLowerCase();
-    const recLower  = item.name.toLowerCase();
-
-    // Exact product family match (e.g. "Vitamin C Serum" → "Vitamin C Brightening Toner")
-    const sharedWords = recLower.split(" ").filter(w =>
-      w.length > 4 && cartLower.includes(w) &&
-      !["with","from","your","that","this","great","also","item","more"].includes(w)
-    );
-    if (sharedWords.length > 0) {
-      const templates = [
-        `Based on the ${cartItem.name} in your cart, this pairs well as part of the same routine.`,
-        `You already have ${cartItem.name} — customers who buy that often add this as a companion product.`,
-        `A natural match with the ${cartItem.name} you're already getting.`,
+      const userProfiles = [
+        { id: "health_conscious", categories: { "Health & Personal Care": 0.5, "All Beauty": 0.3, "Grocery & Gourmet": 0.15, "Office Products": 0.05 }, priceRange: [5, 15] },
+        { id: "beauty_focused", categories: { "All Beauty": 0.45, "Health & Personal Care": 0.35, "Grocery & Gourmet": 0.1, "Office Products": 0.1 }, priceRange: [8, 20] },
+        { id: "office_worker", categories: { "Office Products": 0.4, "Grocery & Gourmet": 0.3, "Health & Personal Care": 0.2, "All Beauty": 0.1 }, priceRange: [4, 12] },
+        { id: "gourmet_shopper", categories: { "Grocery & Gourmet": 0.5, "Health & Personal Care": 0.25, "All Beauty": 0.15, "Office Products": 0.1 }, priceRange: [6, 18] },
+        { id: "tech_enthusiast", categories: { "Office Products": 0.5, "Health & Personal Care": 0.2, "All Beauty": 0.1, "Grocery & Gourmet": 0.2 }, priceRange: [10, 25] },
+        { id: "wellness_focused", categories: { "Health & Personal Care": 0.6, "Grocery & Gourmet": 0.25, "All Beauty": 0.1, "Office Products": 0.05 }, priceRange: [8, 18] }
       ];
-      return templates[Math.floor(Math.random() * templates.length)];
-    }
-  }
 
-  // ── 2. Same-category pairing ────────────────────────────────────────────────
-  const sameCatItem = allCartItems.find(c => c.cat === item.cat);
-  if (sameCatItem) {
-    const sameCatTemplates = [
-      `You already have ${sameCatItem.name} in your cart — this is a frequently bought companion in ${recCatShort}.`,
-      `Pairs well with the ${sameCatItem.name} you're getting — customers often stock up on both.`,
-      `Since you're picking up ${sameCatItem.name}, this is a popular addition in the same category.`,
-      `A common pairing with the ${sameCatItem.name} already in your cart.`,
-    ];
-    return sameCatTemplates[Math.floor(Math.random() * sameCatTemplates.length)];
-  }
+      const currentUser = userProfiles[Math.floor(Math.random() * userProfiles.length)];
+      currentUser.userId = "user_" + Math.random().toString(36).slice(2, 8);
 
-  // ── 3. Cross-category complement ────────────────────────────────────────────
-  if (recCluster) {
-    for (const cartItem of allCartItems) {
-      const cartCluster = getItemCluster(cartItem.name);
-      const pair = COMPLEMENT_PAIRS.find(p => p.cartLabel === cartCluster && p.recLabel === recCluster);
-      if (pair) {
-        const crossTemplates = [
-          `Based on the ${cartItem.name} in your cart, this ${pair.reason}.`,
-          `Customers who buy ${cartItem.name} frequently add this — it ${pair.reason}.`,
-          `A good companion to your ${cartItem.name}: this ${pair.reason}.`,
-        ];
-        return crossTemplates[Math.floor(Math.random() * crossTemplates.length)];
+      // LARGE CATALOG - 100+ items with vendor interest data
+      const LARGE_CATALOG = [
+        // Health & Personal Care (30 items)
+        { id: "h1", name: "Vitamin C Serum 30ml", cat: "Health & Personal Care", price: 8.99, pop: 9, rel: 8, emoji: "🧴", margin: 0.45, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.85, svdScore: 0.78 },
+        { id: "h2", name: "Collagen Face Moisturizer", cat: "Health & Personal Care", price: 11.49, pop: 8, rel: 8, emoji: "✨", margin: 0.52, inventory: 120, vendorPriority: 0.8, collaborativeScore: 0.82, svdScore: 0.81 },
+        { id: "h3", name: "Melatonin Gummies 60ct", cat: "Health & Personal Care", price: 9.99, pop: 9, rel: 7, emoji: "💊", margin: 0.38, inventory: 200, vendorPriority: 0.6, collaborativeScore: 0.79, svdScore: 0.75 },
+        { id: "h4", name: "Zinc + Vitamin D Tablets", cat: "Health & Personal Care", price: 7.49, pop: 8, rel: 7, emoji: "💊", margin: 0.41, inventory: 150, vendorPriority: 0.65, collaborativeScore: 0.77, svdScore: 0.73 },
+        { id: "h5", name: "Natural Lip Balm Set (4pk)", cat: "Health & Personal Care", price: 5.99, pop: 8, rel: 6, emoji: "💋", margin: 0.35, inventory: 90, vendorPriority: 0.5, collaborativeScore: 0.71, svdScore: 0.69 },
+        { id: "h6", name: "Probiotics 30 Capsules", cat: "Health & Personal Care", price: 12.99, pop: 7, rel: 8, emoji: "🦠", margin: 0.48, inventory: 110, vendorPriority: 0.75, collaborativeScore: 0.83, svdScore: 0.79 },
+        { id: "h7", name: "Hand Sanitizer 8oz", cat: "Health & Personal Care", price: 4.99, pop: 9, rel: 6, emoji: "🧴", margin: 0.32, inventory: 300, vendorPriority: 0.4, collaborativeScore: 0.68, svdScore: 0.65 },
+        { id: "h8", name: "Biotin Hair Growth Pills", cat: "Health & Personal Care", price: 13.49, pop: 6, rel: 7, emoji: "💊", margin: 0.55, inventory: 80, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.74 },
+        { id: "h9", name: "Magnesium Supplement", cat: "Health & Personal Care", price: 8.49, pop: 7, rel: 7, emoji: "💊", margin: 0.42, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "h10", name: "Omega-3 Fish Oil", cat: "Health & Personal Care", price: 15.99, pop: 8, rel: 8, emoji: "🐟", margin: 0.58, inventory: 95, vendorPriority: 0.85, collaborativeScore: 0.87, svdScore: 0.84 },
+        { id: "h11", name: "Turmeric Curcumin Capsules", cat: "Health & Personal Care", price: 11.99, pop: 6, rel: 7, emoji: "🌿", margin: 0.49, inventory: 75, vendorPriority: 0.7, collaborativeScore: 0.72, svdScore: 0.69 },
+        { id: "h12", name: "Elderberry Immune Support", cat: "Health & Personal Care", price: 9.49, pop: 7, rel: 8, emoji: "🫐", margin: 0.44, inventory: 120, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.76 },
+        { id: "h13", name: "Ashwagandha Stress Relief", cat: "Health & Personal Care", price: 14.99, pop: 5, rel: 7, emoji: "🌱", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "h14", name: "Calcium + Vitamin D3", cat: "Health & Personal Care", price: 7.99, pop: 8, rel: 7, emoji: "🦴", margin: 0.38, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "h15", name: "Iron Supplement 65mg", cat: "Health & Personal Care", price: 6.49, pop: 7, rel: 6, emoji: "💊", margin: 0.35, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.69, svdScore: 0.66 },
+        { id: "h16", name: "Glucosamine Joint Support", cat: "Health & Personal Care", price: 16.99, pop: 6, rel: 8, emoji: "🦴", margin: 0.61, inventory: 70, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.71 },
+        { id: "h17", name: "CoQ10 Heart Health", cat: "Health & Personal Care", price: 18.49, pop: 5, rel: 8, emoji: "❤️", margin: 0.64, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.67 },
+        { id: "h18", name: "Fiber Supplement Powder", cat: "Health & Personal Care", price: 12.49, pop: 6, rel: 7, emoji: "🥄", margin: 0.47, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "h19", name: "Prenatal Vitamins", cat: "Health & Personal Care", price: 13.99, pop: 7, rel: 8, emoji: "🤱", margin: 0.51, inventory: 85, vendorPriority: 0.75, collaborativeScore: 0.79, svdScore: 0.77 },
+        { id: "h20", name: "Men's Daily Multivitamin", cat: "Health & Personal Care", price: 10.99, pop: 8, rel: 7, emoji: "👨", margin: 0.43, inventory: 130, vendorPriority: 0.6, collaborativeScore: 0.76, svdScore: 0.73 },
+
+        // All Beauty (25 items)
+        { id: "b1", name: "Tinted Moisturizer SPF 20", cat: "All Beauty", price: 10.49, pop: 7, rel: 7, emoji: "🌟", margin: 0.48, inventory: 75, vendorPriority: 0.75, collaborativeScore: 0.88, svdScore: 0.84 },
+        { id: "b2", name: "Rose Water Facial Mist", cat: "All Beauty", price: 7.99, pop: 8, rel: 7, emoji: "🌹", margin: 0.42, inventory: 110, vendorPriority: 0.7, collaborativeScore: 0.83, svdScore: 0.79 },
+        { id: "b3", name: "Bamboo Makeup Brush Set", cat: "All Beauty", price: 12.99, pop: 6, rel: 6, emoji: "🖌️", margin: 0.55, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.76, svdScore: 0.72 },
+        { id: "b4", name: "Coconut Oil Hair Mask", cat: "All Beauty", price: 8.49, pop: 7, rel: 7, emoji: "🥥", margin: 0.39, inventory: 95, vendorPriority: 0.6, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "b5", name: "Hyaluronic Acid Serum", cat: "All Beauty", price: 14.99, pop: 8, rel: 8, emoji: "💧", margin: 0.58, inventory: 85, vendorPriority: 0.85, collaborativeScore: 0.89, svdScore: 0.86 },
+        { id: "b6", name: "Retinol Night Cream", cat: "All Beauty", price: 16.99, pop: 7, rel: 8, emoji: "🌙", margin: 0.62, inventory: 70, vendorPriority: 0.9, collaborativeScore: 0.84, svdScore: 0.82 },
+        { id: "b7", name: "Vitamin E Face Oil", cat: "All Beauty", price: 11.99, pop: 6, rel: 7, emoji: "🌿", margin: 0.51, inventory: 80, vendorPriority: 0.75, collaborativeScore: 0.78, svdScore: 0.75 },
+        { id: "b8", name: "Clay Face Mask", cat: "All Beauty", price: 6.99, pop: 8, rel: 6, emoji: "🧴", margin: 0.35, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "b9", name: "Micellar Cleansing Water", cat: "All Beauty", price: 9.99, pop: 9, rel: 7, emoji: "💧", margin: 0.44, inventory: 140, vendorPriority: 0.65, collaborativeScore: 0.82, svdScore: 0.79 },
+        { id: "b10", name: "Argan Oil Hair Treatment", cat: "All Beauty", price: 13.49, pop: 6, rel: 7, emoji: "💇", margin: 0.54, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.76, svdScore: 0.73 },
+        { id: "b11", name: "Exfoliating Sugar Scrub", cat: "All Beauty", price: 8.99, pop: 7, rel: 6, emoji: "🍯", margin: 0.41, inventory: 90, vendorPriority: 0.6, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "b12", name: "Niacinamide Pore Serum", cat: "All Beauty", price: 12.49, pop: 7, rel: 8, emoji: "✨", margin: 0.52, inventory: 75, vendorPriority: 0.8, collaborativeScore: 0.81, svdScore: 0.78 },
+        { id: "b13", name: "Peptide Eye Cream", cat: "All Beauty", price: 18.99, pop: 6, rel: 8, emoji: "👁️", margin: 0.65, inventory: 50, vendorPriority: 0.9, collaborativeScore: 0.77, svdScore: 0.75 },
+        { id: "b14", name: "Salicylic Acid Cleanser", cat: "All Beauty", price: 9.49, pop: 8, rel: 7, emoji: "🧼", margin: 0.43, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.79, svdScore: 0.76 },
+        { id: "b15", name: "Jojoba Oil Moisturizer", cat: "All Beauty", price: 10.99, pop: 6, rel: 7, emoji: "🌿", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "b16", name: "Charcoal Peel-Off Mask", cat: "All Beauty", price: 7.49, pop: 7, rel: 6, emoji: "🖤", margin: 0.37, inventory: 110, vendorPriority: 0.55, collaborativeScore: 0.72, svdScore: 0.69 },
+        { id: "b17", name: "Caffeine Under-Eye Serum", cat: "All Beauty", price: 11.49, pop: 6, rel: 7, emoji: "☕", margin: 0.49, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "b18", name: "Glycolic Acid Toner", cat: "All Beauty", price: 13.99, pop: 7, rel: 8, emoji: "🧪", margin: 0.56, inventory: 60, vendorPriority: 0.85, collaborativeScore: 0.80, svdScore: 0.77 },
+        { id: "b19", name: "Shea Butter Hand Cream", cat: "All Beauty", price: 5.99, pop: 8, rel: 6, emoji: "🤲", margin: 0.32, inventory: 150, vendorPriority: 0.45, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "b20", name: "Keratin Hair Serum", cat: "All Beauty", price: 15.49, pop: 5, rel: 7, emoji: "💇", margin: 0.59, inventory: 55, vendorPriority: 0.85, collaborativeScore: 0.73, svdScore: 0.70 },
+
+        // Grocery & Gourmet (25 items)
+        { id: "g1", name: "Organic Green Tea (40 bags)", cat: "Grocery & Gourmet", price: 6.99, pop: 9, rel: 8, emoji: "🍵", margin: 0.33, inventory: 180, vendorPriority: 0.55, collaborativeScore: 0.86, svdScore: 0.82 },
+        { id: "g2", name: "Raw Honey 12oz Jar", cat: "Grocery & Gourmet", price: 8.49, pop: 9, rel: 9, emoji: "🍯", margin: 0.36, inventory: 140, vendorPriority: 0.6, collaborativeScore: 0.89, svdScore: 0.87 },
+        { id: "g3", name: "Mixed Nut Snack Pack (6ct)", cat: "Grocery & Gourmet", price: 7.99, pop: 8, rel: 8, emoji: "🥜", margin: 0.31, inventory: 160, vendorPriority: 0.5, collaborativeScore: 0.81, svdScore: 0.77 },
+        { id: "g4", name: "Himalayan Pink Salt Grinder", cat: "Grocery & Gourmet", price: 5.49, pop: 7, rel: 6, emoji: "🧂", margin: 0.28, inventory: 100, vendorPriority: 0.45, collaborativeScore: 0.73, svdScore: 0.68 },
+        { id: "g5", name: "Organic Coffee Beans 1lb", cat: "Grocery & Gourmet", price: 12.99, pop: 8, rel: 8, emoji: "☕", margin: 0.42, inventory: 90, vendorPriority: 0.7, collaborativeScore: 0.84, svdScore: 0.81 },
+        { id: "g6", name: "Extra Virgin Olive Oil", cat: "Grocery & Gourmet", price: 11.49, pop: 7, rel: 7, emoji: "🫒", margin: 0.38, inventory: 110, vendorPriority: 0.6, collaborativeScore: 0.78, svdScore: 0.75 },
+        { id: "g7", name: "Manuka Honey 8oz", cat: "Grocery & Gourmet", price: 24.99, pop: 5, rel: 9, emoji: "🍯", margin: 0.68, inventory: 40, vendorPriority: 0.95, collaborativeScore: 0.82, svdScore: 0.80 },
+        { id: "g8", name: "Organic Quinoa 2lb", cat: "Grocery & Gourmet", price: 9.99, pop: 6, rel: 7, emoji: "🌾", margin: 0.35, inventory: 85, vendorPriority: 0.55, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "g9", name: "Coconut Oil 16oz", cat: "Grocery & Gourmet", price: 8.99, pop: 8, rel: 7, emoji: "🥥", margin: 0.34, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.79, svdScore: 0.76 },
+        { id: "g10", name: "Chia Seeds 1lb", cat: "Grocery & Gourmet", price: 7.49, pop: 7, rel: 7, emoji: "🌱", margin: 0.31, inventory: 95, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.73 },
+        { id: "g11", name: "Matcha Green Tea Powder", cat: "Grocery & Gourmet", price: 15.99, pop: 6, rel: 8, emoji: "🍃", margin: 0.54, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.77, svdScore: 0.74 },
+        { id: "g12", name: "Protein Energy Bars (12pk)", cat: "Grocery & Gourmet", price: 13.49, pop: 8, rel: 7, emoji: "🍫", margin: 0.45, inventory: 100, vendorPriority: 0.65, collaborativeScore: 0.81, svdScore: 0.78 },
+        { id: "g13", name: "Almond Butter 16oz", cat: "Grocery & Gourmet", price: 10.99, pop: 7, rel: 7, emoji: "🥜", margin: 0.39, inventory: 80, vendorPriority: 0.6, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "g14", name: "Dark Chocolate 85% Cacao", cat: "Grocery & Gourmet", price: 6.99, pop: 8, rel: 6, emoji: "🍫", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.78, svdScore: 0.75 },
+        { id: "g15", name: "Organic Maple Syrup", cat: "Grocery & Gourmet", price: 12.49, pop: 6, rel: 7, emoji: "🍁", margin: 0.43, inventory: 70, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "g16", name: "Himalayan Sea Salt", cat: "Grocery & Gourmet", price: 4.99, pop: 7, rel: 6, emoji: "🧂", margin: 0.26, inventory: 150, vendorPriority: 0.4, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "g17", name: "Turmeric Powder Organic", cat: "Grocery & Gourmet", price: 6.49, pop: 6, rel: 7, emoji: "🌿", margin: 0.29, inventory: 90, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
+        { id: "g18", name: "Goji Berries Dried 8oz", cat: "Grocery & Gourmet", price: 11.99, pop: 5, rel: 7, emoji: "🫐", margin: 0.48, inventory: 55, vendorPriority: 0.7, collaborativeScore: 0.69, svdScore: 0.66 },
+        { id: "g19", name: "Spirulina Powder 4oz", cat: "Grocery & Gourmet", price: 14.99, pop: 4, rel: 8, emoji: "🌿", margin: 0.56, inventory: 45, vendorPriority: 0.8, collaborativeScore: 0.65, svdScore: 0.62 },
+        { id: "g20", name: "Cacao Nibs Raw 8oz", cat: "Grocery & Gourmet", price: 9.49, pop: 5, rel: 7, emoji: "🍫", margin: 0.37, inventory: 65, vendorPriority: 0.55, collaborativeScore: 0.67, svdScore: 0.64 },
+
+        // Office Products (25 items)
+        { id: "o1", name: "Sticky Note Assortment Pack", cat: "Office Products", price: 4.99, pop: 9, rel: 8, emoji: "📌", margin: 0.25, inventory: 220, vendorPriority: 0.4, collaborativeScore: 0.78, svdScore: 0.74 },
+        { id: "o2", name: "Gel Pen Set 0.5mm (10pk)", cat: "Office Products", price: 6.99, pop: 9, rel: 8, emoji: "🖊️", margin: 0.29, inventory: 190, vendorPriority: 0.45, collaborativeScore: 0.84, svdScore: 0.80 },
+        { id: "o3", name: "Mini Stapler + 1000 Staples", cat: "Office Products", price: 7.49, pop: 8, rel: 7, emoji: "📎", margin: 0.32, inventory: 130, vendorPriority: 0.5, collaborativeScore: 0.76, svdScore: 0.72 },
+        { id: "o4", name: "Cable Management Clips 20pk", cat: "Office Products", price: 5.99, pop: 8, rel: 7, emoji: "🔌", margin: 0.27, inventory: 170, vendorPriority: 0.4, collaborativeScore: 0.72, svdScore: 0.67 },
+        { id: "o5", name: "Wireless Mouse Pad", cat: "Office Products", price: 12.99, pop: 7, rel: 8, emoji: "🖱️", margin: 0.48, inventory: 85, vendorPriority: 0.7, collaborativeScore: 0.79, svdScore: 0.76 },
+        { id: "o6", name: "Desk Organizer Bamboo", cat: "Office Products", price: 15.99, pop: 6, rel: 7, emoji: "📋", margin: 0.56, inventory: 60, vendorPriority: 0.8, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "o7", name: "Notebook Set A5 (3pk)", cat: "Office Products", price: 8.99, pop: 8, rel: 7, emoji: "📓", margin: 0.35, inventory: 140, vendorPriority: 0.55, collaborativeScore: 0.77, svdScore: 0.74 },
+        { id: "o8", name: "Highlighter Set (6 colors)", cat: "Office Products", price: 5.49, pop: 9, rel: 7, emoji: "🖍️", margin: 0.26, inventory: 200, vendorPriority: 0.4, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "o9", name: "Paper Clips 500ct", cat: "Office Products", price: 3.99, pop: 8, rel: 6, emoji: "📎", margin: 0.22, inventory: 250, vendorPriority: 0.3, collaborativeScore: 0.69, svdScore: 0.66 },
+        { id: "o10", name: "Binder Clips Assorted", cat: "Office Products", price: 4.49, pop: 8, rel: 6, emoji: "📎", margin: 0.24, inventory: 180, vendorPriority: 0.35, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "o11", name: "USB Flash Drive 32GB", cat: "Office Products", price: 11.99, pop: 7, rel: 8, emoji: "💾", margin: 0.44, inventory: 90, vendorPriority: 0.65, collaborativeScore: 0.78, svdScore: 0.75 },
+        { id: "o12", name: "Wireless Keyboard", cat: "Office Products", price: 24.99, pop: 6, rel: 8, emoji: "⌨️", margin: 0.72, inventory: 45, vendorPriority: 0.9, collaborativeScore: 0.76, svdScore: 0.73 },
+        { id: "o13", name: "Monitor Stand Adjustable", cat: "Office Products", price: 18.99, pop: 5, rel: 7, emoji: "🖥️", margin: 0.63, inventory: 50, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "o14", name: "Desk Lamp LED", cat: "Office Products", price: 16.49, pop: 6, rel: 7, emoji: "💡", margin: 0.58, inventory: 65, vendorPriority: 0.8, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "o15", name: "File Folders Letter Size", cat: "Office Products", price: 6.49, pop: 7, rel: 6, emoji: "📁", margin: 0.28, inventory: 160, vendorPriority: 0.4, collaborativeScore: 0.70, svdScore: 0.67 },
+        { id: "o16", name: "Whiteboard Markers (4pk)", cat: "Office Products", price: 7.99, pop: 8, rel: 7, emoji: "🖊️", margin: 0.33, inventory: 120, vendorPriority: 0.5, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "o17", name: "Calculator Scientific", cat: "Office Products", price: 13.49, pop: 6, rel: 7, emoji: "🧮", margin: 0.51, inventory: 70, vendorPriority: 0.75, collaborativeScore: 0.72, svdScore: 0.69 },
+        { id: "o18", name: "Shredder Personal", cat: "Office Products", price: 29.99, pop: 4, rel: 8, emoji: "🗂️", margin: 0.78, inventory: 25, vendorPriority: 0.95, collaborativeScore: 0.68, svdScore: 0.65 },
+        { id: "o19", name: "Label Maker Portable", cat: "Office Products", price: 22.99, pop: 5, rel: 7, emoji: "🏷️", margin: 0.69, inventory: 35, vendorPriority: 0.9, collaborativeScore: 0.69, svdScore: 0.66 },
+        { id: "o20", name: "Hole Punch 3-Hole", cat: "Office Products", price: 9.99, pop: 7, rel: 6, emoji: "🕳️", margin: 0.38, inventory: 100, vendorPriority: 0.55, collaborativeScore: 0.71, svdScore: 0.68 },
+
+        // Health & Personal Care (additional 5 — now 25 total)
+        { id: "h21", name: "Vitamin B12 Sublingual", cat: "Health & Personal Care", price: 8.99, pop: 7, rel: 7, emoji: "💊", margin: 0.43, inventory: 110, vendorPriority: 0.62, collaborativeScore: 0.75, svdScore: 0.72 },
+        { id: "h22", name: "Collagen Peptides Powder", cat: "Health & Personal Care", price: 19.99, pop: 6, rel: 8, emoji: "🥛", margin: 0.62, inventory: 65, vendorPriority: 0.88, collaborativeScore: 0.78, svdScore: 0.76 },
+        { id: "h23", name: "Activated Charcoal Capsules", cat: "Health & Personal Care", price: 10.49, pop: 5, rel: 6, emoji: "🖤", margin: 0.46, inventory: 80, vendorPriority: 0.65, collaborativeScore: 0.70, svdScore: 0.67 },
+        { id: "h24", name: "Castor Oil 16oz", cat: "Health & Personal Care", price: 7.49, pop: 7, rel: 7, emoji: "🧴", margin: 0.38, inventory: 130, vendorPriority: 0.52, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "h25", name: "Digestive Enzyme Complex", cat: "Health & Personal Care", price: 14.49, pop: 6, rel: 8, emoji: "🌿", margin: 0.55, inventory: 70, vendorPriority: 0.78, collaborativeScore: 0.76, svdScore: 0.74 },
+
+        // All Beauty (additional 5 — now 25 total)
+        { id: "b21", name: "Tea Tree Face Wash", cat: "All Beauty", price: 8.49, pop: 8, rel: 7, emoji: "🌿", margin: 0.40, inventory: 105, vendorPriority: 0.60, collaborativeScore: 0.76, svdScore: 0.73 },
+        { id: "b22", name: "Vitamin C Brightening Toner", cat: "All Beauty", price: 11.99, pop: 7, rel: 8, emoji: "🍊", margin: 0.51, inventory: 78, vendorPriority: 0.76, collaborativeScore: 0.79, svdScore: 0.77 },
+        { id: "b23", name: "Aloe Vera Gel 8oz", cat: "All Beauty", price: 6.49, pop: 8, rel: 6, emoji: "🌵", margin: 0.34, inventory: 145, vendorPriority: 0.48, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "b24", name: "Biotin Shampoo 16oz", cat: "All Beauty", price: 9.99, pop: 7, rel: 7, emoji: "🚿", margin: 0.43, inventory: 92, vendorPriority: 0.63, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "b25", name: "Snail Mucin Eye Serum", cat: "All Beauty", price: 16.49, pop: 6, rel: 8, emoji: "🐌", margin: 0.60, inventory: 55, vendorPriority: 0.87, collaborativeScore: 0.80, svdScore: 0.78 },
+
+        // Grocery & Gourmet (additional 5 — now 25 total)
+        { id: "g21", name: "Collagen Bone Broth Powder", cat: "Grocery & Gourmet", price: 18.49, pop: 5, rel: 8, emoji: "🍲", margin: 0.60, inventory: 48, vendorPriority: 0.85, collaborativeScore: 0.71, svdScore: 0.68 },
+        { id: "g22", name: "Pumpkin Seeds Roasted 1lb", cat: "Grocery & Gourmet", price: 7.99, pop: 7, rel: 7, emoji: "🎃", margin: 0.33, inventory: 110, vendorPriority: 0.50, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "g23", name: "Ceylon Cinnamon Powder", cat: "Grocery & Gourmet", price: 8.49, pop: 6, rel: 7, emoji: "🌿", margin: 0.36, inventory: 88, vendorPriority: 0.54, collaborativeScore: 0.70, svdScore: 0.67 },
+        { id: "g24", name: "Grass-Fed Whey Protein 1lb", cat: "Grocery & Gourmet", price: 24.49, pop: 7, rel: 9, emoji: "🏋️", margin: 0.66, inventory: 52, vendorPriority: 0.92, collaborativeScore: 0.83, svdScore: 0.81 },
+        { id: "g25", name: "Flaxseed Meal Organic 2lb", cat: "Grocery & Gourmet", price: 9.49, pop: 6, rel: 7, emoji: "🌾", margin: 0.34, inventory: 82, vendorPriority: 0.52, collaborativeScore: 0.71, svdScore: 0.68 },
+
+        // Office Products (additional 5 — now 25 total)
+        { id: "o21", name: "Mesh Desk Organizer", cat: "Office Products", price: 11.49, pop: 7, rel: 7, emoji: "📐", margin: 0.44, inventory: 78, vendorPriority: 0.65, collaborativeScore: 0.73, svdScore: 0.70 },
+        { id: "o22", name: "Correction Tape 10-Pack", cat: "Office Products", price: 7.99, pop: 8, rel: 7, emoji: "✏️", margin: 0.31, inventory: 165, vendorPriority: 0.45, collaborativeScore: 0.72, svdScore: 0.69 },
+        { id: "o23", name: "Lap Desk Portable", cat: "Office Products", price: 21.99, pop: 6, rel: 8, emoji: "💻", margin: 0.67, inventory: 42, vendorPriority: 0.88, collaborativeScore: 0.74, svdScore: 0.71 },
+        { id: "o24", name: "Index Card Dividers 200pk", cat: "Office Products", price: 5.49, pop: 7, rel: 6, emoji: "📇", margin: 0.25, inventory: 190, vendorPriority: 0.38, collaborativeScore: 0.69, svdScore: 0.66 },
+        { id: "o25", name: "Whiteboard Eraser Magnetic", cat: "Office Products", price: 6.99, pop: 7, rel: 6, emoji: "🗑️", margin: 0.29, inventory: 140, vendorPriority: 0.43, collaborativeScore: 0.70, svdScore: 0.67 }
+      ];
+
+      // Large cart item pool - FIXED: Ensure cart stays below $35
+      const CART_ITEM_POOL = [
+        { name: "Daily Multivitamin 90ct", cat: "Health & Personal Care", price: 8.49, emoji: "💊" },
+        { name: "Micellar Cleansing Water", cat: "All Beauty", price: 7.99, emoji: "💧" },
+        { name: "Chamomile Herbal Tea (20 bags)", cat: "Grocery & Gourmet", price: 5.99, emoji: "🍵" },
+        { name: "Protein Energy Bar (12pk)", cat: "Grocery & Gourmet", price: 9.99, emoji: "🍫" },
+        { name: "Hand Sanitizer 8oz", cat: "Health & Personal Care", price: 4.99, emoji: "🧴" },
+        { name: "Facial Cleanser Foam", cat: "All Beauty", price: 6.49, emoji: "🧼" },
+        { name: "Notebook Set (3pk)", cat: "Office Products", price: 7.99, emoji: "📓" },
+        { name: "Organic Coffee Beans 1lb", cat: "Grocery & Gourmet", price: 9.99, emoji: "☕" },
+        { name: "Moisturizing Hand Cream", cat: "Health & Personal Care", price: 5.49, emoji: "🤲" },
+        { name: "Desk Organizer Tray", cat: "Office Products", price: 8.99, emoji: "📋" },
+        { name: "Vitamin D3 Supplement", cat: "Health & Personal Care", price: 7.99, emoji: "☀️" },
+        { name: "Lip Balm SPF 15", cat: "All Beauty", price: 3.99, emoji: "💋" },
+        { name: "Green Tea Matcha Powder", cat: "Grocery & Gourmet", price: 11.99, emoji: "🍃" },
+        { name: "Wireless Mouse", cat: "Office Products", price: 12.99, emoji: "🖱️" },
+        { name: "Probiotic Yogurt Starter", cat: "Grocery & Gourmet", price: 6.49, emoji: "🥛" },
+        { name: "Eye Cream Anti-Aging", cat: "All Beauty", price: 10.99, emoji: "👁️" },
+        { name: "Magnesium Glycinate", cat: "Health & Personal Care", price: 9.49, emoji: "💊" },
+        { name: "Sticky Notes Rainbow", cat: "Office Products", price: 4.49, emoji: "🌈" },
+        { name: "Almond Milk Unsweetened", cat: "Grocery & Gourmet", price: 3.49, emoji: "🥛" },
+        { name: "Sunscreen SPF 50", cat: "All Beauty", price: 9.49, emoji: "☀️" },
+        { name: "Omega-3 Fish Oil", cat: "Health & Personal Care", price: 12.99, emoji: "🐟" },
+        { name: "Gel Pens Multicolor", cat: "Office Products", price: 6.99, emoji: "🖊️" },
+        { name: "Coconut Water 12pk", cat: "Grocery & Gourmet", price: 14.99, emoji: "🥥" },
+        { name: "Dry Shampoo Spray", cat: "All Beauty", price: 7.99, emoji: "💨" },
+        { name: "Calcium Magnesium Zinc", cat: "Health & Personal Care", price: 8.49, emoji: "🦴" },
+        { name: "Highlighter Set Pastel", cat: "Office Products", price: 5.99, emoji: "🖍️" },
+        { name: "Kombucha Starter Kit", cat: "Grocery & Gourmet", price: 18.99, emoji: "🫧" },
+        { name: "Retinol Serum 1%", cat: "All Beauty", price: 15.99, emoji: "🧪" },
+        { name: "Ashwagandha Capsules", cat: "Health & Personal Care", price: 11.49, emoji: "🌿" },
+        { name: "Wireless Charger Pad", cat: "Office Products", price: 14.99, emoji: "🔋" }
+      ];
+
+      // FIXED: Dynamic cart generation that ENSURES cart stays below $35
+      function generateRandomCart() {
+        const shuffled = [...CART_ITEM_POOL].sort(() => Math.random() - 0.5);
+        const numItems = Math.random() > 0.3 ? 3 : 4;
+        let selectedItems = [];
+        let attempts = 0;
+        const maxAttempts = 50;
+
+        while (attempts < maxAttempts) {
+          selectedItems = [];
+          let totalPrice = 0;
+
+          for (let item of shuffled) {
+            if (selectedItems.length >= numItems) break;
+
+            const categoryPreference = currentUser.categories[item.cat] || 0.1;
+            const selectionProbability = categoryPreference + 0.2;
+
+            if (Math.random() < selectionProbability) {
+              if (totalPrice + item.price < THRESHOLD - 5) {
+                selectedItems.push(item);
+                totalPrice += item.price;
+              }
+            }
+          }
+
+          while (selectedItems.length < 2) {
+            const randomItem = shuffled[Math.floor(Math.random() * shuffled.length)];
+            if (!selectedItems.find(item => item.name === randomItem.name)) {
+              const newTotal = selectedItems.reduce((sum, item) => sum + item.price, 0) + randomItem.price;
+              if (newTotal < THRESHOLD - 5) {
+                selectedItems.push(randomItem);
+              }
+            }
+          }
+
+          totalPrice = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
+
+          if (totalPrice < THRESHOLD && (THRESHOLD - totalPrice) >= 5 && (THRESHOLD - totalPrice) <= 20) {
+            break;
+          }
+
+          attempts++;
+        }
+
+        if (attempts >= maxAttempts) {
+          selectedItems = [
+            { name: "Hand Sanitizer 8oz", cat: "Health & Personal Care", price: 4.99, emoji: "🧴" },
+            { name: "Lip Balm SPF 15", cat: "All Beauty", price: 3.99, emoji: "💋" },
+            { name: "Sticky Notes Rainbow", cat: "Office Products", price: 4.49, emoji: "🌈" },
+            { name: "Chamomile Herbal Tea (20 bags)", cat: "Grocery & Gourmet", price: 5.99, emoji: "🍵" }
+          ];
+        }
+
+        const finalTotal = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
+        return { items: selectedItems, total: finalTotal };
       }
-    }
-  }
 
-  // ── 4. Profile / routine signal ─────────────────────────────────────────────
-  const cartCats = [...new Set(allCartItems.map(c => c.cat))];
-  if (cartCats.length >= 2) {
-    return `Based on the mix of items in your cart, this fits the everyday essentials order you're putting together.`;
-  }
-  if (recCluster === "supplement") {
-    return `A well-reviewed addition to any health and wellness routine.`;
-  }
-  if (recCluster === "skincare") {
-    return `Frequently added by customers building out a personal care routine.`;
-  }
-  if (recCluster === "office") {
-    return `A practical pick that works well alongside the other desk and productivity items in your cart.`;
-  }
+      const cartData = generateRandomCart();
+      const CART_ITEMS = cartData.items;
+      const CART_SUBTOTAL = cartData.total;
+      const GAP_INITIAL = +(THRESHOLD - CART_SUBTOTAL).toFixed(2);
 
-  // ── 5. Fallback — never mentions gap or popularity ───────────────────────────
-  const fallbacks = [
-    `Matches the type of everyday essentials you're already shopping for.`,
-    `A natural fit with the items you have in your cart.`,
-    `Frequently bought together with items similar to yours.`,
-  ];
-  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-}
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // SESSION STATE
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      const participantId = "P_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6).toUpperCase();
+      const condition = Math.floor(Math.random() * 4) + 1;
+      const isDSS = condition >= 3;
+      const hasExp = condition === 2 || condition === 4;
+      const touchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 1 : 0;
 
-// ─── Gap-aware price range helper ─────────────────────────────────────────────
-// Goal: surface items that could plausibly complete the threshold (TCP logic).
-// An item "completes" the threshold if: currentTotal + item.price >= THRESHOLD.
-// That means item.price >= gap. But we also want items that get close (within
-// $2 under) so the participant can combine two small items.
-// Upper bound: cap at gap + $12 to avoid recommending wildly over-priced items
-// when the gap is tiny (e.g. gap=$0.05 → don't show $25 items).
-// When gap is already met (≤0): show any item (general "you might also like").
-function getGapPriceRange(gap) {
-  if (gap <= 0) {
-    return { priceMin: 0, priceMax: Infinity };
-  }
-  // Lower bound: items priced at least (gap - $2), floor at $1
-  // Upper bound: items priced at most (gap + $12), so overshoot is reasonable
-  const priceMin = Math.max(1, gap - 2);
-  const priceMax = gap + 12;
-  return { priceMin, priceMax };
-}
+      document.getElementById("debug-cond").textContent =
+        condition + (isDSS ? " DSS" : " Static") + (hasExp ? " +Exp" : " No Exp");
 
-// FIXED: Dynamic recommendation generation with real-time gap calculation
-function getRecommendations() {
-  const gap = getCurrentGap();
-  const { priceMin, priceMax } = getGapPriceRange(gap);
+      let sessionData = {
+        participantId, condition,
+        conditionDSS: isDSS ? 1 : 0,
+        conditionExp: hasExp ? 1 : 0,
+        cartSubtotal: CART_SUBTOTAL.toFixed(2),
+        gapAtStart: GAP_INITIAL.toFixed(2),
+        abandonType: "none",
+        touchDevice,
+      };
 
-  let recommendations = [];
-  let usedItemIds = new Set();
+      let addedItems = [];
+      let itemsAddedThenRemoved = 0;
+      let shownRecs = [];
+      let recScreenEnter = null;
+      let firstSelectionTime = null;
+      let hoverLog = [];
+      let inactivityTimer = null;
+      let countdownTimer = null;
+      let countdownVal = INACTIVITY_ABANDON_SEC;
+      let sessionStartTime = Date.now();
 
-  switch(condition) {
-    case 1:
-      recommendations = getStaticRecs(gap, 5, usedItemIds);
-      break;
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // ENHANCED RECOMMENDATION ALGORITHMS WITH DYNAMIC GAP CALCULATION
+      // ═══════════════════════════════════════════════════════════════════════════════════
 
-    case 2:
-      recommendations = getStaticRecs(gap, 5, usedItemIds);
-      break;
+      function getStaticRecs(gap, n = 5, usedItemIds = new Set()) {
+        const { priceMin, priceMax } = getGapPriceRange(gap);
 
-    case 3:
-      const collaborativeRecs = getCollaborativeRecs(gap, 2, usedItemIds);
-      recommendations.push(...collaborativeRecs);
-      collaborativeRecs.forEach(item => usedItemIds.add(item.id));
+        return [...LARGE_CATALOG]
+          .filter(item => !addedItems.find(a => a.id === item.id))
+          .filter(item => !usedItemIds.has(item.id))
+          .filter(item => item.price >= priceMin && item.price <= priceMax)
+          .sort((a, b) => {
+            const total = getCurrentTotal();
+            const aClears = (total + a.price) >= THRESHOLD;
+            const bClears = (total + b.price) >= THRESHOLD;
+            if (aClears && !bClears) return -1;
+            if (!aClears && bClears) return 1;
+            // Among items that both clear or both don't: sort by popularity with jitter
+            return (b.pop + Math.random() * 2 - 1) - (a.pop + Math.random() * 2 - 1);
+          })
+          .slice(0, n)
+          .map(item => ({
+            ...item,
+            method: 'static',
+            confidence: 0.6 + (Math.random() * 0.2),
+            explanation: hasExp ? generateContextualExplanation(item, 'static') : null
+          }));
+      }
 
-      const svdRecs = getSVDRecs(gap, 2, usedItemIds);
-      recommendations.push(...svdRecs);
-      svdRecs.forEach(item => usedItemIds.add(item.id));
+      function getCollaborativeRecs(gap, n = 5, usedItemIds = new Set()) {
+        const { priceMin, priceMax } = getGapPriceRange(gap);
 
-      const dssRecs = getDSSRecs(gap, 1, usedItemIds);
-      recommendations.push(...dssRecs);
-      break;
+        return [...LARGE_CATALOG]
+          .filter(item => !addedItems.find(a => a.id === item.id))
+          .filter(item => !usedItemIds.has(item.id))
+          .filter(item => item.price >= priceMin && item.price <= priceMax)
+          .map(item => {
+            let collabScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
 
-    case 4:
-      const collaborativeRecsExp = getCollaborativeRecs(gap, 2, usedItemIds);
-      recommendations.push(...collaborativeRecsExp);
-      collaborativeRecsExp.forEach(item => usedItemIds.add(item.id));
+            const categoryPreference = currentUser.categories[item.cat] || 0.1;
+            collabScore += categoryPreference * 0.3;
 
-      const svdRecsExp = getSVDRecs(gap, 2, usedItemIds);
-      recommendations.push(...svdRecsExp);
-      svdRecsExp.forEach(item => usedItemIds.add(item.id));
+            const vendorScore = (item.margin * 0.4) + (item.vendorPriority * 0.6);
+            const finalScore = (0.6 * collabScore) + (0.4 * vendorScore);
 
-      const dssRecsExp = getDSSRecs(gap, 1, usedItemIds);
-      recommendations.push(...dssRecsExp);
-      break;
+            return {
+              ...item,
+              score: finalScore,
+              method: 'collaborative',
+              confidence: collabScore,
+              vendorScore: vendorScore,
+              explanation: hasExp ? generateContextualExplanation(item, 'collaborative') : null
+            };
+          })
+          .sort((a, b) => b.score - a.score)
+          .slice(0, n);
+      }
 
-    default:
-      recommendations = getStaticRecs(gap, 5, usedItemIds);
-  }
+      function getSVDRecs(gap, n = 5, usedItemIds = new Set()) {
+        const { priceMin, priceMax } = getGapPriceRange(gap);
 
-  // Pad to 5 if any algorithm came up short
-  if (recommendations.length < 5) {
-    const total = getCurrentTotal();
-    const fallbackItems = LARGE_CATALOG
-      .filter(item =>
-        !addedItems.find(a => a.id === item.id) &&
-        !usedItemIds.has(item.id) &&
-        item.price >= priceMin &&
-        item.price <= priceMax
-      )
-      // Prefer items that complete the threshold; among those, prefer lowest overshoot; then by popularity
-      .sort((a, b) => {
-        const aClears = (total + a.price) >= THRESHOLD;
-        const bClears = (total + b.price) >= THRESHOLD;
-        if (aClears && !bClears) return -1;
-        if (!aClears && bClears) return 1;
-        if (aClears && bClears) return (total + a.price) - (total + b.price); // least overshoot first
-        return b.pop - a.pop; // neither clears: by popularity
-      })
-      .slice(0, 5 - recommendations.length)
-      .map(item => ({
-        ...item,
-        method: 'fallback',
-        confidence: 0.5,
-        explanation: hasExp ? generateContextualExplanation(item, 'fallback') : null
-      }));
+        return [...LARGE_CATALOG]
+          .filter(item => !addedItems.find(a => a.id === item.id))
+          .filter(item => !usedItemIds.has(item.id))
+          .filter(item => item.price >= priceMin && item.price <= priceMax)
+          .map(item => {
+            let svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
 
-    recommendations.push(...fallbackItems);
-  }
+            const categoryPreference = currentUser.categories[item.cat] || 0.1;
+            const priceInRange = item.price >= currentUser.priceRange[0] &&
+              item.price <= currentUser.priceRange[1];
+            svdScore += categoryPreference * 0.2 + (priceInRange ? 0.1 : 0);
 
-  return recommendations.slice(0, 5);
-}
+            const inventoryScore = Math.min(item.inventory / 200, 1);
+            const vendorScore = (item.margin * 0.3) + (item.vendorPriority * 0.4) + (inventoryScore * 0.3);
 
-function computeRecDeviationScore() {
-  const staticIds = new Set(getStaticRecs(getCurrentGap(), 5).map(r=>r.id));
-  const dssIds = new Set(getDSSRecs(getCurrentGap(), 5).map(r=>r.id));
-  const overlap = [...staticIds].filter(id=>dssIds.has(id)).length;
-  return +(1 - overlap/5).toFixed(2);
-}
+            const finalScore = (0.55 * svdScore) + (0.45 * vendorScore);
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// CART STATE
-// ═══════════════════════════════════════════════════════════════════════════════════
-function getCurrentTotal() { return +(CART_SUBTOTAL + addedItems.reduce((s,i)=>s+i.price,0)).toFixed(2); }
-function getCurrentGap() { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
-function isGapCleared() { return getCurrentTotal() >= THRESHOLD; }
+            return {
+              ...item,
+              score: finalScore,
+              method: 'svd',
+              confidence: svdScore,
+              vendorScore: vendorScore,
+              explanation: hasExp ? generateContextualExplanation(item, 'svd') : null
+            };
+          })
+          .sort((a, b) => b.score - a.score)
+          .slice(0, n);
+      }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// SCREEN MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════════════════════
-const SCREENS = ["consent","prescreener","scenario","cart","recommendations","abandon-survey","posttask","debrief"];
-const SCREEN_LABELS = [
-  "Step 1 of 6 — Study Information & Consent",
-  "Step 2 of 6 — Background Questions",
-  "Step 3 of 6 — Shopping Scenario",
-  "Step 4 of 6 — Your Cart",
-  "Step 5 of 6 — Add-on Recommendations",
-  "Step 5 of 6 — A Few Quick Questions",
-  "Step 6 of 6 — Survey",
-  "Complete"
-];
-const SCREEN_PROGRESS = [5,16,28,42,57,68,82,100];
-let currentScreenIdx = 0;
+      function getDSSRecs(gap, n = 5, usedItemIds = new Set()) {
+        const { priceMin, priceMax } = getGapPriceRange(gap);
 
-function setScreen(name) {
-  currentScreenIdx = SCREENS.indexOf(name);
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen-"+name).classList.add("active");
-  document.getElementById("progress").style.width = SCREEN_PROGRESS[currentScreenIdx]+"%";
-  document.getElementById("progress-label").textContent = SCREEN_LABELS[currentScreenIdx];
-  document.getElementById("debug-screen").textContent = name;
-  window.scrollTo(0,0);
+        return [...LARGE_CATALOG]
+          .filter(item => !addedItems.find(a => a.id === item.id))
+          .filter(item => !usedItemIds.has(item.id))
+          .filter(item => item.price >= priceMin && item.price <= priceMax)
+          .map(item => {
+            const relevanceScore = (item.rel / 10) + (Math.random() * 0.1 - 0.05);
+            const popularityScore = (item.pop / 10) + (Math.random() * 0.1 - 0.05);
+            const collaborativeScore = item.collaborativeScore + (Math.random() * 0.1 - 0.05);
+            const svdScore = item.svdScore + (Math.random() * 0.1 - 0.05);
 
-  if (name === "recommendations") {
-    recScreenEnter = Date.now();
-    startInactivityWatch();
-    refreshAddonQualityCard();
-  } else {
-    stopInactivityWatch();
-  }
-  if (name === "posttask") refreshAddonQualityCard();
-  if (name === "debrief") {
-    const card = document.getElementById("order-summary-card");
-    if (card) {
-      const total = parseFloat(sessionData.finalTotal) || getCurrentTotal();
-      const cleared = isGapCleared();
-      if (cleared) {
-        card.style.background = "var(--success-light)";
-        card.style.borderColor = "var(--success)";
-        card.innerHTML = `
+            const categoryAffinity = currentUser.categories[item.cat] || 0.1;
+            const priceAffinity = item.price >= currentUser.priceRange[0] &&
+              item.price <= currentUser.priceRange[1] ? 1 : 0.5;
+
+            const marginScore = item.margin;
+            const inventoryScore = Math.min(item.inventory / 200, 1);
+            const priorityScore = item.vendorPriority;
+            const vendorScore = (marginScore * 0.4) + (priorityScore * 0.4) + (inventoryScore * 0.2);
+
+            const gapCenter = (priceMin + priceMax) / 2;
+            const gapFit = Math.max(0, 1 - Math.abs(item.price - gapCenter) / Math.max(gapCenter, 0.01));
+
+            const userScore = (
+              0.20 * relevanceScore +
+              0.15 * popularityScore +
+              0.25 * collaborativeScore +
+              0.20 * svdScore +
+              0.15 * categoryAffinity +
+              0.05 * priceAffinity
+            );
+
+            const finalScore = (0.5 * userScore) + (0.3 * vendorScore) + (0.2 * gapFit);
+
+            return {
+              ...item,
+              score: finalScore,
+              method: 'dss',
+              confidence: userScore,
+              vendorScore: vendorScore,
+              gapFit: gapFit,
+              explanation: hasExp ? generateContextualExplanation(item, 'dss') : null
+            };
+          })
+          .sort((a, b) => b.score - a.score)
+          .slice(0, n);
+      }
+
+      // ─── Cart-aware contextual explanation engine ─────────────────────────────────
+      // Generates natural-language explanations grounded in what's actually in the
+      // cart (both original items and anything the tester has already added).
+      // Logic priority:
+      //   1. Direct name match — a cart item is semantically related to the rec
+      //   2. Same-category pairing — rec shares a category with a cart item
+      //   3. Cross-category complement — known pairing patterns (e.g. coffee → mug)
+      //   4. User profile / wellness routine signal
+      //   5. Generic fallback (never mentions gap or popularity)
+
+      // Semantic keyword clusters used for name-based matching
+      const KEYWORD_CLUSTERS = [
+        { keys: ["vitamin", "supplement", "capsule", "tablet", "mineral", "zinc", "magnesium", "calcium", "iron", "omega", "probiotic", "biotin", "collagen", "enzyme", "melatonin", "turmeric", "elderberry", "ashwagandha", "coq10", "glucosamine", "fiber", "prenatal", "multivitamin"], label: "supplement" },
+        { keys: ["serum", "moisturizer", "cream", "toner", "cleanser", "mask", "mist", "scrub", "oil", "eye cream", "peel", "micellar", "retinol", "hyaluronic", "niacinamide", "peptide", "glycolic", "salicylic", "caffeine", "vitamin c", "spf", "tinted"], label: "skincare" },
+        { keys: ["shampoo", "conditioner", "hair", "argan", "keratin", "biotin shampoo", "coconut oil hair"], label: "haircare" },
+        { keys: ["coffee", "matcha", "tea", "green tea", "honey", "nut", "seed", "quinoa", "chia", "cacao", "chocolate", "maple", "olive oil", "protein bar", "almond butter", "coconut water", "kombucha", "bone broth", "whey", "flaxseed", "pumpkin seed", "cinnamon", "spirulina"], label: "food" },
+        { keys: ["notebook", "pen", "stapler", "highlighter", "sticky note", "organizer", "clip", "folder", "calculator", "mouse", "keyboard", "lamp", "desk", "label", "whiteboard", "correction", "index card", "lap desk", "eraser", "hole punch", "binder", "usb", "flash drive", "monitor"], label: "office" },
+        { keys: ["hand sanitizer", "hand cream", "lip balm", "sunscreen", "sanitizer"], label: "bodycare" },
+      ];
+
+      function getItemCluster(itemName) {
+        const lower = itemName.toLowerCase();
+        for (const cluster of KEYWORD_CLUSTERS) {
+          if (cluster.keys.some(k => lower.includes(k))) return cluster.label;
+        }
+        return null;
+      }
+
+      // Cross-category complement pairs: if cart has A, rec of type B pairs naturally
+      const COMPLEMENT_PAIRS = [
+        { cartLabel: "food", recLabel: "supplement", reason: "pairs naturally with the health foods already in your cart" },
+        { cartLabel: "supplement", recLabel: "food", reason: "complements the supplements in your cart for a complete wellness routine" },
+        { cartLabel: "skincare", recLabel: "haircare", reason: "rounds out your personal care routine alongside the skincare items in your cart" },
+        { cartLabel: "haircare", recLabel: "skincare", reason: "pairs well with the hair products already in your cart" },
+        { cartLabel: "office", recLabel: "food", reason: "a popular add-on for people stocking up on desk essentials" },
+        { cartLabel: "food", recLabel: "bodycare", reason: "complements the pantry items in your cart for an everyday essentials order" },
+        { cartLabel: "bodycare", recLabel: "skincare", reason: "extends your personal care selection alongside what's already in your cart" },
+        { cartLabel: "supplement", recLabel: "skincare", reason: "pairs well with your supplements — many customers combine inner and outer wellness products" },
+        { cartLabel: "skincare", recLabel: "supplement", reason: "a natural companion to your skincare items — customers who buy these often add a wellness supplement" },
+      ];
+
+      function generateContextualExplanation(item, method) {
+        // Full cart context = original items + anything the tester has added so far
+        const allCartItems = [...CART_ITEMS, ...addedItems.filter(a => a.id !== item.id)];
+
+        const recCluster = getItemCluster(item.name);
+        const recCatShort = item.cat.split(" &")[0];
+
+        // ── 1. Direct name-level match ──────────────────────────────────────────────
+        // Find a cart item whose name shares a meaningful keyword with the rec
+        for (const cartItem of allCartItems) {
+          const cartLower = cartItem.name.toLowerCase();
+          const recLower = item.name.toLowerCase();
+
+          // Exact product family match (e.g. "Vitamin C Serum" → "Vitamin C Brightening Toner")
+          const sharedWords = recLower.split(" ").filter(w =>
+            w.length > 4 && cartLower.includes(w) &&
+            !["with", "from", "your", "that", "this", "great", "also", "item", "more"].includes(w)
+          );
+          if (sharedWords.length > 0) {
+            const templates = [
+              `Based on the ${cartItem.name} in your cart, this pairs well as part of the same routine.`,
+              `You already have ${cartItem.name} — customers who buy that often add this as a companion product.`,
+              `A natural match with the ${cartItem.name} you're already getting.`,
+            ];
+            return templates[Math.floor(Math.random() * templates.length)];
+          }
+        }
+
+        // ── 2. Same-category pairing ────────────────────────────────────────────────
+        const sameCatItem = allCartItems.find(c => c.cat === item.cat);
+        if (sameCatItem) {
+          const sameCatTemplates = [
+            `You already have ${sameCatItem.name} in your cart — this is a frequently bought companion in ${recCatShort}.`,
+            `Pairs well with the ${sameCatItem.name} you're getting — customers often stock up on both.`,
+            `Since you're picking up ${sameCatItem.name}, this is a popular addition in the same category.`,
+            `A common pairing with the ${sameCatItem.name} already in your cart.`,
+          ];
+          return sameCatTemplates[Math.floor(Math.random() * sameCatTemplates.length)];
+        }
+
+        // ── 3. Cross-category complement ────────────────────────────────────────────
+        if (recCluster) {
+          for (const cartItem of allCartItems) {
+            const cartCluster = getItemCluster(cartItem.name);
+            const pair = COMPLEMENT_PAIRS.find(p => p.cartLabel === cartCluster && p.recLabel === recCluster);
+            if (pair) {
+              const crossTemplates = [
+                `Based on the ${cartItem.name} in your cart, this ${pair.reason}.`,
+                `Customers who buy ${cartItem.name} frequently add this — it ${pair.reason}.`,
+                `A good companion to your ${cartItem.name}: this ${pair.reason}.`,
+              ];
+              return crossTemplates[Math.floor(Math.random() * crossTemplates.length)];
+            }
+          }
+        }
+
+        // ── 4. Profile / routine signal ─────────────────────────────────────────────
+        const cartCats = [...new Set(allCartItems.map(c => c.cat))];
+        if (cartCats.length >= 2) {
+          return `Based on the mix of items in your cart, this fits the everyday essentials order you're putting together.`;
+        }
+        if (recCluster === "supplement") {
+          return `A well-reviewed addition to any health and wellness routine.`;
+        }
+        if (recCluster === "skincare") {
+          return `Frequently added by customers building out a personal care routine.`;
+        }
+        if (recCluster === "office") {
+          return `A practical pick that works well alongside the other desk and productivity items in your cart.`;
+        }
+
+        // ── 5. Fallback — never mentions gap or popularity ───────────────────────────
+        const fallbacks = [
+          `Matches the type of everyday essentials you're already shopping for.`,
+          `A natural fit with the items you have in your cart.`,
+          `Frequently bought together with items similar to yours.`,
+        ];
+        return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+      }
+
+      // ─── Gap-aware price range helper ─────────────────────────────────────────────
+      // Goal: surface items that could plausibly complete the threshold (TCP logic).
+      // An item "completes" the threshold if: currentTotal + item.price >= THRESHOLD.
+      // That means item.price >= gap. But we also want items that get close (within
+      // $2 under) so the participant can combine two small items.
+      // Upper bound: cap at gap + $12 to avoid recommending wildly over-priced items
+      // when the gap is tiny (e.g. gap=$0.05 → don't show $25 items).
+      // When gap is already met (≤0): show any item (general "you might also like").
+      function getGapPriceRange(gap) {
+        if (gap <= 0) {
+          return { priceMin: 0, priceMax: Infinity };
+        }
+        // Lower bound: items priced at least (gap - $2), floor at $1
+        // Upper bound: items priced at most (gap + $12), so overshoot is reasonable
+        const priceMin = Math.max(1, gap - 2);
+        const priceMax = gap + 12;
+        return { priceMin, priceMax };
+      }
+
+      // FIXED: Dynamic recommendation generation with real-time gap calculation
+      function getRecommendations() {
+        const gap = getCurrentGap();
+        const { priceMin, priceMax } = getGapPriceRange(gap);
+
+        let recommendations = [];
+        let usedItemIds = new Set();
+
+        switch (condition) {
+          case 1:
+            recommendations = getStaticRecs(gap, 5, usedItemIds);
+            break;
+
+          case 2:
+            recommendations = getStaticRecs(gap, 5, usedItemIds);
+            break;
+
+          case 3:
+            const collaborativeRecs = getCollaborativeRecs(gap, 2, usedItemIds);
+            recommendations.push(...collaborativeRecs);
+            collaborativeRecs.forEach(item => usedItemIds.add(item.id));
+
+            const svdRecs = getSVDRecs(gap, 2, usedItemIds);
+            recommendations.push(...svdRecs);
+            svdRecs.forEach(item => usedItemIds.add(item.id));
+
+            const dssRecs = getDSSRecs(gap, 1, usedItemIds);
+            recommendations.push(...dssRecs);
+            break;
+
+          case 4:
+            const collaborativeRecsExp = getCollaborativeRecs(gap, 2, usedItemIds);
+            recommendations.push(...collaborativeRecsExp);
+            collaborativeRecsExp.forEach(item => usedItemIds.add(item.id));
+
+            const svdRecsExp = getSVDRecs(gap, 2, usedItemIds);
+            recommendations.push(...svdRecsExp);
+            svdRecsExp.forEach(item => usedItemIds.add(item.id));
+
+            const dssRecsExp = getDSSRecs(gap, 1, usedItemIds);
+            recommendations.push(...dssRecsExp);
+            break;
+
+          default:
+            recommendations = getStaticRecs(gap, 5, usedItemIds);
+        }
+
+        // Pad to 5 if any algorithm came up short
+        if (recommendations.length < 5) {
+          const total = getCurrentTotal();
+          const fallbackItems = LARGE_CATALOG
+            .filter(item =>
+              !addedItems.find(a => a.id === item.id) &&
+              !usedItemIds.has(item.id) &&
+              item.price >= priceMin &&
+              item.price <= priceMax
+            )
+            // Prefer items that complete the threshold; among those, prefer lowest overshoot; then by popularity
+            .sort((a, b) => {
+              const aClears = (total + a.price) >= THRESHOLD;
+              const bClears = (total + b.price) >= THRESHOLD;
+              if (aClears && !bClears) return -1;
+              if (!aClears && bClears) return 1;
+              if (aClears && bClears) return (total + a.price) - (total + b.price); // least overshoot first
+              return b.pop - a.pop; // neither clears: by popularity
+            })
+            .slice(0, 5 - recommendations.length)
+            .map(item => ({
+              ...item,
+              method: 'fallback',
+              confidence: 0.5,
+              explanation: hasExp ? generateContextualExplanation(item, 'fallback') : null
+            }));
+
+          recommendations.push(...fallbackItems);
+        }
+
+        return recommendations.slice(0, 5);
+      }
+
+      function computeRecDeviationScore() {
+        const staticIds = new Set(getStaticRecs(getCurrentGap(), 5).map(r => r.id));
+        const dssIds = new Set(getDSSRecs(getCurrentGap(), 5).map(r => r.id));
+        const overlap = [...staticIds].filter(id => dssIds.has(id)).length;
+        return +(1 - overlap / 5).toFixed(2);
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // CART STATE
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      function getCurrentTotal() { return +(CART_SUBTOTAL + addedItems.reduce((s, i) => s + i.price, 0)).toFixed(2); }
+      function getCurrentGap() { return Math.max(0, +(THRESHOLD - getCurrentTotal()).toFixed(2)); }
+      function isGapCleared() { return getCurrentTotal() >= THRESHOLD; }
+
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // SCREEN MANAGEMENT
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      const SCREENS = ["consent", "prescreener", "scenario", "cart", "recommendations", "abandon-survey", "posttask", "debrief"];
+      const SCREEN_LABELS = [
+        "Step 1 of 6 — Study Information & Consent",
+        "Step 2 of 6 — Background Questions",
+        "Step 3 of 6 — Shopping Scenario",
+        "Step 4 of 6 — Your Cart",
+        "Step 5 of 6 — Add-on Recommendations",
+        "Step 5 of 6 — A Few Quick Questions",
+        "Step 6 of 6 — Survey",
+        "Complete"
+      ];
+      const SCREEN_PROGRESS = [5, 16, 28, 42, 57, 68, 82, 100];
+      let currentScreenIdx = 0;
+
+      function setScreen(name) {
+        currentScreenIdx = SCREENS.indexOf(name);
+        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+        document.getElementById("screen-" + name).classList.add("active");
+        document.getElementById("progress").style.width = SCREEN_PROGRESS[currentScreenIdx] + "%";
+        document.getElementById("progress-label").textContent = SCREEN_LABELS[currentScreenIdx];
+        document.getElementById("debug-screen").textContent = name;
+        window.scrollTo(0, 0);
+
+        if (name === "recommendations") {
+          recScreenEnter = Date.now();
+          startInactivityWatch();
+          refreshAddonQualityCard();
+        } else {
+          stopInactivityWatch();
+        }
+        if (name === "posttask") refreshAddonQualityCard();
+        if (name === "debrief") {
+          const card = document.getElementById("order-summary-card");
+          if (card) {
+            const total = parseFloat(sessionData.finalTotal) || getCurrentTotal();
+            const cleared = isGapCleared();
+            if (cleared) {
+              card.style.background = "var(--success-light)";
+              card.style.borderColor = "var(--success)";
+              card.innerHTML = `
           <div class="section-label">Your order summary</div>
           <p style="color:var(--text);margin:0">✅ <strong>Free shipping unlocked!</strong> Your final cart total was <strong>$${total.toFixed(2)}</strong> — above the $35 threshold.</p>`;
-      } else {
-        card.style.background = "var(--warning-light)";
-        card.style.borderColor = "var(--warning)";
-        card.innerHTML = `
+            } else {
+              card.style.background = "var(--warning-light)";
+              card.style.borderColor = "var(--warning)";
+              card.innerHTML = `
           <div class="section-label">Your order summary</div>
           <p style="color:var(--text);margin:0">📦 Your final cart total was <strong>$${total.toFixed(2)}</strong>. The $5.99 shipping fee applied.</p>`;
+            }
+          }
+        }
       }
-    }
-  }
-}
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// ABANDONMENT DETECTION
-// ═══════════════════════════════════════════════════════════════════════════════════
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // ABANDONMENT DETECTION
+      // ═══════════════════════════════════════════════════════════════════════════════════
 
-window.addEventListener("beforeunload", function(e) {
-  if (currentScreenIdx === 4 && sessionData.checkoutCompleted === undefined) {
-    sessionData.abandonType = "pagetransition";
-    sessionData.checkoutCompleted = 0;
-    recordTimingsAndItems(false);
-    flushData();
-    e.preventDefault();
-    e.returnValue = "";
-  }
-});
+      window.addEventListener("beforeunload", function (e) {
+        if (currentScreenIdx === 4 && sessionData.checkoutCompleted === undefined) {
+          sessionData.abandonType = "pagetransition";
+          sessionData.checkoutCompleted = 0;
+          recordTimingsAndItems(false);
+          flushData();
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
 
-function startInactivityWatch() {
-  stopInactivityWatch();
-  inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
-  ["mousemove","keydown","click","touchstart"].forEach(ev =>
-    document.addEventListener(ev, resetInactivityOnMove));
-}
-function stopInactivityWatch() {
-  clearTimeout(inactivityTimer);
-  clearInterval(countdownTimer);
-  ["mousemove","keydown","click","touchstart"].forEach(ev =>
-    document.removeEventListener(ev, resetInactivityOnMove));
-  hideInactivityOverlay();
-}
-function resetInactivityOnMove() { resetInactivity(); }
-function resetInactivity() {
-  hideInactivityOverlay();
-  clearTimeout(inactivityTimer);
-  clearInterval(countdownTimer);
-  inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
-}
-function showInactivityWarning() {
-  countdownVal = INACTIVITY_ABANDON_SEC;
-  document.getElementById("countdown-num").textContent = countdownVal;
-  document.getElementById("inactivity-overlay").classList.add("show");
-  countdownTimer = setInterval(function() {
-    countdownVal--;
-    document.getElementById("countdown-num").textContent = countdownVal;
-    if (countdownVal <= 0) { clearInterval(countdownTimer); triggerInactivityAbandon(); }
-  }, 1000);
-}
-function hideInactivityOverlay() {
-  document.getElementById("inactivity-overlay").classList.remove("show");
-  clearInterval(countdownTimer);
-}
-function triggerInactivityAbandon() {
-  hideInactivityOverlay();
-  sessionData.abandonType = "inactivity";
-  sessionData.checkoutCompleted = 0;
-  recordTimingsAndItems(false);
-  flushData();
-  document.getElementById("debrief-note").textContent =
-    "Your session was recorded as incomplete due to inactivity.";
-  setScreen("debrief");
-}
+      function startInactivityWatch() {
+        stopInactivityWatch();
+        inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
+        ["mousemove", "keydown", "click", "touchstart"].forEach(ev =>
+          document.addEventListener(ev, resetInactivityOnMove));
+      }
+      function stopInactivityWatch() {
+        clearTimeout(inactivityTimer);
+        clearInterval(countdownTimer);
+        ["mousemove", "keydown", "click", "touchstart"].forEach(ev =>
+          document.removeEventListener(ev, resetInactivityOnMove));
+        hideInactivityOverlay();
+      }
+      function resetInactivityOnMove() { resetInactivity(); }
+      function resetInactivity() {
+        hideInactivityOverlay();
+        clearTimeout(inactivityTimer);
+        clearInterval(countdownTimer);
+        inactivityTimer = setTimeout(showInactivityWarning, INACTIVITY_WARN_SEC * 1000);
+      }
+      function showInactivityWarning() {
+        countdownVal = INACTIVITY_ABANDON_SEC;
+        document.getElementById("countdown-num").textContent = countdownVal;
+        document.getElementById("inactivity-overlay").classList.add("show");
+        countdownTimer = setInterval(function () {
+          countdownVal--;
+          document.getElementById("countdown-num").textContent = countdownVal;
+          if (countdownVal <= 0) { clearInterval(countdownTimer); triggerInactivityAbandon(); }
+        }, 1000);
+      }
+      function hideInactivityOverlay() {
+        document.getElementById("inactivity-overlay").classList.remove("show");
+        clearInterval(countdownTimer);
+      }
+      function triggerInactivityAbandon() {
+        hideInactivityOverlay();
+        sessionData.abandonType = "inactivity";
+        sessionData.checkoutCompleted = 0;
+        recordTimingsAndItems(false);
+        flushData();
+        document.getElementById("debrief-note").textContent =
+          "Your session was recorded as incomplete due to inactivity.";
+        setScreen("debrief");
+      }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// UI HELPERS
-// ═══════════════════════════════════════════════════════════════════════════════════
-function buildLikert(name, n=7) {
-  return `<div class="likert">${Array.from({length:n},(_,i)=>`<div><input type="radio" name="${name}" id="${name}_${i+1}" value="${i+1}"><label for="${name}_${i+1}">${i+1}</label></div>`).join("")}</div>`;
-}
-function getRadio(name) {
-  const el = document.querySelector(`input[name="${name}"]:checked`);
-  return el ? el.value : "";
-}
-function refreshAddonQualityCard() {
-  const card = document.getElementById("addon-quality-card");
-  if (card) card.style.display = addedItems.length > 0 ? "block" : "none";
-}
-function updateBanner() {
-  const banner = document.getElementById("rec-banner");
-  if (!banner) return;
-  const cleared = isGapCleared();
-  banner.className = "shipping-banner " + (cleared ? "success" : "danger");
-  banner.innerHTML = `
-    <span class="icon">${cleared?"✅":"🚚"}</span>
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // UI HELPERS
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      function buildLikert(name, n = 7) {
+        return `<div class="likert">${Array.from({ length: n }, (_, i) => `<div><input type="radio" name="${name}" id="${name}_${i + 1}" value="${i + 1}"><label for="${name}_${i + 1}">${i + 1}</label></div>`).join("")}</div>`;
+      }
+      function getRadio(name) {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : "";
+      }
+      function refreshAddonQualityCard() {
+        const card = document.getElementById("addon-quality-card");
+        if (card) card.style.display = addedItems.length > 0 ? "block" : "none";
+      }
+      function updateBanner() {
+        const banner = document.getElementById("rec-banner");
+        if (!banner) return;
+        const cleared = isGapCleared();
+        banner.className = "shipping-banner " + (cleared ? "success" : "danger");
+        banner.innerHTML = `
+    <span class="icon">${cleared ? "✅" : "🚚"}</span>
     <div class="banner-text">
       <strong>${cleared ? "Free shipping unlocked! 🎉" : `Add $${getCurrentGap().toFixed(2)} more for FREE shipping`}</strong>
       <span>${cleared
-        ? `Your total is $${getCurrentTotal().toFixed(2)} — you qualify for free shipping!`
-        : `Orders $35+ ship free. Current shipping fee: $5.99.`}</span>
+            ? `Your total is $${getCurrentTotal().toFixed(2)} — you qualify for free shipping!`
+            : `Orders $35+ ship free. Current shipping fee: $5.99.`}</span>
     </div>`;
-}
-function updateLivePanel() {
-  const panel = document.getElementById("live-cart-panel");
-  if (!panel) return;
-  const total = getCurrentTotal();
-  const cleared = isGapCleared();
-  const addedSum = addedItems.reduce((s,i)=>s+i.price,0);
-  const addedHTML = addedItems.length === 0
-    ? `<p style="font-size:0.8rem;color:var(--muted);margin:0">No items added yet.</p>`
-    : addedItems.map(item=>`
+      }
+      function updateLivePanel() {
+        const panel = document.getElementById("live-cart-panel");
+        if (!panel) return;
+        const total = getCurrentTotal();
+        const cleared = isGapCleared();
+        const addedSum = addedItems.reduce((s, i) => s + i.price, 0);
+        const addedHTML = addedItems.length === 0
+          ? `<p style="font-size:0.8rem;color:var(--muted);margin:0">No items added yet.</p>`
+          : addedItems.map(item => `
       <div class="added-item">
         <span class="ai-name">${item.emoji} ${item.name}</span>
         <span style="display:flex;align-items:center;gap:6px">
@@ -946,34 +1486,34 @@ function updateLivePanel() {
           <button class="ai-remove" onclick="removeAddon('${item.id}')">✕</button>
         </span>
       </div>`).join("");
-  panel.innerHTML = `
+        panel.innerHTML = `
     <div class="panel-title">Your updated cart</div>
     <div class="added-items">${addedHTML}</div>
     <div class="panel-totals">
       <div class="panel-row"><span>Original subtotal</span><span>$${CART_SUBTOTAL.toFixed(2)}</span></div>
-      ${addedItems.length>0?`<div class="panel-row"><span>Add-ons (×${addedItems.length})</span><span style="color:var(--success);font-weight:600">+$${addedSum.toFixed(2)}</span></div>`:""}
+      ${addedItems.length > 0 ? `<div class="panel-row"><span>Add-ons (×${addedItems.length})</span><span style="color:var(--success);font-weight:600">+$${addedSum.toFixed(2)}</span></div>` : ""}
       <div class="panel-row bold"><span>New total</span><span>$${total.toFixed(2)}</span></div>
     </div>
-    <div class="gap-indicator ${cleared?"met":"short"}">
+    <div class="gap-indicator ${cleared ? "met" : "short"}">
       ${cleared ? "✅ Free shipping threshold met!" : `🚚 $${getCurrentGap().toFixed(2)} more needed for free shipping`}
     </div>`;
-}
+      }
 
-// Render recommendation grid.
-// Added items are always pinned at the top of the grid (selected state, tappable to remove).
-// Below them, up to 5 fresh unselected recommendations fill the rest of the grid.
-function renderRecs() {
-  const total = getCurrentTotal();
+      // Render recommendation grid.
+      // Added items are always pinned at the top of the grid (selected state, tappable to remove).
+      // Below them, up to 5 fresh unselected recommendations fill the rest of the grid.
+      function renderRecs() {
+        const total = getCurrentTotal();
 
-  // Fresh recs exclude already-added items — these fill the unselected slots
-  shownRecs = getRecommendations();
-  sessionData.addonsShown = shownRecs.map(r=>r.name).join("|");
+        // Fresh recs exclude already-added items — these fill the unselected slots
+        shownRecs = getRecommendations();
+        sessionData.addonsShown = shownRecs.map(r => r.name).join("|");
 
-  const grid = document.getElementById("rec-grid");
-  if (!grid) return;
+        const grid = document.getElementById("rec-grid");
+        if (!grid) return;
 
-  // Build pinned cards for items already in the cart (so they can be toggled off)
-  const pinnedCards = addedItems.map(item => `
+        // Build pinned cards for items already in the cart (so they can be toggled off)
+        const pinnedCards = addedItems.map(item => `
     <div class="rec-card selected" id="rec-${item.id}"
       onclick="toggleAddon('${item.id}')"
       onmouseenter="logHover('${item.id}','enter')"
@@ -989,16 +1529,16 @@ function renderRecs() {
       <div style="font-size:0.72rem;color:var(--accent);margin-top:6px;font-weight:600">Tap to remove</div>
     </div>`).join("");
 
-  // Build fresh recommendation cards (unselected items only)
-  const freshCards = shownRecs.map(item => {
-    const clears = (+(total + item.price).toFixed(2)) >= THRESHOLD;
-    const showValueBadge = isDSS && item.vendorScore && item.vendorScore >= 0.65;
-    const badge = clears && !hasExp
-      ? `<div class="gap-badge">Clears gap</div>`
-      : (showValueBadge && !hasExp
-        ? `<div class="gap-badge" style="background:var(--warning)">★ Value</div>`
-        : "");
-    return `
+        // Build fresh recommendation cards (unselected items only)
+        const freshCards = shownRecs.map(item => {
+          const clears = (+(total + item.price).toFixed(2)) >= THRESHOLD;
+          const showValueBadge = isDSS && item.vendorScore && item.vendorScore >= 0.65;
+          const badge = clears && !hasExp
+            ? `<div class="gap-badge">Clears gap</div>`
+            : (showValueBadge && !hasExp
+              ? `<div class="gap-badge" style="background:var(--warning)">★ Value</div>`
+              : "");
+          return `
     <div class="rec-card" id="rec-${item.id}"
       onclick="toggleAddon('${item.id}')"
       onmouseenter="logHover('${item.id}','enter')"
@@ -1012,87 +1552,88 @@ function renderRecs() {
       </div>
       ${hasExp && item.explanation ? `<div class="rec-explanation">💡 ${item.explanation}</div>` : ""}
     </div>`;
-  }).join("");
+        }).join("");
 
-  // Divider shown only when there are both pinned and fresh cards
-  const divider = (addedItems.length > 0 && shownRecs.length > 0)
-    ? `<div style="grid-column:1/-1;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:4px 0 2px">More suggestions</div>`
-    : "";
+        // Divider shown only when there are both pinned and fresh cards
+        const divider = (addedItems.length > 0 && shownRecs.length > 0)
+          ? `<div style="grid-column:1/-1;font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:4px 0 2px">More suggestions</div>`
+          : "";
 
-  grid.innerHTML = pinnedCards + divider + freshCards;
-}
+        grid.innerHTML = pinnedCards + divider + freshCards;
+      }
 
-function toggleCartSummary() {
-  const body = document.getElementById("cart-summary-body");
-  const toggle = document.getElementById("cart-summary-toggle");
-  if (!body || !toggle) return;
-  const isHidden = body.style.display === "none";
-  body.style.display = isHidden ? "block" : "none";
-  toggle.textContent = isHidden ? "Hide ▴" : "Show ▾";
-}
+      function toggleCartSummary() {
+        const body = document.getElementById("cart-summary-body");
+        const toggle = document.getElementById("cart-summary-toggle");
+        if (!body || !toggle) return;
+        const isHidden = body.style.display === "none";
+        body.style.display = isHidden ? "block" : "none";
+        toggle.textContent = isHidden ? "Hide ▴" : "Show ▾";
+      }
 
-function logHover(id, type) {
-  hoverLog.push({ id, type, time: Date.now() });
-}
+      function logHover(id, type) {
+        hoverLog.push({ id, type, time: Date.now() });
+      }
 
-// FIXED: Toggle addon with dynamic recommendation updates - STAY ON RECOMMENDATIONS SCREEN
-function toggleAddon(itemId) {
-  const item = LARGE_CATALOG.find(i => i.id === itemId);
-  if (!item) return;
-  
-  const existingIndex = addedItems.findIndex(a => a.id === itemId);
-  if (existingIndex >= 0) {
-    addedItems.splice(existingIndex, 1);
-    itemsAddedThenRemoved++;
-  } else {
-    addedItems.push(item);
-    if (!firstSelectionTime) firstSelectionTime = Date.now();
-  }
-  
-  // CRITICAL FIX: Update everything dynamically but STAY ON RECOMMENDATIONS SCREEN
-  renderRecs();
-  updateBanner();
-  updateLivePanel();
-  refreshAddonQualityCard();
-  
-  if (currentScreenIdx === 4) {
-    resetInactivity();
-  }
-}
+      // FIXED: Toggle addon with dynamic recommendation updates - STAY ON RECOMMENDATIONS SCREEN
+      function toggleAddon(itemId) {
+        const item = LARGE_CATALOG.find(i => i.id === itemId);
+        if (!item) return;
 
-function removeAddon(itemId) {
-  const existingIndex = addedItems.findIndex(a => a.id === itemId);
-  if (existingIndex >= 0) {
-    addedItems.splice(existingIndex, 1);
-    itemsAddedThenRemoved++;
-    renderRecs();
-    updateBanner();
-    updateLivePanel();
-    refreshAddonQualityCard();
-  }
-}
+        const existingIndex = addedItems.findIndex(a => a.id === itemId);
+        if (existingIndex >= 0) {
+          addedItems.splice(existingIndex, 1);
+          itemsAddedThenRemoved++;
+        } else {
+          addedItems.push(item);
+          if (!firstSelectionTime) firstSelectionTime = Date.now();
+        }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// DATA COLLECTION & SUBMISSION
-// ═══════════════════════════════════════════════════════════════════════════════════
-function recordTimingsAndItems(completed) {
-  sessionData.checkoutCompleted = completed ? 1 : 0;
-  sessionData.addonsSelected = addedItems.map(i=>i.name).join("|");
-  sessionData.addonCount = addedItems.length;
-  sessionData.addonNames = addedItems.map(i=>i.name).join("|");
-  sessionData.addonPrices = addedItems.map(i=>i.price.toFixed(2)).join("|");
-  sessionData.finalTotal = getCurrentTotal().toFixed(2);
-  sessionData.gapCleared = isGapCleared() ? 1 : 0;
-  sessionData.timeOnRecScreen = recScreenEnter ? Math.round((Date.now() - recScreenEnter) / 1000) : 0;
-  sessionData.timeToFirstSelection = firstSelectionTime && recScreenEnter ? Math.round((firstSelectionTime - recScreenEnter) / 1000) : 0;
-  sessionData.hoverEvents = hoverLog.length;
-  sessionData.hoverEventsPerMinute = sessionData.timeOnRecScreen > 0
-    ? +(hoverLog.length / (sessionData.timeOnRecScreen / 60)).toFixed(2)
-    : 0;
-  sessionData.itemsAddedThenRemoved = itemsAddedThenRemoved;
-  sessionData.recDeviationScore = computeRecDeviationScore();
-}
-function flushData() {
+        // CRITICAL FIX: Update everything dynamically but STAY ON RECOMMENDATIONS SCREEN
+        renderRecs();
+        updateBanner();
+        updateLivePanel();
+        refreshAddonQualityCard();
+
+        if (currentScreenIdx === 4) {
+          resetInactivity();
+        }
+      }
+
+      function removeAddon(itemId) {
+        const existingIndex = addedItems.findIndex(a => a.id === itemId);
+        if (existingIndex >= 0) {
+          addedItems.splice(existingIndex, 1);
+          itemsAddedThenRemoved++;
+          renderRecs();
+          updateBanner();
+          updateLivePanel();
+          refreshAddonQualityCard();
+        }
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // DATA COLLECTION & SUBMISSION
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      function recordTimingsAndItems(completed) {
+        sessionData.checkoutCompleted = completed ? 1 : 0;
+        sessionData.addonsSelected = addedItems.map(i => i.name).join("|");
+        sessionData.addonCount = addedItems.length;
+        sessionData.addonNames = addedItems.map(i => i.name).join("|");
+        sessionData.addonPrices = addedItems.map(i => i.price.toFixed(2)).join("|");
+        sessionData.finalTotal = getCurrentTotal().toFixed(2);
+        sessionData.gapCleared = isGapCleared() ? 1 : 0;
+        sessionData.timeOnRecScreen = recScreenEnter ? Math.round((Date.now() - recScreenEnter) / 1000) : 0;
+        sessionData.timeToFirstSelection = firstSelectionTime && recScreenEnter ? Math.round((firstSelectionTime - recScreenEnter) / 1000) : 0;
+        sessionData.hoverEvents = hoverLog.length;
+        sessionData.hoverEventsPerMinute = sessionData.timeOnRecScreen > 0
+          ? +(hoverLog.length / (sessionData.timeOnRecScreen / 60)).toFixed(2)
+          : 0;
+        sessionData.itemsAddedThenRemoved = itemsAddedThenRemoved;
+        sessionData.recDeviationScore = computeRecDeviationScore();
+      }
+
+      function flushData() {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://docs.google.com/forms/d/e/1FAIpQLSe8xqXW-yapMCuR8_h5M6O1P0_ZH3aHPKgyBmTI2qr-vvJPbA/formResponse', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -1238,34 +1779,35 @@ function flushData() {
         xhr.send(formData.toString());
         console.log("PhD Data Collection: All 45+ entries dynamically mapped and sent.");
       }
-function proceedToCheckout() {
-  stopInactivityWatch();
-  sessionData.abandonType = sessionData.abandonType || "none";
-  recordTimingsAndItems(true);
-  setScreen("posttask");
-}
 
-function proceedSkipRecs() {
-  stopInactivityWatch();
-  sessionData.skipRecs = 1;
-  sessionData.abandonType = "deliberate_skip";
-  recordTimingsAndItems(addedItems.length > 0);
-  // Route to short abandonment follow-up before the main post-task survey
-  setScreen("abandon-survey");
-}
+      function proceedToCheckout() {
+        stopInactivityWatch();
+        sessionData.abandonType = sessionData.abandonType || "none";
+        recordTimingsAndItems(true);
+        setScreen("posttask");
+      }
 
-function submitAbandonSurvey() {
-  sessionData.abandonReason = getRadio("abandonReason");
-  sessionData.abandonBarrier = getRadio("abandonBarrier");
-  sessionData.abandonShipIntent = getRadio("abandonShipIntent");
-  setScreen("posttask");
-}
+      function proceedSkipRecs() {
+        stopInactivityWatch();
+        sessionData.skipRecs = 1;
+        sessionData.abandonType = "deliberate_skip";
+        recordTimingsAndItems(addedItems.length > 0);
+        // Route to short abandonment follow-up before the main post-task survey
+        setScreen("abandon-survey");
+      }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// SCREEN CONTENT GENERATION
-// ═══════════════════════════════════════════════════════════════════════════════════
-function renderApp() {
-  document.getElementById("app").innerHTML = `
+      function submitAbandonSurvey() {
+        sessionData.abandonReason = getRadio("abandonReason");
+        sessionData.abandonBarrier = getRadio("abandonBarrier");
+        sessionData.abandonShipIntent = getRadio("abandonShipIntent");
+        setScreen("posttask");
+      }
+
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // SCREEN CONTENT GENERATION
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      function renderApp() {
+        document.getElementById("app").innerHTML = `
     <!-- CONSENT SCREEN -->
     <div class="screen active" id="screen-consent">
       <h1>Research Study Participation</h1>
@@ -1688,91 +2230,92 @@ function renderApp() {
       </p>
     </div>
   `;
-}
+      }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// EVENT HANDLERS
-// ═══════════════════════════════════════════════════════════════════════════════════
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // EVENT HANDLERS
+      // ═══════════════════════════════════════════════════════════════════════════════════
 
-function submitPrescreener() {
-  sessionData.shopFreq = getRadio("shopFreq");
-  sessionData.priceSensitivity = getRadio("priceSensitivity");
-  sessionData.algoTrust = getRadio("algoTrust");
-  setScreen("scenario");
-}
+      function submitPrescreener() {
+        sessionData.shopFreq = getRadio("shopFreq");
+        sessionData.priceSensitivity = getRadio("priceSensitivity");
+        sessionData.algoTrust = getRadio("algoTrust");
+        setScreen("scenario");
+      }
 
-function submitPostTask() {
-  // Manipulation checks
-  sessionData.manCheck1 = getRadio("manCheck1");
-  sessionData.manCheck2 = getRadio("manCheck2");
-  sessionData.manCheck3 = getRadio("manCheck3");
-  // Trust
-  sessionData.trust1 = getRadio("trust1");
-  sessionData.trust2 = getRadio("trust2");
-  sessionData.trust3 = getRadio("trust3");
-  sessionData.percComp1 = getRadio("percComp1");
-  // Transparency & manipulation
-  sessionData.transp1 = getRadio("transp1");
-  sessionData.transp2 = getRadio("transp2");
-  sessionData.manip1 = getRadio("manip1");
-  sessionData.manip2 = getRadio("manip2");
-  sessionData.manip3 = getRadio("manip3");
-  // Autonomy & confidence
-  sessionData.conf1 = getRadio("conf1");
-  sessionData.autonom1 = getRadio("autonom1");
-  sessionData.autonom2 = getRadio("autonom2");
-  // Cognitive load
-  sessionData.load1 = getRadio("load1");
-  sessionData.load2 = getRadio("load2");
-  sessionData.load3 = getRadio("load3");
-  sessionData.load4 = getRadio("load4");
-  // Choice quality
-  sessionData.fit1 = getRadio("fit1");
-  sessionData.fit2 = getRadio("fit2");
-  sessionData.value1 = getRadio("value1");
-  sessionData.regret1 = getRadio("regret1");
-  sessionData.ecoval1 = getRadio("ecoval1");
+      function submitPostTask() {
+        // Manipulation checks
+        sessionData.manCheck1 = getRadio("manCheck1");
+        sessionData.manCheck2 = getRadio("manCheck2");
+        sessionData.manCheck3 = getRadio("manCheck3");
+        // Trust
+        sessionData.trust1 = getRadio("trust1");
+        sessionData.trust2 = getRadio("trust2");
+        sessionData.trust3 = getRadio("trust3");
+        sessionData.percComp1 = getRadio("percComp1");
+        // Transparency & manipulation
+        sessionData.transp1 = getRadio("transp1");
+        sessionData.transp2 = getRadio("transp2");
+        sessionData.manip1 = getRadio("manip1");
+        sessionData.manip2 = getRadio("manip2");
+        sessionData.manip3 = getRadio("manip3");
+        // Autonomy & confidence
+        sessionData.conf1 = getRadio("conf1");
+        sessionData.autonom1 = getRadio("autonom1");
+        sessionData.autonom2 = getRadio("autonom2");
+        // Cognitive load
+        sessionData.load1 = getRadio("load1");
+        sessionData.load2 = getRadio("load2");
+        sessionData.load3 = getRadio("load3");
+        sessionData.load4 = getRadio("load4");
+        // Choice quality
+        sessionData.fit1 = getRadio("fit1");
+        sessionData.fit2 = getRadio("fit2");
+        sessionData.value1 = getRadio("value1");
+        sessionData.regret1 = getRadio("regret1");
+        sessionData.ecoval1 = getRadio("ecoval1");
 
-  flushData();
-  setScreen("debrief");
-}
+        flushData();
+        setScreen("debrief");
+      }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// INITIALIZATION
-// ═══════════════════════════════════════════════════════════════════════════════════
-renderApp();
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      // INITIALIZATION
+      // ═══════════════════════════════════════════════════════════════════════════════════
+      renderApp();
 
-// Initialize recommendations screen when it loads
-document.addEventListener('DOMContentLoaded', function() {
-  if (currentScreenIdx === 4) {
-    renderRecs();
-    updateBanner();
-    updateLivePanel();
-  }
-});
-
-// Update recommendations when screen becomes active
-const observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-      const target = mutation.target;
-      if (target.id === 'screen-recommendations' && target.classList.contains('active')) {
-        setTimeout(() => {
+      // Initialize recommendations screen when it loads
+      document.addEventListener('DOMContentLoaded', function () {
+        if (currentScreenIdx === 4) {
           renderRecs();
           updateBanner();
           updateLivePanel();
-        }, 100);
-      }
-    }
-  });
-});
+        }
+      });
 
-observer.observe(document.getElementById('app'), {
-  attributes: true,
-  subtree: true,
-  attributeFilter: ['class']
-});
+      // Update recommendations when screen becomes active
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target;
+            if (target.id === 'screen-recommendations' && target.classList.contains('active')) {
+              setTimeout(() => {
+                renderRecs();
+                updateBanner();
+                updateLivePanel();
+              }, 100);
+            }
+          }
+        });
+      });
 
-</script>
+      observer.observe(document.getElementById('app'), {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ['class']
+      });
+
+    </script>
 </body>
+
 </html>
