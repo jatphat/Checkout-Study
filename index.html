@@ -314,6 +314,12 @@
       flex-shrink: 0;
     }
 
+    .shipping-banner.success .icon {
+      color: var(--success);
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
     .shipping-banner .banner-text strong {
       font-size: 0.92rem;
     }
@@ -1145,6 +1151,13 @@
       let countdownTimer = null;
       let countdownVal = INACTIVITY_ABANDON_SEC;
       let sessionStartTime = Date.now();
+      // FIX: cumulative set of every item ever shown across the whole
+      // session, keyed by name. `addonsShown` used to be overwritten on
+      // every re-render with only the CURRENTLY-unselected recs — so
+      // anything a participant added would drop out of its own exposure
+      // record the moment they selected it (it moves to "pinned"). This
+      // union survives every render, so the field means what it says.
+      let allItemsEverShown = new Set();
 
       // ═══════════════════════════════════════════════════════════════════════════════════
       // ENHANCED RECOMMENDATION ALGORITHMS WITH DYNAMIC GAP CALCULATION
@@ -1565,7 +1578,7 @@
               card.style.borderColor = "var(--success)";
               card.innerHTML = `
           <div class="section-label">Your order summary</div>
-          <p style="color:var(--text);margin:0">✅ <strong>Free shipping unlocked!</strong> Your final cart total was <strong>$${total.toFixed(2)}</strong> — above the $35 threshold.</p>`;
+          <p style="color:var(--text);margin:0"><strong>Free shipping unlocked.</strong> Your final cart total was <strong>$${total.toFixed(2)}</strong> — above the $35 threshold.</p>`;
             } else {
               card.style.background = "var(--warning-light)";
               card.style.borderColor = "var(--warning)";
@@ -1657,12 +1670,12 @@
         const cleared = isGapCleared();
         banner.className = "shipping-banner " + (cleared ? "success" : "danger");
         banner.innerHTML = `
-    <span class="icon">${cleared ? "✅" : "🚚"}</span>
+    <span class="icon">${cleared ? "✓" : "🚚"}</span>
     <div class="banner-text">
-      <strong>${cleared ? "Free shipping unlocked! 🎉" : `Add $${getCurrentGap().toFixed(2)} more for FREE shipping`}</strong>
+      <strong>${cleared ? "Free shipping unlocked" : `Add $${getCurrentGap().toFixed(2)} more in cart value for FREE shipping`}</strong>
       <span>${cleared
-            ? `Your total is $${getCurrentTotal().toFixed(2)} — you qualify for free shipping!`
-            : `Orders $35+ ship free. Current shipping fee: $5.99.`}</span>
+            ? `Your cart value is $${getCurrentTotal().toFixed(2)} — you qualify for free shipping.`
+            : `Your cart value is $${getCurrentTotal().toFixed(2)}. Reach $35 and the $5.99 shipping fee disappears.`}</span>
     </div>`;
       }
       function updateLivePanel() {
@@ -1690,7 +1703,7 @@
       <div class="panel-row bold"><span>New total</span><span>$${total.toFixed(2)}</span></div>
     </div>
     <div class="gap-indicator ${cleared ? "met" : "short"}">
-      ${cleared ? "✅ Free shipping threshold met!" : `🚚 $${getCurrentGap().toFixed(2)} more needed for free shipping`}
+      ${cleared ? "Free shipping threshold met" : `🚚 $${getCurrentGap().toFixed(2)} more needed for free shipping`}
     </div>`;
       }
 
@@ -1702,7 +1715,14 @@
 
         // Fresh recs exclude already-added items — these fill the unselected slots
         shownRecs = getRecommendations();
-        sessionData.addonsShown = shownRecs.map(r => r.name).join("|");
+        // FIX: union this render's fresh recs AND currently-added items into
+        // the cumulative exposure set, instead of overwriting addonsShown
+        // with only the fresh (unselected) list. Previously, whatever a
+        // participant ended up adding would vanish from its own "shown"
+        // record the instant they selected it.
+        shownRecs.forEach(item => allItemsEverShown.add(item.name));
+        addedItems.forEach(item => allItemsEverShown.add(item.name));
+        sessionData.addonsShown = [...allItemsEverShown].join("|");
 
         const grid = document.getElementById("rec-grid");
         if (!grid) return;
@@ -1822,9 +1842,16 @@
         sessionData.gapCleared = isGapCleared() ? 1 : 0;
         sessionData.timeOnRecScreen = recScreenEnter ? Math.round((Date.now() - recScreenEnter) / 1000) : 0;
         sessionData.timeToFirstSelection = firstSelectionTime && recScreenEnter ? Math.round((firstSelectionTime - recScreenEnter) / 1000) : 0;
-        sessionData.hoverEvents = hoverLog.length;
+        // FIX: the recommendation grid fully re-renders on every add/remove
+        // click, which can fire phantom mouseenter/mouseleave pairs if the
+        // cursor happens to be resting over the grid when new DOM nodes
+        // appear underneath it — inflating a raw event count well past
+        // genuine hovering. Counting unique items explored is immune to
+        // that and also matches what the question label actually asks.
+        const uniqueItemsHovered = new Set(hoverLog.filter(h => h.type === "enter").map(h => h.id)).size;
+        sessionData.hoverEvents = uniqueItemsHovered;
         sessionData.hoverEventsPerMinute = sessionData.timeOnRecScreen > 0
-          ? +(hoverLog.length / (sessionData.timeOnRecScreen / 60)).toFixed(2)
+          ? +(uniqueItemsHovered / (sessionData.timeOnRecScreen / 60)).toFixed(2)
           : 0;
         sessionData.itemsAddedThenRemoved = itemsAddedThenRemoved;
         // Codebook: "exitAddThenRemove" — binary indecision flag (H2, H5)
@@ -1842,7 +1869,7 @@
         sessionData.exitGapAtAbandon = getCurrentGap().toFixed(2);
         sessionData.exitTimeOnScreen = sessionData.timeOnRecScreen;
         // Codebook: "exitHoverCount" — interaction intensity before leaving (H2)
-        sessionData.exitHoverCount = hoverLog.length;
+        sessionData.exitHoverCount = uniqueItemsHovered;
         // NEW: total session length, consent → this point. Computed once here
         // so it's captured on every exit path (complete, abandon, tab-close).
         sessionData.sessionDurationSeconds = Math.round((Date.now() - sessionStartTime) / 1000);
@@ -1863,9 +1890,15 @@
         // Combined group index (1-4) representing the 2x2 factorial cells
         formData.append('entry.1363167156', sessionData.condition || '');
         // Independent Factor A: Recommendation Logic (0=Standard, 1=Threshold-Aware DSS)
-        formData.append('entry.1701158278', sessionData.conditionDSS || '');
+        // FIX: conditionDSS is a real 0/1 number, and 0 is falsy in JS — the
+        // old `|| ''` fallback silently replaced every legitimate 0 (Static
+        // condition) with an empty string, so the Form recorded nothing at
+        // all for roughly half of all participants. Ternary avoids this.
+        formData.append('entry.1701158278', sessionData.conditionDSS === 1 ? 1 : 0);
         // Independent Factor B: Explanation Presence (0=No Explanation, 1=LLM-Generated)
-        formData.append('entry.699386313', sessionData.conditionExp || '');
+        // FIX: same bug — conditionExp=0 (No-Explanation condition) was
+        // being sent as an empty string instead of "0".
+        formData.append('entry.699386313', sessionData.conditionExp === 1 ? 1 : 0);
 
         // ══════════════════════════════════════════════════════════════════════════
         // 2. SHOPPING TASK PERFORMANCE (SCREEN: RECOMMENDATIONS)
@@ -1907,15 +1940,23 @@
         formData.append('entry.227332894', sessionData.exitFreeText || '');
         // Codebook: "exitSuggestion" — actionable improvement feedback
         formData.append('entry.1897370611', sessionData.exitSuggestion || '');
+
+        // FIX: these four are behavioral snapshots computed for EVERY session
+        // (so they're ready the instant someone abandons), but they only mean
+        // something on the abandonment path — a completer showing "1 item
+        // added before abandonment" is confusing and wrong-looking even
+        // though it's harmless for analysis. Gate them here so completers
+        // submit blank/0, matching what the question labels actually promise.
+        const isAbandoner = sessionData.abandonType && sessionData.abandonType !== "none";
         // Codebook: "exitItemsAdded" (H2) — engagement depth before abandonment
-        formData.append('entry.457722614', sessionData.exitItemsAdded || 0);
+        formData.append('entry.457722614', isAbandoner ? (sessionData.exitItemsAdded || 0) : '');
         // Codebook: "exitGapAtAbandon" (H1) — proximity to goal when they quit
-        formData.append('entry.1893427120', sessionData.exitGapAtAbandon || 0);
+        formData.append('entry.1893427120', isAbandoner ? (sessionData.exitGapAtAbandon || 0) : '');
         // Codebook: "exitTimeOnScreen" (H2) — seconds elapsed before quitting
-        formData.append('entry.973032317', sessionData.exitTimeOnScreen || 0);
+        formData.append('entry.973032317', isAbandoner ? (sessionData.exitTimeOnScreen || 0) : '');
         // Codebook: "exitHoverCount" (H2) — interaction intensity before leaving
         // FIX: computed but never sent before — now wired to its Form question.
-        formData.append('entry.481529522', sessionData.exitHoverCount || 0);
+        formData.append('entry.481529522', isAbandoner ? (sessionData.exitHoverCount || 0) : '');
 
         // ── Codebook exit-mechanism battery (H2, H3, H4) — asked only of
         // abandoners on the abandon-survey screen, short-form versions of the
@@ -2161,17 +2202,12 @@
         `).join("")}
         
         <div class="cart-footer">
-          <div class="cart-row">
-            <span>Subtotal</span>
+          <div class="cart-row total">
+            <span>Cart value</span>
             <span>$${CART_SUBTOTAL.toFixed(2)}</span>
           </div>
-          <div class="cart-row">
-            <span>Shipping</span>
-            <span class="shipping-line">$5.99</span>
-          </div>
-          <div class="cart-row total">
-            <span>Total (with shipping)</span>
-            <span>$${(CART_SUBTOTAL + 5.99).toFixed(2)}</span>
+          <div class="cart-row" style="margin-top:4px">
+            <span class="shipping-line">+ $5.99 shipping — waived on orders $35+</span>
           </div>
         </div>
       </div>
@@ -2179,8 +2215,8 @@
       <div class="shipping-banner danger">
         <span class="icon">🚚</span>
         <div class="banner-text">
-          <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping</strong>
-          <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
+          <strong>Add $${GAP_INITIAL.toFixed(2)} more in cart value for FREE shipping</strong>
+          <span>Your cart value is $${CART_SUBTOTAL.toFixed(2)}. Reach $35 in cart value and the $5.99 shipping fee disappears.</span>
         </div>
       </div>
       
@@ -2196,8 +2232,8 @@
       <div id="rec-banner" class="shipping-banner danger">
         <span class="icon">🚚</span>
         <div class="banner-text">
-          <strong>Add $${GAP_INITIAL.toFixed(2)} more for FREE shipping</strong>
-          <span>Orders $35+ ship free. Current shipping fee: $5.99.</span>
+          <strong>Add $${GAP_INITIAL.toFixed(2)} more in cart value for FREE shipping</strong>
+          <span>Your cart value is $${CART_SUBTOTAL.toFixed(2)}. Reach $35 and the $5.99 shipping fee disappears.</span>
         </div>
       </div>
 
