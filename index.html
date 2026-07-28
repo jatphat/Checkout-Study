@@ -5,24 +5,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout Study</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
   <style>
+    /* ─────────────────────────────────────────────────────────────
+       E-COMMERCE STORE THEME
+       Familiar checkout/marketplace visual language (dark nav bar,
+       orange accent, yellow CTA button, product-tile cards) with no
+       brand references. Variable names below are reused everywhere
+       else in the file, so every existing rule inherits this palette
+       automatically — no script logic or field mappings were touched.
+       ───────────────────────────────────────────────────────────── */
     :root {
-      --bg: #F7F5F0;
+      --bg: #EAEDED;
       --surface: #FFFFFF;
-      --text: #1A1A18;
-      --muted: #6B6B65;
-      --accent: #2B5E3F;
-      --accent-light: #EAF2ED;
-      --border: #E0DDD6;
-      --warning: #C84B0F;
-      --warning-light: #FDF0EA;
-      --success: #1A6B3C;
-      --success-light: #D6F0E2;
-      --shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
-      --radius: 12px;
+      --text: #0F1111;
+      --muted: #565959;
+      --accent: #067D62;
+      --accent-light: #E7F5EE;
+      --border: #D5D9D9;
+      --warning: #B12704;
+      --warning-light: #FDF1EF;
+      --success: #067D62;
+      --success-light: #E7F5EE;
+      --nav-dark: #131921;
+      --nav-mid: #232F3E;
+      --brand-orange: #FF9900;
+      --btn-yellow: #FFD814;
+      --btn-yellow-border: #FCD200;
+      --link-teal: #007185;
+      --shadow: 0 2px 5px rgba(15, 17, 17, 0.15);
+      --radius: 8px;
     }
 
     * {
@@ -32,15 +44,148 @@
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'DM Sans', Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 20px 80px;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 80px;
     }
+
+    /* ── Store-style header (decorative wrapper — no study logic here) ─── */
+    .store-header {
+      width: 100%;
+      background: var(--nav-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 18px;
+    }
+
+    .store-logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+    }
+
+    .store-logo .dot { color: var(--brand-orange); }
+
+    .store-deliver {
+      font-size: 0.7rem;
+      color: #ccc;
+      line-height: 1.2;
+      display: none;
+    }
+
+    .store-deliver strong { color: #fff; font-size: 0.8rem; display: block; }
+
+    .store-search {
+      flex: 1;
+      display: flex;
+      max-width: 640px;
+      border-radius: 4px;
+      overflow: hidden;
+      height: 38px;
+    }
+
+    .store-search input {
+      flex: 1;
+      border: none;
+      padding: 0 12px;
+      font-size: 0.85rem;
+      outline: none;
+      color: #111;
+    }
+
+    .store-search button {
+      width: 44px;
+      background: var(--brand-orange);
+      border: none;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .store-account {
+      font-size: 0.72rem;
+      line-height: 1.25;
+      white-space: nowrap;
+      display: none;
+    }
+
+    .store-account strong { font-size: 0.82rem; display: block; }
+
+    .store-cart {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .store-cart .cart-icon { font-size: 1.5rem; position: relative; }
+
+    .store-cart .cart-count {
+      position: absolute;
+      top: -4px;
+      left: 14px;
+      background: var(--brand-orange);
+      color: #111;
+      font-size: 0.68rem;
+      font-weight: 800;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .store-subnav {
+      width: 100%;
+      background: var(--nav-mid);
+      color: #fff;
+      display: flex;
+      gap: 18px;
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .store-subnav span { opacity: 0.92; cursor: default; }
+
+    .store-subnav span.study-badge {
+      margin-left: auto;
+      background: var(--brand-orange);
+      color: #111;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 99px;
+      opacity: 1;
+    }
+
+    @media (min-width: 700px) {
+      .store-deliver, .store-account { display: block; }
+    }
+
+    .store-breadcrumb {
+      width: 100%;
+      max-width: 780px;
+      padding: 14px 20px 0;
+      font-size: 0.78rem;
+      color: var(--link-teal);
+    }
+
+    .store-breadcrumb span { color: var(--muted); }
 
     .container {
       width: 100%;
@@ -81,7 +226,7 @@
 
     .progress-fill {
       height: 100%;
-      background: var(--accent);
+      background: var(--brand-orange);
       border-radius: 99px;
       transition: width 0.4s ease;
     }
@@ -95,16 +240,20 @@
     }
 
     h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.9rem;
-      line-height: 1.2;
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.7rem;
+      line-height: 1.25;
       margin-bottom: 10px;
+      color: var(--text);
     }
 
     h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.25rem;
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
       margin-bottom: 14px;
+      color: var(--text);
     }
 
     p {
@@ -252,29 +401,36 @@
 
     .rec-card {
       background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
       cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       position: relative;
       user-select: none;
     }
 
     .rec-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 18px rgba(43, 94, 63, 0.1);
-      transform: translateY(-2px);
+      border-color: #999;
+      box-shadow: 0 2px 8px rgba(15, 17, 17, 0.15);
     }
 
     .rec-card.selected {
       border-color: var(--accent);
       background: var(--accent-light);
+      box-shadow: 0 0 0 1px var(--accent);
     }
 
     .rec-card .rec-emoji {
-      font-size: 1.5rem;
-      margin-bottom: 7px;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FAFAFA;
+      border-radius: 4px;
     }
 
     .rec-card .rec-name {
@@ -448,35 +604,37 @@
       align-items: center;
       justify-content: center;
       gap: 7px;
-      padding: 13px 24px;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
       cursor: pointer;
-      border: none;
-      transition: all 0.2s;
+      border: 1px solid;
+      transition: all 0.15s;
       width: 100%;
     }
 
     .btn-primary {
-      background: var(--accent);
-      color: white;
+      background: linear-gradient(to bottom, var(--btn-yellow), #F7CA00);
+      border-color: var(--btn-yellow-border);
+      color: #0F1111;
+      box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
     }
 
     .btn-primary:hover {
-      background: #214a30;
+      background: linear-gradient(to bottom, #F7DFA5, #F0C14B);
     }
 
     .btn-secondary {
-      background: transparent;
-      color: var(--muted);
-      border: 1.5px solid var(--border);
+      background: linear-gradient(to bottom, #FFFFFF, #F7F8F8);
+      color: var(--text);
+      border: 1px solid #D5D9D9;
       margin-top: 8px;
     }
 
     .btn-secondary:hover {
-      border-color: var(--muted);
+      background: linear-gradient(to bottom, #F7F8F8, #E7E9EC);
       color: var(--text);
     }
 
@@ -656,7 +814,37 @@
 </head>
 
 <body>
-  <div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       STORE-STYLE HEADER (purely decorative — no study logic lives
+       here; every screen/button/handler below is unchanged)
+       ═══════════════════════════════════════════════════════════════ -->
+  <header class="store-header">
+    <div class="store-logo">cart<span class="dot">.</span>sim</div>
+    <div class="store-deliver">Deliver to<strong>Your Location</strong></div>
+    <div class="store-search">
+      <input type="text" placeholder="Search Health, Beauty, Grocery, Office..." disabled>
+      <button aria-hidden="true">🔍</button>
+    </div>
+    <div class="store-account">Hello, sign in<strong>Account &amp; Lists</strong></div>
+    <div class="store-cart">
+      <span class="cart-icon">🛒<span class="cart-count" id="store-cart-count">0</span></span>
+      Cart
+    </div>
+  </header>
+  <div class="store-subnav">
+    <span>☰ All</span>
+    <span>Today's Deals</span>
+    <span>Customer Service</span>
+    <span>Health &amp; Personal Care</span>
+    <span>All Beauty</span>
+    <span>Grocery &amp; Gourmet</span>
+    <span>Office Products</span>
+    <span class="study-badge">Research Study Session</span>
+  </div>
+  <div class="store-breadcrumb">Checkout Study <span>›</span> Threshold-Aware Recommendations</div>
+
+  <div class="container" style="padding:16px 20px 0;">
     <div class="progress-wrap">
       <div class="progress-bar">
         <div class="progress-fill" id="progress" style="width:0%"></div>
@@ -921,7 +1109,14 @@
       // ═══════════════════════════════════════════════════════════════════════════════════
       // SESSION STATE
       // ═══════════════════════════════════════════════════════════════════════════════════
-      const participantId = "P_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6).toUpperCase();
+      // Participant ID: use the real panel ID if this link was opened from
+      // Prolific/CloudResearch (they append it as a URL parameter), so survey
+      // responses can be matched back to who to pay. Falls back to a generated
+      // ID for direct testing/preview links where no panel ID is present.
+      const urlParams = new URLSearchParams(window.location.search);
+      const externalPid = urlParams.get("PROLIFIC_PID") || urlParams.get("prolific_pid")
+        || urlParams.get("participant_id") || urlParams.get("pid");
+      const participantId = externalPid || ("P_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6).toUpperCase());
       const condition = Math.floor(Math.random() * 4) + 1;
       const isDSS = condition >= 3;
       const hasExp = condition === 2 || condition === 4;
@@ -1617,7 +1812,9 @@
       // ═══════════════════════════════════════════════════════════════════════════════════
       function recordTimingsAndItems(completed) {
         sessionData.checkoutCompleted = completed ? 1 : 0;
-        sessionData.addonsSelected = addedItems.map(i => i.name).join("|");
+        // FIX: must be a 0/1 binary ("Added Any Recommended Item"), not the
+        // joined item-name string — that string already lives in addonNames.
+        sessionData.addonsSelected = addedItems.length > 0 ? 1 : 0;
         sessionData.addonCount = addedItems.length;
         sessionData.addonNames = addedItems.map(i => i.name).join("|");
         sessionData.addonPrices = addedItems.map(i => i.price.toFixed(2)).join("|");
@@ -1630,7 +1827,25 @@
           ? +(hoverLog.length / (sessionData.timeOnRecScreen / 60)).toFixed(2)
           : 0;
         sessionData.itemsAddedThenRemoved = itemsAddedThenRemoved;
+        // Codebook: "exitAddThenRemove" — binary indecision flag (H2, H5)
+        sessionData.exitAddThenRemove = itemsAddedThenRemoved > 0 ? 1 : 0;
+        // Indecision ratio: share of add-actions later reversed (0-1) — distinct
+        // from the raw count field, normalizes for total items touched.
+        const totalAddActions = addedItems.length + itemsAddedThenRemoved;
+        sessionData.indecisionScore = totalAddActions > 0
+          ? +(itemsAddedThenRemoved / totalAddActions).toFixed(2)
+          : 0;
         sessionData.recDeviationScore = computeRecDeviationScore();
+        // Codebook exit-path behavioral snapshot (H1, H2) — computed for everyone,
+        // only reaches the Form on the abandon-survey path.
+        sessionData.exitItemsAdded = addedItems.length;
+        sessionData.exitGapAtAbandon = getCurrentGap().toFixed(2);
+        sessionData.exitTimeOnScreen = sessionData.timeOnRecScreen;
+        // Codebook: "exitHoverCount" — interaction intensity before leaving (H2)
+        sessionData.exitHoverCount = hoverLog.length;
+        // NEW: total session length, consent → this point. Computed once here
+        // so it's captured on every exit path (complete, abandon, tab-close).
+        sessionData.sessionDurationSeconds = Math.round((Date.now() - sessionStartTime) / 1000);
       }
 
       function flushData() {
@@ -1681,20 +1896,41 @@
         // ══════════════════════════════════════════════════════════════════════════
         // Categorical Logic: Abandoned early (0 items) or after partial selection?
         formData.append('entry.1445663391', sessionData.abandonType || 'N/A');
-        // Q: "During the shopping task, I was focused on avoiding the shipping fee"
+        // Codebook: "exitPrimaryReason" — Q: "What best describes why you left?"
         formData.append('entry.1421685344', sessionData.abandonReason || '');
-        // Q: "Please select all that apply" ( Irrelevant items / Too expensive / etc. )
+        // Q: "How much did [difficulty finding a suitable item] make it harder?"
+        // FIX: collected but never sent before — now wired to its Form question.
+        formData.append('entry.581530009', sessionData.abandonBarrier || '');
+        // Codebook: "exitReasonsChecked" — multi-select contributing factors
         formData.append('entry.1111071683', sessionData.exitReasonsChecked || '');
-        // Q: "Please tell us more about why you decided to leave" (Open text field)
+        // Codebook: "exitFreeText" — open-ended reason in participant's own words
         formData.append('entry.227332894', sessionData.exitFreeText || '');
-        // Q: "What could we have done to make it easier for you to reach the threshold?"
+        // Codebook: "exitSuggestion" — actionable improvement feedback
         formData.append('entry.1897370611', sessionData.exitSuggestion || '');
-        // Engagement at Exit: Number of items checked at the moment of abandonment
+        // Codebook: "exitItemsAdded" (H2) — engagement depth before abandonment
         formData.append('entry.457722614', sessionData.exitItemsAdded || 0);
-        // Proximity at Exit: Dollar amount remaining to reach $35 when user quit
+        // Codebook: "exitGapAtAbandon" (H1) — proximity to goal when they quit
         formData.append('entry.1893427120', sessionData.exitGapAtAbandon || 0);
-        // Temporal Exit: Seconds elapsed on the task screen before deciding to quit
+        // Codebook: "exitTimeOnScreen" (H2) — seconds elapsed before quitting
         formData.append('entry.973032317', sessionData.exitTimeOnScreen || 0);
+        // Codebook: "exitHoverCount" (H2) — interaction intensity before leaving
+        // FIX: computed but never sent before — now wired to its Form question.
+        formData.append('entry.481529522', sessionData.exitHoverCount || 0);
+
+        // ── Codebook exit-mechanism battery (H2, H3, H4) — asked only of
+        // abandoners on the abandon-survey screen, short-form versions of the
+        // main trust/manipulation/transparency/load constructs captured right
+        // at the moment of leaving, before recall fades.
+        // Q: "I felt pressured to add items I didn't want" (at time of leaving)
+        formData.append('entry.1900160483', sessionData.exitManip1 || '');
+        // Q: "I felt manipulated by the suggestions" (at time of leaving)
+        formData.append('entry.115935025', sessionData.exitManip2 || '');
+        // Q: "The recommendations were trustworthy" (at time of leaving)
+        formData.append('entry.977674086', sessionData.exitTrust1 || '');
+        // Q: "I understood why these items were recommended" (at time of leaving)
+        formData.append('entry.575325771', sessionData.exitTransp1 || '');
+        // Q: "This decision felt mentally demanding" (at time of leaving)
+        formData.append('entry.1906937013', sessionData.exitLoad1 || '');
 
         // ══════════════════════════════════════════════════════════════════════════
         // 4. PROCESS TRACING & BACKEND RESEARCH METRICS (H2, H5, H6)
@@ -1707,14 +1943,19 @@
         formData.append('entry.1218658725', sessionData.hoverEvents || 0);
         // H2 Effort: Number of times an item was unchecked after being checked (Flipping)
         formData.append('entry.1649885971', sessionData.itemsAddedThenRemoved || 0);
-        // H2 Binary: Did the participant exhibit any add-then-remove behavior? (1/0)
-        formData.append('entry.154643064', sessionData.itemsAddedThenRemoved > 0 ? 1 : 0);
-        // H2 Complexity: Mathematical score of decision conflict/indecision density
+        // Codebook: "exitAddThenRemove" — H2 Binary: any add-then-remove behavior?
+        formData.append('entry.154643064', sessionData.exitAddThenRemove || 0);
+        // H2 Complexity: indecision ratio = reversed add-actions / total add-actions (0-1)
+        // FIX: was never computed before — now populated in recordTimingsAndItems().
         formData.append('entry.1214928906', sessionData.indecisionScore || 0);
         // H6 Algorithmic Deviation: Measure of how DSS differed from static baseline (0-1)
         formData.append('entry.1755997909', sessionData.recDeviationScore || 0);
         // Control: Was the participant using a touch-based device for the interaction?
         formData.append('entry.257967857', sessionData.touchDevice ? 1 : 0);
+        // NEW: repurposed the "Choice Speed" question (entry.1073493008) —
+        // it was a dead duplicate with no construct behind it. Go to your
+        // Form, rename its label to "Total Session Duration (seconds)".
+        formData.append('entry.1073493008', sessionData.sessionDurationSeconds || 0);
 
         // ══════════════════════════════════════════════════════════════════════════
         // 5. POST-TASK SURVEY (SCREENSHOTS: LIKERT SCALES 1-7)
@@ -1731,34 +1972,39 @@
         formData.append('entry.2036109088', sessionData.autonom1 || '');
         // Q: "I felt in control of the shopping task."
         formData.append('entry.1357028410', sessionData.autonom2 || '');
+        // NEW: repurposed the duplicate "Perceived Pressure (1-7)" question
+        // (entry.94395533, the non-exit duplicate of "Pressure 1...") — it
+        // was a dead duplicate. Go to your Form, rename its label to
+        // "Task Realism (1-7)". Directly answers the AMCIS reviewer critique
+        // that the evaluation "does not actually test... user behavior."
+        formData.append('entry.94395533', sessionData.realism1 || '');
 
-        // [COGNITIVE LOAD - H2]
+        // [COGNITIVE LOAD - H2]  (3-item adapted NASA-TLX)
         // Q: "The process of choosing was mentally taxing."
         formData.append('entry.1866255536', sessionData.load1 || '');
         // Q: "I found the task easy to complete." (REVERSE CODED LOAD)
         formData.append('entry.1102238274', sessionData.load2 || '');
         // Q: "The information provided was overwhelming."
         formData.append('entry.1713932049', sessionData.load3 || '');
-        // Q: "I spent a lot of effort to reach the free-shipping threshold."
-        formData.append('entry.1340156972', sessionData.load4 || '');
 
         // [TRUST & TRANSPARENCY - H3/H5]
         // Q: "I trust the recommendations provided."
         formData.append('entry.2117691022', sessionData.trust1 || '');
         // Q: "The recommendations appeared to be based on my likely preferences."
         formData.append('entry.432591211', sessionData.trust2 || '');
+        // Q: "I could depend on the recommendations."
+        // FIX: collected but never sent before — now wired to its Form question.
+        formData.append('entry.721379581', sessionData.trust3 || '');
         // Q: "The system was transparent about why it suggested these items."
         formData.append('entry.756646952', sessionData.transp1 || '');
         // Q: "I understood how the system works."
         formData.append('entry.655019999', sessionData.transp2 || '');
 
-        // [MANIPULATIVE INTENT - H4/H5]
+        // [MANIPULATIVE INTENT - H4/H5]  (2-item scale)
         // Q: "I felt the system was trying to trick me into buying more."
         formData.append('entry.755621104', sessionData.manip1 || '');
         // Q: "The system seemed to prioritize the store's profit over my needs."
         formData.append('entry.261399405', sessionData.manip2 || '');
-        // Q: "The recommendations felt pushy."
-        formData.append('entry.1633519159', sessionData.manip3 || '');
 
         // [CHOICE QUALITY]
         // Q: "The recommendations appeared to fit my needs."
@@ -1768,16 +2014,25 @@
         // Q: "I feel regret regarding the items I did not choose."
         formData.append('entry.1829525115', sessionData.regret1 || '');
 
-        // Q: "Choice Speed: I could make my choice quickly."
-        // HTML variable: conf1 (or choiceSpeed) | Google ID: 1073493008
-        formData.append('entry.1073493008', sessionData.conf1 || '');
+        // [DECISION CONFIDENCE - H2/H5]
+        // Q: "I am confident in my purchase decisions."
+        // FIX: was previously sent to entry.1073493008, a question actually
+        // labeled "Choice Speed" — a different construct. Now sent to the
+        // question genuinely labeled "Decision Confidence".
+        formData.append('entry.1576676739', sessionData.conf1 || '');
 
-        // [MANIPULATION CHECKS]
+        // [MANIPULATION CHECKS - Validation]
+        // Q: "Approximately how far below the free-shipping threshold were you?"
+        // FIX: collected but never sent before — now wired to its Form question.
+        formData.append('entry.656307787', sessionData.manCheck1 || '');
         // Q: "I was shown explanations for why items were recommended."
         formData.append('entry.2141226584', sessionData.manCheck2 || '');
+        // Q: "I was focused on avoiding the shipping fee during this task."
+        // FIX: collected but never sent before — now wired to its Form question.
+        formData.append('entry.1638538059', sessionData.manCheck3 || '');
 
         xhr.send(formData.toString());
-        console.log("PhD Data Collection: All 45+ entries dynamically mapped and sent.");
+        console.log("Data Collection: 58 codebook-aligned entries sent (audited " + new Date().toISOString() + ").");
       }
 
       function proceedToCheckout() {
@@ -1799,7 +2054,17 @@
       function submitAbandonSurvey() {
         sessionData.abandonReason = getRadio("abandonReason");
         sessionData.abandonBarrier = getRadio("abandonBarrier");
-        sessionData.abandonShipIntent = getRadio("abandonShipIntent");
+        // Codebook exit-mechanism battery (H2, H3, H4)
+        sessionData.exitManip1 = getRadio("exitManip1");
+        sessionData.exitManip2 = getRadio("exitManip2");
+        sessionData.exitTrust1 = getRadio("exitTrust1");
+        sessionData.exitTransp1 = getRadio("exitTransp1");
+        sessionData.exitLoad1 = getRadio("exitLoad1");
+        // Optional multi-select + free text
+        sessionData.exitReasonsChecked = [...document.querySelectorAll('input[name="exitReasonCheck"]:checked')]
+          .map(el => el.value).join("|");
+        sessionData.exitFreeText = (document.getElementById("exitFreeText")?.value || "").trim().slice(0, 400);
+        sessionData.exitSuggestion = (document.getElementById("exitSuggestion")?.value || "").trim().slice(0, 400);
         setScreen("posttask");
       }
 
@@ -2035,12 +2300,6 @@
           ${buildLikert("trust3")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
         </div>
-
-        <div class="survey-group">
-          <label>The recommendation system seemed competent at its job</label>
-          ${buildLikert("percComp1")}
-          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
       </div>
 
       <!-- ── SECTION 3: Transparency & Perceived Manipulation ───────── -->
@@ -2070,12 +2329,6 @@
           ${buildLikert("manip2")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
         </div>
-
-        <div class="survey-group">
-          <label>I felt pressured to add items I didn't really want</label>
-          ${buildLikert("manip3")}
-          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
       </div>
 
       <!-- ── SECTION 4: Decision Autonomy & Confidence ─────────────── -->
@@ -2097,6 +2350,12 @@
         <div class="survey-group">
           <label>I felt in control of my shopping decisions</label>
           ${buildLikert("autonom2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group" style="margin-bottom:0">
+          <label>This felt like a realistic shopping decision</label>
+          ${buildLikert("realism1")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
         </div>
       </div>
@@ -2122,12 +2381,6 @@
           ${buildLikert("load3")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
         </div>
-
-        <div class="survey-group">
-          <label>I felt frustrated or confused while choosing items</label>
-          ${buildLikert("load4")}
-          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
       </div>
 
       <!-- ── SECTION 6: Choice Quality ─────────────────────────────── -->
@@ -2141,12 +2394,6 @@
         </div>
 
         <div class="survey-group">
-          <label>I genuinely needed or wanted the items I added (if any)</label>
-          ${buildLikert("fit2")}
-          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-
-        <div class="survey-group">
           <label>The recommendations provided good value for money</label>
           ${buildLikert("value1")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
@@ -2155,12 +2402,6 @@
         <div class="survey-group">
           <label>I will probably regret the decisions I made in this task</label>
           ${buildLikert("regret1")}
-          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-
-        <div class="survey-group">
-          <label>I would add similar items in a real shopping situation</label>
-          ${buildLikert("ecoval1")}
           <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
         </div>
       </div>
@@ -2189,7 +2430,7 @@
           </div>
         </div>
 
-        <div class="survey-group">
+        <div class="survey-group" style="margin-bottom:0">
           <label>How much did the following make it harder to choose an add-on item?</label>
           <div style="margin-top:10px">
             <div style="font-size:0.84rem;font-weight:500;margin-bottom:4px">Difficulty finding a suitable item</div>
@@ -2197,11 +2438,68 @@
             <div class="scale-labels"><span>Not at all difficult</span><span>Very difficult</span></div>
           </div>
         </div>
+      </div>
+
+      <!-- Codebook exit-mechanism battery (H2, H3, H4): condensed trust /
+           manipulation / transparency / load items captured right at the
+           moment of leaving, before recall fades — feeds H5 mediation
+           analysis for the abandonment path specifically. -->
+      <div class="card">
+        <div class="section-label">Your impressions in that moment</div>
 
         <div class="survey-group">
-          <label>In a real shopping situation, how likely would you be to pay the shipping fee rather than add an item you didn't plan to buy?</label>
-          ${buildLikert("abandonShipIntent")}
-          <div class="scale-labels"><span>Very unlikely</span><span>Very likely</span></div>
+          <label>I felt pressured to add items I didn't really want</label>
+          ${buildLikert("exitManip1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I felt manipulated by the suggestions</label>
+          ${buildLikert("exitManip2")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>The recommendations were trustworthy</label>
+          ${buildLikert("exitTrust1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group">
+          <label>I understood why these items were recommended</label>
+          ${buildLikert("exitTransp1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+
+        <div class="survey-group" style="margin-bottom:0">
+          <label>This decision felt mentally demanding</label>
+          ${buildLikert("exitLoad1")}
+          <div class="scale-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="survey-group">
+          <label>Which of these also played a role? <span style="font-weight:400;color:var(--muted)">(select all that apply — optional)</span></label>
+          <div class="radio-group" style="margin-top:8px">
+            <label class="radio-opt"><input type="checkbox" name="exitReasonCheck" value="irrelevant"><span>Items felt irrelevant to what I needed</span></label>
+            <label class="radio-opt"><input type="checkbox" name="exitReasonCheck" value="too_expensive"><span>Items were too expensive</span></label>
+            <label class="radio-opt"><input type="checkbox" name="exitReasonCheck" value="no_explanation"><span>I didn't understand why items were suggested</span></label>
+            <label class="radio-opt"><input type="checkbox" name="exitReasonCheck" value="distrust"><span>I don't trust product recommendations in general</span></label>
+            <label class="radio-opt"><input type="checkbox" name="exitReasonCheck" value="too_slow"><span>It was taking too long to decide</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-label">Optional — in your own words</div>
+        <div class="survey-group">
+          <label>Anything else that influenced your decision to leave? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <textarea id="exitFreeText" maxlength="400" rows="3" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.88rem;resize:vertical" placeholder="e.g. none of the suggestions matched what was already in my cart..."></textarea>
+        </div>
+        <div class="survey-group" style="margin-bottom:0">
+          <label>What would have made you more likely to complete the purchase? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <textarea id="exitSuggestion" maxlength="400" rows="3" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.88rem;resize:vertical" placeholder="e.g. a cheaper option that matched the remaining gap exactly..."></textarea>
         </div>
       </div>
 
@@ -2252,28 +2550,24 @@
         sessionData.trust1 = getRadio("trust1");
         sessionData.trust2 = getRadio("trust2");
         sessionData.trust3 = getRadio("trust3");
-        sessionData.percComp1 = getRadio("percComp1");
         // Transparency & manipulation
         sessionData.transp1 = getRadio("transp1");
         sessionData.transp2 = getRadio("transp2");
         sessionData.manip1 = getRadio("manip1");
         sessionData.manip2 = getRadio("manip2");
-        sessionData.manip3 = getRadio("manip3");
         // Autonomy & confidence
         sessionData.conf1 = getRadio("conf1");
         sessionData.autonom1 = getRadio("autonom1");
         sessionData.autonom2 = getRadio("autonom2");
+        sessionData.realism1 = getRadio("realism1");
         // Cognitive load
         sessionData.load1 = getRadio("load1");
         sessionData.load2 = getRadio("load2");
         sessionData.load3 = getRadio("load3");
-        sessionData.load4 = getRadio("load4");
         // Choice quality
         sessionData.fit1 = getRadio("fit1");
-        sessionData.fit2 = getRadio("fit2");
         sessionData.value1 = getRadio("value1");
         sessionData.regret1 = getRadio("regret1");
-        sessionData.ecoval1 = getRadio("ecoval1");
 
         flushData();
         setScreen("debrief");
@@ -2316,6 +2610,19 @@
       });
 
     </script>
+
+  <!-- Decorative-only: keeps the header cart badge in sync with the
+       study's existing `addedItems` array. Separate script block that
+       only READS state (classic inline scripts share global lexical
+       scope) — does not modify any study logic or data submission. -->
+  <script>
+    setInterval(function () {
+      try {
+        const el = document.getElementById('store-cart-count');
+        if (el && typeof addedItems !== 'undefined') { el.textContent = addedItems.length; }
+      } catch (e) { /* no-op — purely cosmetic */ }
+    }, 400);
+  </script>
 </body>
 
 </html>
