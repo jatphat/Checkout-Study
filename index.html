@@ -1272,8 +1272,15 @@
             const priorityScore = item.vendorPriority;
             const vendorScore = (marginScore * 0.4) + (priorityScore * 0.4) + (inventoryScore * 0.2);
 
-            const gapCenter = (priceMin + priceMax) / 2;
-            const gapFit = Math.max(0, 1 - Math.abs(item.price - gapCenter) / Math.max(gapCenter, 0.01));
+            // FIX: this was anchored to `gapCenter` — the midpoint of the whole
+            // filter band (priceMin..priceMax), which skews well above the
+            // actual gap because priceMax extends +$12 past it while priceMin
+            // only extends -$2 below it. For a $6 gap that center lands near
+            // $11, so "gap fit" was silently optimizing for the wrong number.
+            // Anchoring directly to `gap` is what actually rewards items that
+            // closely close the shipping threshold — the core DSS selling
+            // point (matches the paper's Gap Reduction metric).
+            const gapFit = Math.max(0, 1 - Math.abs(item.price - gap) / Math.max(gap, 1));
 
             const userScore = (
               0.20 * relevanceScore +
@@ -1284,7 +1291,10 @@
               0.05 * priceAffinity
             );
 
-            const finalScore = (0.5 * userScore) + (0.3 * vendorScore) + (0.2 * gapFit);
+            // FIX: gapFit weight raised from 0.2 to 0.35 (vendorScore trimmed
+            // to make room) so gap-precision is a dominant driver of DSS
+            // ranking, not a minor tiebreaker.
+            const finalScore = (0.45 * userScore) + (0.20 * vendorScore) + (0.35 * gapFit);
 
             return {
               ...item,
@@ -1485,6 +1495,48 @@
 
           default:
             recommendations = getStaticRecs(gap, 5, usedItemIds);
+        }
+
+        // ── GAP-ANCHOR GUARANTEE (DSS conditions only — 3 & 4) ──────────────
+        // Deliberately NOT applied to Static (conditions 1/2): the paper's
+        // manipulation is that Static is popularity/margin-weighted and NOT
+        // gap-aware, while DSS explicitly optimizes for threshold attainment.
+        // Giving Static the same guarantee would erase that contrast and
+        // confound H1/H2. This step makes sure the DSS conditions reliably
+        // demonstrate their actual selling point — close to the gap, not
+        // just some item that happens to clear it eventually.
+        if ((condition === 3 || condition === 4) && gap > 0) {
+          const tolerance = Math.max(1.5, gap * 0.2);
+          const hasNearGapItem = recommendations.some(item => Math.abs(item.price - gap) <= tolerance);
+
+          if (!hasNearGapItem) {
+            const shownIds = new Set(recommendations.map(r => r.id));
+            const bestAnchor = [...LARGE_CATALOG]
+              .filter(item =>
+                !addedItems.find(a => a.id === item.id) &&
+                !shownIds.has(item.id) &&
+                item.price >= priceMin && item.price <= priceMax
+              )
+              .sort((a, b) => Math.abs(a.price - gap) - Math.abs(b.price - gap))[0];
+
+            if (bestAnchor) {
+              // Replace the current lowest-scored slot (or last item if
+              // scores aren't comparable, e.g. mixed method types)
+              let weakestIdx = 0;
+              let weakestScore = Infinity;
+              recommendations.forEach((item, i) => {
+                const s = item.score ?? item.confidence ?? 1;
+                if (s < weakestScore) { weakestScore = s; weakestIdx = i; }
+              });
+              recommendations[weakestIdx] = {
+                ...bestAnchor,
+                method: 'gap-anchor',
+                confidence: 0.7,
+                gapFit: 1 - Math.abs(bestAnchor.price - gap) / Math.max(gap, 1),
+                explanation: hasExp ? generateContextualExplanation(bestAnchor, 'dss') : null
+              };
+            }
+          }
         }
 
         // Pad to 5 if any algorithm came up short
@@ -2093,20 +2145,42 @@
       }
 
       function submitAbandonSurvey() {
-        sessionData.abandonReason = getRadio("abandonReason");
-        sessionData.abandonBarrier = getRadio("abandonBarrier");
-        // Codebook exit-mechanism battery (H2, H3, H4)
-        sessionData.exitManip1 = getRadio("exitManip1");
-        sessionData.exitManip2 = getRadio("exitManip2");
-        sessionData.exitTrust1 = getRadio("exitTrust1");
-        sessionData.exitTransp1 = getRadio("exitTransp1");
-        sessionData.exitLoad1 = getRadio("exitLoad1");
-        // Optional multi-select + free text
+        const abandonReason = getRadio("abandonReason");
+        const abandonBarrier = getRadio("abandonBarrier");
+        const exitManip1 = getRadio("exitManip1");
+        const exitManip2 = getRadio("exitManip2");
+        const exitTrust1 = getRadio("exitTrust1");
+        const exitTransp1 = getRadio("exitTransp1");
+        const exitLoad1 = getRadio("exitLoad1");
+
+        // These seven are required — they're the entire mechanism dataset for
+        // the abandonment path (H2-H5). Free-text/suggestion/multi-select
+        // fields below stay fully optional, as requested.
+        if (!abandonReason || !abandonBarrier || !exitManip1 || !exitManip2
+          || !exitTrust1 || !exitTransp1 || !exitLoad1) {
+          alert("Please answer all questions before continuing — the open-text boxes below are optional, but these aren't.");
+          return;
+        }
+
+        sessionData.abandonReason = abandonReason;
+        sessionData.abandonBarrier = abandonBarrier;
+        sessionData.exitManip1 = exitManip1;
+        sessionData.exitManip2 = exitManip2;
+        sessionData.exitTrust1 = exitTrust1;
+        sessionData.exitTransp1 = exitTransp1;
+        sessionData.exitLoad1 = exitLoad1;
+        // Optional multi-select + free text — never blocks submission
         sessionData.exitReasonsChecked = [...document.querySelectorAll('input[name="exitReasonCheck"]:checked')]
           .map(el => el.value).join("|");
         sessionData.exitFreeText = (document.getElementById("exitFreeText")?.value || "").trim().slice(0, 400);
         sessionData.exitSuggestion = (document.getElementById("exitSuggestion")?.value || "").trim().slice(0, 400);
-        setScreen("posttask");
+
+        // FIX: abandoners used to be funneled into the entire main survey
+        // (trust1-3, manip1-2, transp1-2, load1-3, etc.) on top of the exit
+        // battery they just answered — asking the same constructs twice
+        // under different names. They're done: submit and finish here.
+        flushData();
+        setScreen("debrief");
       }
 
       // ═══════════════════════════════════════════════════════════════════════════════════
@@ -2571,39 +2645,44 @@
       // ═══════════════════════════════════════════════════════════════════════════════════
 
       function submitPrescreener() {
-        sessionData.shopFreq = getRadio("shopFreq");
-        sessionData.priceSensitivity = getRadio("priceSensitivity");
-        sessionData.algoTrust = getRadio("algoTrust");
+        const shopFreq = getRadio("shopFreq");
+        const priceSensitivity = getRadio("priceSensitivity");
+        const algoTrust = getRadio("algoTrust");
+        if (!shopFreq || !priceSensitivity || !algoTrust) {
+          alert("Please answer all questions before continuing.");
+          return;
+        }
+        sessionData.shopFreq = shopFreq;
+        sessionData.priceSensitivity = priceSensitivity;
+        sessionData.algoTrust = algoTrust;
         setScreen("scenario");
       }
 
       function submitPostTask() {
-        // Manipulation checks
-        sessionData.manCheck1 = getRadio("manCheck1");
-        sessionData.manCheck2 = getRadio("manCheck2");
-        sessionData.manCheck3 = getRadio("manCheck3");
-        // Trust
-        sessionData.trust1 = getRadio("trust1");
-        sessionData.trust2 = getRadio("trust2");
-        sessionData.trust3 = getRadio("trust3");
-        // Transparency & manipulation
-        sessionData.transp1 = getRadio("transp1");
-        sessionData.transp2 = getRadio("transp2");
-        sessionData.manip1 = getRadio("manip1");
-        sessionData.manip2 = getRadio("manip2");
-        // Autonomy & confidence
-        sessionData.conf1 = getRadio("conf1");
-        sessionData.autonom1 = getRadio("autonom1");
-        sessionData.autonom2 = getRadio("autonom2");
-        sessionData.realism1 = getRadio("realism1");
-        // Cognitive load
-        sessionData.load1 = getRadio("load1");
-        sessionData.load2 = getRadio("load2");
-        sessionData.load3 = getRadio("load3");
-        // Choice quality
-        sessionData.fit1 = getRadio("fit1");
-        sessionData.value1 = getRadio("value1");
-        sessionData.regret1 = getRadio("regret1");
+        // All core measures are required — this survey is now only shown to
+        // completers (abandoners answer their own short battery and finish
+        // separately, see submitAbandonSurvey), so nothing here should be
+        // skippable: it's the primary data behind H1-H6.
+        const required = {
+          manCheck1: "manCheck1", manCheck2: "manCheck2", manCheck3: "manCheck3",
+          trust1: "trust1", trust2: "trust2", trust3: "trust3",
+          transp1: "transp1", transp2: "transp2",
+          manip1: "manip1", manip2: "manip2",
+          conf1: "conf1", autonom1: "autonom1", autonom2: "autonom2", realism1: "realism1",
+          load1: "load1", load2: "load2", load3: "load3",
+          fit1: "fit1", value1: "value1", regret1: "regret1",
+        };
+        const values = {};
+        let missing = false;
+        for (const key in required) {
+          values[key] = getRadio(required[key]);
+          if (!values[key]) missing = true;
+        }
+        if (missing) {
+          alert("Please answer all questions before submitting — none of these are optional.");
+          return;
+        }
+        Object.assign(sessionData, values);
 
         flushData();
         setScreen("debrief");
