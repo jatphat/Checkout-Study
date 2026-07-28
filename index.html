@@ -1087,7 +1087,7 @@
 
           totalPrice = +(selectedItems.reduce((sum, item) => sum + item.price, 0)).toFixed(2);
 
-          if (totalPrice < THRESHOLD && (THRESHOLD - totalPrice) >= 5 && (THRESHOLD - totalPrice) <= 20) {
+          if (totalPrice < THRESHOLD && (THRESHOLD - totalPrice) >= 5 && (THRESHOLD - totalPrice) <= 15) {
             break;
           }
 
@@ -1099,7 +1099,7 @@
             { name: "Hand Sanitizer 8oz", cat: "Health & Personal Care", price: 4.99, emoji: "🧴" },
             { name: "Lip Balm SPF 15", cat: "All Beauty", price: 3.99, emoji: "💋" },
             { name: "Sticky Notes Rainbow", cat: "Office Products", price: 4.49, emoji: "🌈" },
-            { name: "Chamomile Herbal Tea (20 bags)", cat: "Grocery & Gourmet", price: 5.99, emoji: "🍵" }
+            { name: "Chamomile Herbal Tea (20 bags)", cat: "Grocery & Gourmet", price: 7.99, emoji: "🍵" }
           ];
         }
 
