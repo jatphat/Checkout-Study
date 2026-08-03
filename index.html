@@ -1151,13 +1151,17 @@
       let countdownTimer = null;
       let countdownVal = INACTIVITY_ABANDON_SEC;
       let sessionStartTime = Date.now();
-      // FIX: cumulative set of every item ever shown across the whole
-      // session, keyed by name. `addonsShown` used to be overwritten on
+      // FIX: cumulative map of every item ever shown across the whole
+      // session, keyed by item id. `addonsShown` used to be overwritten on
       // every re-render with only the CURRENTLY-unselected recs — so
       // anything a participant added would drop out of its own exposure
       // record the moment they selected it (it moves to "pinned"). This
       // union survives every render, so the field means what it says.
-      let allItemsEverShown = new Set();
+      // Stores { name, method } so we can also report which algorithm
+      // (static/collaborative/svd/dss/gap-anchor) produced each item,
+      // directly in the existing addonsShown/addonNames Form fields —
+      // no new Google Form question needed.
+      let allItemsEverShown = new Map();
 
       // ═══════════════════════════════════════════════════════════════════════════════════
       // ENHANCED RECOMMENDATION ALGORITHMS WITH DYNAMIC GAP CALCULATION
@@ -1176,8 +1180,13 @@
             const bClears = (total + b.price) >= THRESHOLD;
             if (aClears && !bClears) return -1;
             if (!aClears && bClears) return 1;
-            // Among items that both clear or both don't: sort by popularity with jitter
-            return (b.pop + Math.random() * 2 - 1) - (a.pop + Math.random() * 2 - 1);
+            // FIX: paper describes Study 1's Static baseline as "popularity-
+            // and margin-weighted" — this previously ranked by popularity
+            // alone, with margin defined on every catalog item but unused.
+            // Now genuinely blends both, matching the paper exactly.
+            const aScore = ((a.pop / 10) * 0.7) + (a.margin * 0.3) + (Math.random() * 0.15 - 0.075);
+            const bScore = ((b.pop / 10) * 0.7) + (b.margin * 0.3) + (Math.random() * 0.15 - 0.075);
+            return bScore - aScore;
           })
           .slice(0, n)
           .map(item => ({
@@ -1468,43 +1477,67 @@
             break;
 
           case 3:
-            const collaborativeRecs = getCollaborativeRecs(gap, 2, usedItemIds);
-            recommendations.push(...collaborativeRecs);
-            collaborativeRecs.forEach(item => usedItemIds.add(item.id));
+          case 4: {
+            // "Deep learning" recommendation engine layer (paper's
+            // component 2): collaborative filtering + SVD, 2 slots each.
+            const engineCollab = getCollaborativeRecs(gap, 2, usedItemIds);
+            recommendations.push(...engineCollab);
+            engineCollab.forEach(item => usedItemIds.add(item.id));
 
-            const svdRecs = getSVDRecs(gap, 2, usedItemIds);
-            recommendations.push(...svdRecs);
-            svdRecs.forEach(item => usedItemIds.add(item.id));
+            const engineSVD = getSVDRecs(gap, 2, usedItemIds);
+            recommendations.push(...engineSVD);
+            engineSVD.forEach(item => usedItemIds.add(item.id));
 
-            const dssRecs = getDSSRecs(gap, 1, usedItemIds);
-            recommendations.push(...dssRecs);
+            // Multi-objective optimization layer (paper's component 3).
+            // FIX: this used to always take exactly 1 fixed slot, treating
+            // gap-closing as a minor add-on rather than the DSS's actual
+            // job. Now: check whether collaborative+SVD already surfaced
+            // something that closes the gap well. If yes, DSS still takes
+            // its normal 1 slot (it's a permanent re-ranking layer, not
+            // just an emergency patch). If the engine layer found nothing
+            // close to the gap, DSS escalates to 2 slots — dropping the
+            // weakest engine-layer pick — and searches specifically for a
+            // genuine gap-closer. This is what makes it "truly DSS": the
+            // multi-objective optimizer is the layer responsible for
+            // guaranteeing threshold attainment when similarity-based
+            // methods alone don't deliver it.
+            const engineTolerance = Math.max(1.5, gap * 0.2);
+            const engineFoundGapCloser = recommendations.some(
+              item => Math.abs(item.price - gap) <= engineTolerance
+            );
+
+            let dssSlotCount = 1;
+            if (!engineFoundGapCloser && recommendations.length > 0) {
+              let weakestIdx = 0, weakestScore = Infinity;
+              recommendations.forEach((item, i) => {
+                const s = item.score ?? item.confidence ?? 1;
+                if (s < weakestScore) { weakestScore = s; weakestIdx = i; }
+              });
+              usedItemIds.delete(recommendations[weakestIdx].id);
+              recommendations.splice(weakestIdx, 1);
+              dssSlotCount = 2;
+            }
+
+            const dssPicks = getDSSRecs(gap, dssSlotCount, usedItemIds);
+            recommendations.push(...dssPicks);
             break;
-
-          case 4:
-            const collaborativeRecsExp = getCollaborativeRecs(gap, 2, usedItemIds);
-            recommendations.push(...collaborativeRecsExp);
-            collaborativeRecsExp.forEach(item => usedItemIds.add(item.id));
-
-            const svdRecsExp = getSVDRecs(gap, 2, usedItemIds);
-            recommendations.push(...svdRecsExp);
-            svdRecsExp.forEach(item => usedItemIds.add(item.id));
-
-            const dssRecsExp = getDSSRecs(gap, 1, usedItemIds);
-            recommendations.push(...dssRecsExp);
-            break;
+          }
 
           default:
             recommendations = getStaticRecs(gap, 5, usedItemIds);
         }
 
-        // ── GAP-ANCHOR GUARANTEE (DSS conditions only — 3 & 4) ──────────────
-        // Deliberately NOT applied to Static (conditions 1/2): the paper's
-        // manipulation is that Static is popularity/margin-weighted and NOT
-        // gap-aware, while DSS explicitly optimizes for threshold attainment.
-        // Giving Static the same guarantee would erase that contrast and
-        // confound H1/H2. This step makes sure the DSS conditions reliably
-        // demonstrate their actual selling point — close to the gap, not
-        // just some item that happens to clear it eventually.
+        // ── FINAL SAFETY NET (DSS conditions only — 3 & 4) ───────────────────
+        // The DSS escalation logic above (in the switch statement) is now the
+        // PRIMARY gap-closing mechanism — it actively takes over slots from
+        // collaborative/SVD when they don't surface a gap-closer. This check
+        // is a last-resort catch for the rare case where even the escalated
+        // DSS picks didn't land close enough (DSS blends gap-fit with other
+        // factors, so it isn't a hard guarantee on its own). Deliberately NOT
+        // applied to Static (conditions 1/2): the paper's manipulation is
+        // that Static is popularity/margin-weighted and NOT gap-aware, while
+        // DSS explicitly optimizes for threshold attainment. Giving Static
+        // the same guarantee would erase that contrast and confound H1/H2.
         if ((condition === 3 || condition === 4) && gap > 0) {
           const tolerance = Math.max(1.5, gap * 0.2);
           const hasNearGapItem = recommendations.some(item => Math.abs(item.price - gap) <= tolerance);
@@ -1772,9 +1805,17 @@
         // with only the fresh (unselected) list. Previously, whatever a
         // participant ended up adding would vanish from its own "shown"
         // record the instant they selected it.
-        shownRecs.forEach(item => allItemsEverShown.add(item.name));
-        addedItems.forEach(item => allItemsEverShown.add(item.name));
-        sessionData.addonsShown = [...allItemsEverShown].join("|");
+        shownRecs.forEach(item => allItemsEverShown.set(item.id, { name: item.name, method: item.method }));
+        addedItems.forEach(item => {
+          // Don't overwrite a real method tag with "unknown" if an added
+          // item isn't in this particular render's shownRecs
+          if (!allItemsEverShown.has(item.id) || item.method) {
+            allItemsEverShown.set(item.id, { name: item.name, method: item.method });
+          }
+        });
+        sessionData.addonsShown = [...allItemsEverShown.values()]
+          .map(e => e.method ? `${e.name} [${e.method}]` : e.name)
+          .join("|");
 
         const grid = document.getElementById("rec-grid");
         if (!grid) return;
@@ -1844,14 +1885,20 @@
 
       // FIXED: Toggle addon with dynamic recommendation updates - STAY ON RECOMMENDATIONS SCREEN
       function toggleAddon(itemId) {
-        const item = LARGE_CATALOG.find(i => i.id === itemId);
-        if (!item) return;
-
         const existingIndex = addedItems.findIndex(a => a.id === itemId);
         if (existingIndex >= 0) {
           addedItems.splice(existingIndex, 1);
           itemsAddedThenRemoved++;
         } else {
+          // FIX: was reading from LARGE_CATALOG (the raw, untagged catalog
+          // entry), which silently discarded which algorithm — static,
+          // collaborative, svd, dss, or gap-anchor — actually produced the
+          // recommendation the participant clicked. Now reads from
+          // shownRecs, the enriched list that still carries .method,
+          // .score, and .explanation, falling back to the raw catalog only
+          // if the item somehow isn't in the currently-rendered set.
+          const item = shownRecs.find(i => i.id === itemId) || LARGE_CATALOG.find(i => i.id === itemId);
+          if (!item) return;
           addedItems.push(item);
           if (!firstSelectionTime) firstSelectionTime = Date.now();
         }
@@ -1888,7 +1935,11 @@
         // joined item-name string — that string already lives in addonNames.
         sessionData.addonsSelected = addedItems.length > 0 ? 1 : 0;
         sessionData.addonCount = addedItems.length;
-        sessionData.addonNames = addedItems.map(i => i.name).join("|");
+        // FIX: now that toggleAddon preserves .method (see fix there), tag
+        // each added item with which algorithm produced it — directly
+        // answers "how do we know which recommendation was collaborative
+        // vs SVD vs DSS," without needing a new Form question.
+        sessionData.addonNames = addedItems.map(i => i.method ? `${i.name} [${i.method}]` : i.name).join("|");
         sessionData.addonPrices = addedItems.map(i => i.price.toFixed(2)).join("|");
         sessionData.finalTotal = getCurrentTotal().toFixed(2);
         sessionData.gapCleared = isGapCleared() ? 1 : 0;
